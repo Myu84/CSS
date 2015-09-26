@@ -1,5 +1,7 @@
 language: cpp
 script: true
 compiler:
-	- clang
-	- gcc
+  - clang
+  - gcc
+notifications:
+  slack: 3307-orange:YAFPqWGvHpDpBOhLeq5D5wO6
