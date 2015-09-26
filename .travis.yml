@@ -1,0 +1,5 @@
+language: cpp
+script: true
+compiler:
+	- clang
+	- gcc
