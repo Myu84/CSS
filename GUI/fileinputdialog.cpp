@@ -1,3 +1,4 @@
+#include<stdo.h>
 #include "fileinputdialog.h"
 #include "ui_fileinputdialog.h"
 
