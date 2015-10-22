@@ -11,16 +11,19 @@ SOURCES += main.cpp \
     fileinputdialog.cpp \
     dashboardwindow.cpp \
     visualizationwindow.cpp \
-    qcustomplot/qcustomplot.cpp
+    qcustomplot/qcustomplot.cpp \
+    errorlistdialog.cpp
 
 FORMS += \
     fileinputdialog.ui \
     dashboardwindow.ui \
-    visualizationwindow.ui
+    visualizationwindow.ui \
+    errorlistdialog.ui
 
 HEADERS += \
     fileinputdialog.h \
     dashboardwindow.h \
     visualizationwindow.h \
-    qcustomplot/qcustomplot.h
+    qcustomplot/qcustomplot.h \
+    errorlistdialog.h
 
