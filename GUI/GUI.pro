@@ -9,13 +9,18 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     fileinputdialog.cpp \
-    dashboardwindow.cpp
+    dashboardwindow.cpp \
+    visualizationwindow.cpp \
+    qcustomplot/qcustomplot.cpp
 
 FORMS += \
     fileinputdialog.ui \
-    dashboardwindow.ui
+    dashboardwindow.ui \
+    visualizationwindow.ui
 
 HEADERS += \
     fileinputdialog.h \
-    dashboardwindow.h
+    dashboardwindow.h \
+    visualizationwindow.h \
+    qcustomplot/qcustomplot.h
 
