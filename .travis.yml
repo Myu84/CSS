@@ -1,13 +1,11 @@
 language: cpp
 before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-  - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
   - $CXX --version
 script:
   - qmake -o Makefile src/project.pro "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
   - make
 compiler:
-  - clang
   - gcc
 notifications:
   slack: 3307-orange:YAFPqWGvHpDpBOhLeq5D5wO6
@@ -17,8 +15,6 @@ addons:
       - libboost-all-dev
       - qt5-default
       - g++-5
-      - clang-3.7
     sources:
       - ubuntu-sdk-team
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.7
