@@ -8,7 +8,7 @@ using namespace std;
 
 // file_name should be path to file
 vector<PresentationRecord> PresentationParser::parse(string file_name) {
-	CSVParser parser(file_name);
+	CSVParser<20> parser(file_name);
 
 	parser.read_header(column_policy,
 		"Member Name",
@@ -32,18 +32,39 @@ vector<PresentationRecord> PresentationParser::parse(string file_name) {
 		"Rest of Citation",
 		"Personal Remuneration");
 	
-	// error checking + column ignoring should be done in the while loop
-	while (in.read_row(memberName, primaryDomain,
-		date, type, role, activityType, 
-		geographicalScope, host, country, 
-		province, city, numberOfAttendees, 
-		hours, teachingScore, 
-		educationPresentation, remarks, authorship, title, restOfCitation, personalRemuneration)) {
-
-		cout << "Member Name: " << memberName << " Primary Domain: " << primaryDomain << " Type: " << type << " Authorship: " << authorship;
-
-		cin.ignore();
+	vector<PresentationRecord> records;
+	bool done = false;
+	
+	while (!done) {
+		PresentationRecord curr_record;
 		
-		break;
+		done = parser.read_row(curr_record.memberName, 
+			curr_record.primaryDomain,
+			curr_record.date, 
+			curr_record.type, 
+			curr_record.role, 
+			curr_record.activityType, 
+			curr_record.geographicalScope, 
+			curr_record.host, 
+			curr_record.country, 
+			curr_record.province, 
+			curr_record.city, 
+			curr_record.numberOfAttendees, 
+			curr_record.hours, 
+			curr_record.teachingScore, 
+			curr_record.educationPresentation, 
+			curr_record.remarks, 
+			curr_record.authorship, 
+			curr_record.title, 
+			curr_record.restOfCitation, 
+			curr_record.personalRemuneration);
+		
+		/*
+			Error checking goes here.
+		*/
+		
+		records.push_back(curr_record);
 	}
+	
+	return records;
 }

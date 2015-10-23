@@ -10,3 +10,5 @@ addons:
     packages:
       - libboost-dev
       - qt5-default
+    sources:
+      - debian-sid
