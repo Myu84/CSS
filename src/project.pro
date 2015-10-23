@@ -1,5 +1,4 @@
-QT += widgets
-QT -= gui
+QT += core gui widgets printsupport
 
 TARGET = cs3307-orange
 TEMPLATE = app
