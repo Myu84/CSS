@@ -1,3 +1,5 @@
+#include "csv_vs2013_compat.h"
+
 // Copyright: (2012-2014) Ben Strasser <code@ben-strasser.net>
 // License: BSD-3
 //
