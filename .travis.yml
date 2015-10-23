@@ -10,5 +10,9 @@ addons:
     packages:
       - libboost-all-dev
       - qt5-default
+      - gcc-5
+      - clang-3.7
     sources:
       - ubuntu-sdk-team
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.7
