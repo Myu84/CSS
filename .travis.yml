@@ -5,3 +5,8 @@ compiler:
   - gcc
 notifications:
   slack: 3307-orange:YAFPqWGvHpDpBOhLeq5D5wO6
+addons:
+  apt:
+    packages:
+      - libboost-dev
+      - qt5-default
