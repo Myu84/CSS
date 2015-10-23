@@ -4,7 +4,7 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
   - $CXX --version
 script:
-  - qmake -o Makefile src/project.pro
+  - qmake -o Makefile src/project.pro "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
   - make
 compiler:
   - clang
