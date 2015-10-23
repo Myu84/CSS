@@ -7,7 +7,7 @@
 #include "../records/PresentationRecord.h"
 #include "Parser.h"
 
-class PresentationParser : Parser {
+class PresentationParser : public Parser {
  public:
 	std::vector<PresentationRecord> parse(std::string file_name);
 };

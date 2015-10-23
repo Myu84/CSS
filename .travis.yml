@@ -8,7 +8,7 @@ notifications:
 addons:
   apt:
     packages:
-      - libboost-dev
+      - libboost-all-dev
       - qt5-default
     sources:
-      - debian-sid
+      - ubuntu-sdk-team
