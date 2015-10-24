@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="okCancelButtons">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -29,75 +29,23 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QGroupBox" name="subjectGroup">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
+     <y>189</y>
      <width>451</width>
-     <height>80</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>451</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_3">
-    <property name="geometry">
-     <rect>
-      <x>-9</x>
-      <y>7</y>
-      <width>20</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_4">
-    <property name="geometry">
-     <rect>
-      <x>441</x>
-      <y>8</y>
-      <width>20</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_2">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>71</y>
-      <width>451</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="subjectLabel">
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>17</y>
+      <y>5</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -106,11 +54,11 @@
      <string>Subject Area</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="publicationsButton">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>30</y>
       <width>101</width>
       <height>28</height>
      </rect>
@@ -118,12 +66,30 @@
     <property name="text">
      <string>Publications</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
+    <property name="autoDefault">
+     <bool>true</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">subjectButtonGroup</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="presentationButton">
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>40</y>
+      <y>30</y>
       <width>101</width>
       <height>28</height>
      </rect>
@@ -131,12 +97,18 @@
     <property name="text">
      <string>Presentation</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">subjectButtonGroup</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="grantsButton">
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>40</y>
+      <y>30</y>
       <width>101</width>
       <height>28</height>
      </rect>
@@ -144,12 +116,18 @@
     <property name="text">
      <string>Grants/Funding</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">subjectButtonGroup</string>
+    </attribute>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="teachingButton">
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>40</y>
+      <y>30</y>
       <width>101</width>
       <height>28</height>
      </rect>
@@ -157,18 +135,15 @@
     <property name="text">
      <string>Teaching</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">subjectButtonGroup</string>
+    </attribute>
    </widget>
-   <zorder>line</zorder>
-   <zorder>line_4</zorder>
-   <zorder>line_2</zorder>
-   <zorder>label</zorder>
-   <zorder>pushButton</zorder>
-   <zorder>pushButton_2</zorder>
-   <zorder>pushButton_3</zorder>
-   <zorder>pushButton_4</zorder>
-   <zorder>line_3</zorder>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="browseButton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -181,7 +156,7 @@
     <string>Browse for CSV...</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="filenameText">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -190,8 +165,11 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QGraphicsView" name="logoImage">
+  <widget class="QGraphicsView" name="unknownBox">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -205,7 +183,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>okCancelButtons</sender>
    <signal>accepted()</signal>
    <receiver>FileInputDialog</receiver>
    <slot>accept()</slot>
@@ -221,7 +199,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>okCancelButtons</sender>
    <signal>rejected()</signal>
    <receiver>FileInputDialog</receiver>
    <slot>reject()</slot>
@@ -237,4 +215,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="subjectButtonGroup"/>
+ </buttongroups>
 </ui>
