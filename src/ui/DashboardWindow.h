@@ -10,6 +10,9 @@ class DashboardWindow : public QMainWindow {
 
  public:
 	static DashboardWindow *makeDashboard();
+
+ private slots:
+	void on_actionExit_triggered();
 	
  protected:
     DashboardWindow();

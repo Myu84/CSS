@@ -19,3 +19,7 @@ DashboardWindow *DashboardWindow::makeDashboard() {
 		return nullptr;
 	}
 }
+
+void DashboardWindow::on_actionExit_triggered() {
+	close();
+}
