@@ -34,19 +34,21 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 		"Personal Remuneration");
 	
 	QList<PresentationRecord> records;
-	bool done = false;
 	
-	while (!done) {
+	while (true) {
 		std::string memberName, primaryDomain, date, type, role, activityType, 
 					geographicalScope, host, country, province, city, 
 					numberOfAttendees, hours, teachingScore, educationPresentation,
 					remarks, authorship, title, restOfCitation, personalRemuneration;
 		
-		done = parser.read_row(memberName, primaryDomain, date, type, role, 
-					activityType, geographicalScope, host, country, province, 
-					city, numberOfAttendees, hours, teachingScore, 
-					educationPresentation, remarks, authorship, title, 
-					restOfCitation, personalRemuneration);
+		bool readOK = parser.read_row(memberName, primaryDomain, date, type, role, 
+						activityType, geographicalScope, host, country, province, 
+						city, numberOfAttendees, hours, teachingScore, 
+						educationPresentation, remarks, authorship, title, 
+						restOfCitation, personalRemuneration);
+		
+		if (readOK)
+			break;
 		
 		PresentationRecord curr_record;
 		
