@@ -1,19 +1,13 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "ui/FileInputDialog.h"
+#include "ui/DashboardWindow.h"
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
-
-	//show the file chooser dialog
-	FileInputDialog fileInputDialog;
-	if (fileInputDialog.exec() == QDialog::Accepted) {
-		QMessageBox::information(nullptr, "Selected Filename", 
-								 QString::fromStdString(fileInputDialog.getFilename()));
-	} else {
-		app.quit();
-	}
+	QApplication app(argc, argv);
+		
+	DashboardWindow dashboard;
+	dashboard.show();
 	
-    return app.exec();
+	return app.exec();
 }

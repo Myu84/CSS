@@ -2,7 +2,7 @@ QT += core gui widgets printsupport
 
 TARGET = cs3307-orange
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++11 static
 win32 {
 	CONFIG += windows
 }

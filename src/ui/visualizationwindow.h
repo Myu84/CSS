@@ -3,20 +3,16 @@
 
 #include <QDialog>
 
-namespace Ui {
-class VisualizationWindow;
-}
+#include "ui_VisualizationWindow.h"
 
-class VisualizationWindow : public QDialog
-{
+class VisualizationWindow : public QDialog {
     Q_OBJECT
 
 public:
-    explicit VisualizationWindow(QWidget *parent = 0);
-    ~VisualizationWindow();
+    explicit VisualizationWindow(QWidget *parent = nullptr);
 
 private:
-    Ui::VisualizationWindow *ui;
+    Ui::VisualizationWindow ui;
 };
 
-#endif // VISUALIZATIONWINDOW_H
+#endif

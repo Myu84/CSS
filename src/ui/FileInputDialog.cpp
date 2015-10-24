@@ -47,6 +47,8 @@ void FileInputDialog::on_teachingButton_clicked() {
 }
 
 void FileInputDialog::on_browseButton_clicked() {
-	filename = QFileDialog::getOpenFileName(this, "Select A CSV File", "", 
-											"CSV Files (*.csv)").toStdString();
+	QString str = QFileDialog::getOpenFileName(this, "Select Input CSV File", "", 
+											   "CSV Files (*.csv)");
+	ui.filenameText->setText(str);
+	filename = str.toStdString();
 }
