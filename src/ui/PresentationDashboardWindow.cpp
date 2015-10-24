@@ -5,5 +5,8 @@
 PresentationDashboardWindow::PresentationDashboardWindow(std::string csv_filename) {
     PresentationParser parser;
 	records = parser.parse(csv_filename);
+	
+	/*
+		Display the records here
+	*/
 }
-

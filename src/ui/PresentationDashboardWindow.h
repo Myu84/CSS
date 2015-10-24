@@ -13,7 +13,7 @@ class PresentationDashboardWindow : public DashboardWindow {
     PresentationDashboardWindow(std::string csv_filename);
 
  private:
-	vector<PresentationRecord> records;
+	std::vector<PresentationRecord> records;
 };
 
 #endif
