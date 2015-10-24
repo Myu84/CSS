@@ -1,7 +1,8 @@
 #ifndef PRESENTATIONDASHBOARDWINDOW_H
 #define PRESENTATIONDASHBOARDWINDOW_H
 
-#include <vector>
+#include <QString>
+#include <QList>
 
 #include "DashboardWindow.h"
 #include "../records/PresentationRecord.h"
@@ -10,10 +11,10 @@ class PresentationDashboardWindow : public DashboardWindow {
     Q_OBJECT
 
  public:
-    PresentationDashboardWindow(std::string csv_filename);
+    PresentationDashboardWindow(QString csv_filename);
 
  private:
-	std::vector<PresentationRecord> records;
+	QList<PresentationRecord> records;
 };
 
 #endif

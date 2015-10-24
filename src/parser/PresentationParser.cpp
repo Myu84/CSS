@@ -1,5 +1,6 @@
+#include <QString>
+#include <QList>
 #include <string>
-#include <vector>
 
 #include "../records/PresentationRecord.h"
 #include "PresentationParser.h"
@@ -7,8 +8,8 @@
 using namespace std;
 
 // file_name should be path to file
-vector<PresentationRecord> PresentationParser::parse(string file_name) {
-	CSVParser<20> parser(file_name);
+QList<PresentationRecord> PresentationParser::parse(QString file_name) {
+	CSVParser<20> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
 		"Member Name",
@@ -32,38 +33,49 @@ vector<PresentationRecord> PresentationParser::parse(string file_name) {
 		"Rest of Citation",
 		"Personal Remuneration");
 	
-	vector<PresentationRecord> records;
+	QList<PresentationRecord> records;
 	bool done = false;
 	
 	while (!done) {
+		std::string memberName, primaryDomain, date, type, role, activityType, 
+					geographicalScope, host, country, province, city, 
+					numberOfAttendees, hours, teachingScore, educationPresentation,
+					remarks, authorship, title, restOfCitation, personalRemuneration;
+		
+		done = parser.read_row(memberName, primaryDomain, date, type, role, 
+					activityType, geographicalScope, host, country, province, 
+					city, numberOfAttendees, hours, teachingScore, 
+					educationPresentation, remarks, authorship, title, 
+					restOfCitation, personalRemuneration);
+		
 		PresentationRecord curr_record;
 		
-		done = parser.read_row(curr_record.memberName, 
-			curr_record.primaryDomain,
-			curr_record.date, 
-			curr_record.type, 
-			curr_record.role, 
-			curr_record.activityType, 
-			curr_record.geographicalScope, 
-			curr_record.host, 
-			curr_record.country, 
-			curr_record.province, 
-			curr_record.city, 
-			curr_record.numberOfAttendees, 
-			curr_record.hours, 
-			curr_record.teachingScore, 
-			curr_record.educationPresentation, 
-			curr_record.remarks, 
-			curr_record.authorship, 
-			curr_record.title, 
-			curr_record.restOfCitation, 
-			curr_record.personalRemuneration);
+		curr_record.memberName = QString::fromStdString(memberName);
+		curr_record.primaryDomain = QString::fromStdString(primaryDomain);
+		curr_record.date = QString::fromStdString(date);
+		curr_record.type = QString::fromStdString(type);
+		curr_record.role = QString::fromStdString(role);
+		curr_record.activityType = QString::fromStdString(activityType);
+		curr_record.geographicalScope = QString::fromStdString(geographicalScope);
+		curr_record.host = QString::fromStdString(host);
+		curr_record.country = QString::fromStdString(country);
+		curr_record.province = QString::fromStdString(province);
+		curr_record.city = QString::fromStdString(city);
+		curr_record.numberOfAttendees = QString::fromStdString(numberOfAttendees);
+		curr_record.hours = QString::fromStdString(hours);
+		curr_record.teachingScore = QString::fromStdString(teachingScore);
+		curr_record.educationPresentation = QString::fromStdString(educationPresentation);
+		curr_record.remarks = QString::fromStdString(remarks);
+		curr_record.authorship = QString::fromStdString(authorship);
+		curr_record.title = QString::fromStdString(title);
+		curr_record.restOfCitation = QString::fromStdString(restOfCitation);
+		curr_record.personalRemuneration = QString::fromStdString(personalRemuneration);
 		
 		/*
-			Error checking goes here.
+			Error checking goes here
 		*/
 		
-		records.push_back(curr_record);
+		records.append(curr_record);
 	}
 	
 	return records;

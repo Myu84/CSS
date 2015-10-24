@@ -1,7 +1,7 @@
 #ifndef FILEINPUTDIALOG_H
 #define FILEINPUTDIALOG_H
 
-#include <string>
+#include <QString>
 #include <QDialog>
 
 #include "ui_FileInputDialog.h"
@@ -16,7 +16,7 @@ class FileInputDialog : public QDialog {
  public:
 	explicit FileInputDialog(QWidget *parent = nullptr);
 	
-	std::string getFilename();
+	QString getFilename();
 	SubjectArea getSubjectArea();
 	
  private slots:
@@ -33,7 +33,7 @@ class FileInputDialog : public QDialog {
  private:
 	Ui::FileInputDialog ui;
 	
-	std::string filename;
+	QString filename;
 	SubjectArea subjectArea = None;
 };
 
