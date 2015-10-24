@@ -1,6 +1,7 @@
 #include <QString>
 #include <QDate>
 #include <QList>
+#include <QDebug>
 #include <string>
 
 #include "../records/PresentationRecord.h"
@@ -76,6 +77,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 				curr_record.date = QDate::fromString(q_datestr, "yyyy");
 				if (!curr_record.date.isValid()) {
 					//TODO: handle invalid date entry
+					qDebug() << "Invalid date entry: " << curr_record.memberName << " " << q_datestr;
 					continue;
 				}
 			}
