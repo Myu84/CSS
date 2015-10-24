@@ -1,7 +1,20 @@
 language: cpp
-script: true
+before_install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - $CXX --version
+script:
+  - qmake -o Makefile src/project.pro "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
+  - make
 compiler:
-  - clang
   - gcc
 notifications:
   slack: 3307-orange:YAFPqWGvHpDpBOhLeq5D5wO6
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
+      - qt5-default
+      - g++-5
+    sources:
+      - ubuntu-sdk-team
+      - ubuntu-toolchain-r-test
