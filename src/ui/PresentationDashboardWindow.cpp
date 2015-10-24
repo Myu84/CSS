@@ -16,8 +16,8 @@ PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 		exit(1);
 	}
 	
-	ui.subjectAreaLabel->setText("Presentations");
-	ui.departmentLabel->setText(records[0].primaryDomain);
+	ui.subjectAreaLabel->setText("Presentations Summary");
+	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Presentations - " + records[0].primaryDomain + " - " + csv_filename);
 	
