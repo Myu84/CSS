@@ -47,7 +47,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 						educationPresentation, remarks, authorship, title, 
 						restOfCitation, personalRemuneration);
 		
-		if (readOK)
+		if (!readOK)
 			break;
 		
 		PresentationRecord curr_record;
