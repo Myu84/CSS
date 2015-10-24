@@ -12,7 +12,7 @@ SOURCES += main.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
     ../external/qcustomplot.cpp
 
-FORMS += ui/FileInputDialog.ui ui/DashboardWindow.ui ui/VisualizationWindow.ui
+FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
 HEADERS += \
     parser/Parser.h parser/PresentationParser.h \
