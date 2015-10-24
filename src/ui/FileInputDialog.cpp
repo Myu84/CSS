@@ -6,7 +6,7 @@
 
 FileInputDialog::FileInputDialog(QWidget *parent) : QDialog(parent) {
     ui.setupUi(this);
-	ui.setFixedSize(ui.size());
+	setFixedSize(size());
 }
 
 std::string FileInputDialog::getFilename() {
