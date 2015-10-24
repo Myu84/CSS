@@ -2,11 +2,12 @@
 #define PRESENTATION_RECORD_H
 
 #include <QString>
+#include <QDate>
 
 struct PresentationRecord {
 	QString memberName;
 	QString primaryDomain;
-	QString date;
+	QDate date;
 	QString type;
 	QString role;
 	QString activityType;

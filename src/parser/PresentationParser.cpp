@@ -1,4 +1,5 @@
 #include <QString>
+#include <QDate>
 #include <QList>
 #include <string>
 
@@ -35,26 +36,20 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 	
 	QList<PresentationRecord> records;
 	
-	while (true) {
-		std::string memberName, primaryDomain, date, type, role, activityType, 
-					geographicalScope, host, country, province, city, 
-					numberOfAttendees, hours, teachingScore, educationPresentation,
-					remarks, authorship, title, restOfCitation, personalRemuneration;
-		
-		bool readOK = parser.read_row(memberName, primaryDomain, date, type, role, 
-						activityType, geographicalScope, host, country, province, 
-						city, numberOfAttendees, hours, teachingScore, 
-						educationPresentation, remarks, authorship, title, 
-						restOfCitation, personalRemuneration);
-		
-		if (!readOK)
-			break;
-		
+	std::string memberName, primaryDomain, date, type, role, activityType, 
+				geographicalScope, host, country, province, city, 
+				numberOfAttendees, hours, teachingScore, educationPresentation,
+				remarks, authorship, title, restOfCitation, personalRemuneration;
+	
+	while (parser.read_row(memberName, primaryDomain, date, type, role, 
+						   activityType, geographicalScope, host, country, province, 
+						   city, numberOfAttendees, hours, teachingScore, 
+						   educationPresentation, remarks, authorship, title, 
+						   restOfCitation, personalRemuneration)) {
 		PresentationRecord curr_record;
 		
 		curr_record.memberName = QString::fromStdString(memberName);
 		curr_record.primaryDomain = QString::fromStdString(primaryDomain);
-		curr_record.date = QString::fromStdString(date);
 		curr_record.type = QString::fromStdString(type);
 		curr_record.role = QString::fromStdString(role);
 		curr_record.activityType = QString::fromStdString(activityType);
@@ -72,6 +67,19 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 		curr_record.title = QString::fromStdString(title);
 		curr_record.restOfCitation = QString::fromStdString(restOfCitation);
 		curr_record.personalRemuneration = QString::fromStdString(personalRemuneration);
+		
+		QString q_datestr = QString::fromStdString(date);
+		curr_record.date = QDate::fromString(q_datestr, "yyyy/M/d");
+		if (!curr_record.date.isValid()) {
+			curr_record.date = QDate::fromString(q_datestr, "yyyy/M");
+			if (!curr_record.date.isValid()) {
+				curr_record.date = QDate::fromString(q_datestr, "yyyy");
+				if (!curr_record.date.isValid()) {
+					//TODO: handle invalid date entry
+					continue;
+				}
+			}
+		}
 		
 		/*
 			Error checking goes here
