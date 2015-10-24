@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QMessageBox>
 
 #include "ui/DashboardWindow.h"
 

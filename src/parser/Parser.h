@@ -14,7 +14,7 @@ class Parser {
 									io::throw_on_overflow,
 									io::empty_line_comment>;
 	
-	static const io::ignore_column column_policy = io::ignore_no_column;
+	static const io::ignore_column column_policy = io::ignore_extra_column;
 };
 
 #endif
