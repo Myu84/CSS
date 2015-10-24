@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "FileInputDialog.h"
 #include "DashboardWindow.h"
 #include "PresentationDashboardWindow.h"
