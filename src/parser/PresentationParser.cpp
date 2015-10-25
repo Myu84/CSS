@@ -42,13 +42,14 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 				numberOfAttendees, hours, teachingScore, educationPresentation,
 				remarks, authorship, title, restOfCitation, personalRemuneration;
 	
+    int count=2; // keep track of csv line being read. Start at 2 to account for the header
 	while (parser.read_row(memberName, primaryDomain, date, type, role, 
 						   activityType, geographicalScope, host, country, province, 
 						   city, numberOfAttendees, hours, teachingScore, 
 						   educationPresentation, remarks, authorship, title, 
 						   restOfCitation, personalRemuneration)) {
 		PresentationRecord curr_record;
-		
+
 		curr_record.memberName = QString::fromStdString(memberName);
 		curr_record.primaryDomain = QString::fromStdString(primaryDomain);
 		curr_record.type = QString::fromStdString(type);
@@ -77,7 +78,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 				curr_record.date = QDate::fromString(q_datestr, "yyyy");
 				if (!curr_record.date.isValid()) {
 					//TODO: handle invalid date entry
-					qDebug() << "Invalid date entry: " << curr_record.memberName << " " << q_datestr;
+                    qDebug() << "Invalid date entry: " << curr_record.memberName << " " << q_datestr << " on line " << count;
 					continue;
 				}
 			}
@@ -88,6 +89,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 		*/
 		
 		records.append(curr_record);
+        count++;
 	}
 	
 	return records;

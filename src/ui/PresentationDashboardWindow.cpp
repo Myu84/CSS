@@ -48,15 +48,13 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	}
 	
 	//build the view
-	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, {"Presentations", "", "", 
-									QString::number(recordsInRange.size())});
+    QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << "Presentations" << "" << "" << QString::number(recordsInRange.size())));
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
-		QTreeWidgetItem *presNode = new QTreeWidgetItem(root, {"", presType.key(), "", 
-											QString::number(total(presType.value()))});
+        QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << "" << presType.key() << "" << QString::number(total(presType.value()))));
 		
 		for (auto name = presType.value().begin(); name != presType.value().end(); ++name) {
-			new QTreeWidgetItem(presNode, {"", "", name.key(), QString::number(name.value())});
+            new QTreeWidgetItem(presNode, (QStringList() << "" << "" << name.key() << QString::number(name.value())));
 		}
 	}
 }
