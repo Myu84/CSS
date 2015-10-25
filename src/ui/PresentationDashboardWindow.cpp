@@ -1,13 +1,17 @@
 #include <cstdlib>
 #include <QMessageBox>
 #include <QString>
+#include <QDate>
+#include <QPair>
+#include <QTreeWidgetItem>
 
 #include "PresentationDashboardWindow.h"
 #include "../records/PresentationRecord.h"
 #include "../parser/PresentationParser.h"
+#include "../utils/Utils.h"
 
 PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
-    PresentationParser parser;
+	PresentationParser parser;
 	
 	try {
 		records = parser.parse(csv_filename);
@@ -21,7 +25,38 @@ PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Presentations - " + records[0].primaryDomain + " - " + csv_filename);
 	
-	/*
-		Display the records here
-	*/
+	QPair<QDate, QDate> dateInterval = findDateRange(records);
+	ui.startDateSelector->setDate(dateInterval.first);
+	ui.endDateSelector->setDate(dateInterval.second);
+	
+	updateDateLabel();
+	updateTreeWidget();
+}
+
+void PresentationDashboardWindow::updateTreeWidget() {
+	ui.treeWidget->clear();
+	
+	//find records in range
+	QList<PresentationRecord> recordsInRange = filterByDateRange(records, 
+													ui.startDateSelector->date(),
+													ui.endDateSelector->date());
+	
+	//count the records
+	QMap<QString, QMap<QString, int>> recordsSummary;
+	for (const PresentationRecord &record : recordsInRange) {
+		++recordsSummary[record.activityType][record.memberName];
+	}
+	
+	//build the view
+	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, {"Presentations", "", "", 
+									QString::number(recordsInRange.size())});
+	
+	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
+		QTreeWidgetItem *presNode = new QTreeWidgetItem(root, {"", presType.key(), "", 
+											QString::number(total(presType.value()))});
+		
+		for (auto name = presType.value().begin(); name != presType.value().end(); ++name) {
+			new QTreeWidgetItem(presNode, {"", "", name.key(), QString::number(name.value())});
+		}
+	}
 }

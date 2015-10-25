@@ -13,9 +13,13 @@ class DashboardWindow : public QMainWindow {
 
  private slots:
 	void on_actionExit_triggered();
+	void on_dateFilterButton_clicked();
 	
  protected:
     DashboardWindow();
+	void updateDateLabel();
+	virtual void updateTreeWidget() = 0;
+	
     Ui::DashboardWindow ui;
 };
 

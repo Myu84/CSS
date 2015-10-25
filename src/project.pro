@@ -18,4 +18,5 @@ HEADERS += \
 	parser/PresentationParser.h ui/PresentationDashboardWindow.h \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
+	utils/Utils.h \
     ../external/qcustomplot.h ../external/csv.h
