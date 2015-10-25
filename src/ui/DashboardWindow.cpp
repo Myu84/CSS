@@ -2,9 +2,14 @@
 #include "DashboardWindow.h"
 #include "PresentationDashboardWindow.h"
 #include "ui_DashboardWindow.h"
+#include <QDesktopWidget>
+#include <QRect>
 
 DashboardWindow::DashboardWindow() {
     ui.setupUi(this);
+    QDesktopWidget dw;
+    QRect mainScreen = dw.availableGeometry(dw.primaryScreen());
+    this->resize(mainScreen.width()*0.7f, mainScreen.height()*0.7f);
 }
 
 DashboardWindow *DashboardWindow::makeDashboard() {
