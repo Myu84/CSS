@@ -50,6 +50,8 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	//build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << "Presentations" << "" << "" << QString::number(recordsInRange.size())));
 	ui.treeWidget->expandItem(root);
+
+
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
         QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << "" << presType.key() << "" << QString::number(total(presType.value()))));
@@ -58,4 +60,9 @@ void PresentationDashboardWindow::updateTreeWidget() {
             new QTreeWidgetItem(presNode, (QStringList() << "" << "" << name.key() << QString::number(name.value())));
 		}
 	}
+
+    // for now, make sure that column width is at least equal to contents
+    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
+        ui.treeWidget->resizeColumnToContents(i);
+    }
 }
