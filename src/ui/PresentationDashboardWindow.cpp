@@ -47,7 +47,7 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
 		QTreeWidgetItem *presNode = new QTreeWidgetItem(root, {"", presType.key(), "", 
-											QString::number(0)});
+											QString::number(total(presType.value()))});
 		
 		for (auto name = presType.value().begin(); name != presType.value().end(); ++name) {
 			new QTreeWidgetItem(presNode, {"", "", name.key(), QString::number(name.value())});

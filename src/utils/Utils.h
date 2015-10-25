@@ -6,11 +6,10 @@
 #include <QList>
 
 template <typename T>
-QPair<QDate, QDate> findDateRange(const QList<T> &records) {
-	QDate min;
-	QDate max;
+QPair<QDate, QDate> findDateRange(const T &records) {
+	QDate min, max;
 	
-	for (const T &record : records) {
+	for (const auto &record : records) {
 		if (record.date < min) {
 			min = record.date;
 		}
@@ -23,13 +22,24 @@ QPair<QDate, QDate> findDateRange(const QList<T> &records) {
 }
 
 template <typename T, typename U>
-QList<T> filterRecords(const QList<T> &records, U pred) {
-	QList<T> output;
+QList<typename T::value_type> filterRecords(const T &records, U pred) {
+	QList<typename T::value_type> output;
 	
-	for (const T &record : records) {
+	for (const auto &record : records) {
 		if (pred(record)) {
 			output.append(record);
 		}
+	}
+	
+	return output;
+}
+
+template <typename T>
+int total(const T &vect) {
+	int output = 0;
+	
+	for (const auto &val : vect) {
+		output += val;
 	}
 	
 	return output;
