@@ -21,12 +21,12 @@ QPair<QDate, QDate> findDateRange(const T &records) {
 	return qMakePair(min, max);
 }
 
-template <typename T, typename U>
-QList<typename T::value_type> filterRecords(const T &records, U pred) {
+template <typename T>
+QList<typename T::value_type> filterByDateRange(const T &records, QDate startDate, QDate endDate) {
 	QList<typename T::value_type> output;
 	
 	for (const auto &record : records) {
-		if (pred(record)) {
+		if (record.date >= startDate && record.date <= endDate) {
 			output.append(record);
 		}
 	}

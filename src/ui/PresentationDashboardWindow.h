@@ -8,14 +8,15 @@
 #include "../records/PresentationRecord.h"
 
 class PresentationDashboardWindow : public DashboardWindow {
-    Q_OBJECT
+	Q_OBJECT
 
  public:
-    PresentationDashboardWindow(QString csv_filename);
-
- private:
-	void updateTreeWidget();
+	PresentationDashboardWindow(QString csv_filename);
 	
+ protected:
+	virtual void updateTreeWidget();
+	
+ private:
 	QList<PresentationRecord> records;
 };
 

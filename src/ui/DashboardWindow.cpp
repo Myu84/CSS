@@ -20,6 +20,18 @@ DashboardWindow *DashboardWindow::makeDashboard() {
 	}
 }
 
+void DashboardWindow::on_dateFilterButton_clicked() {
+	updateDateLabel();
+	updateTreeWidget();
+}
+
+void DashboardWindow::updateDateLabel() {
+	ui.dateRangeLabel->setText("Showing records from " + 
+							   ui.startDateSelector->date().toString("yyyy/MM/dd") + 
+							   " to " + 
+							   ui.endDateSelector->date().toString("yyyy/MM/dd"));
+}
+
 void DashboardWindow::on_actionExit_triggered() {
 	close();
 }

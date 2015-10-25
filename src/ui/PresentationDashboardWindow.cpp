@@ -11,7 +11,7 @@
 #include "../utils/Utils.h"
 
 PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
-    PresentationParser parser;
+	PresentationParser parser;
 	
 	try {
 		records = parser.parse(csv_filename);
@@ -29,21 +29,27 @@ PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 	ui.startDateSelector->setDate(dateInterval.first);
 	ui.endDateSelector->setDate(dateInterval.second);
 	
+	updateDateLabel();
 	updateTreeWidget();
 }
 
 void PresentationDashboardWindow::updateTreeWidget() {
-    ui.treeWidget->clear();
+	ui.treeWidget->clear();
+	
+	//find records in range
+	QList<PresentationRecord> recordsInRange = filterByDateRange(records, 
+													ui.startDateSelector->date(),
+													ui.endDateSelector->date());
 	
 	//count the records
 	QMap<QString, QMap<QString, int>> recordsSummary;
-	for (const PresentationRecord &record : records) {
+	for (const PresentationRecord &record : recordsInRange) {
 		++recordsSummary[record.activityType][record.memberName];
 	}
 	
 	//build the view
 	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, {"Presentations", "", "", 
-									QString::number(records.size())});
+									QString::number(recordsInRange.size())});
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
 		QTreeWidgetItem *presNode = new QTreeWidgetItem(root, {"", presType.key(), "", 
