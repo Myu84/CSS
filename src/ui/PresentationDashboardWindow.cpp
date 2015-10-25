@@ -49,6 +49,7 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	
 	//build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << "Presentations" << "" << "" << QString::number(recordsInRange.size())));
+	ui.treeWidget->expandItem(root);
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
         QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << "" << presType.key() << "" << QString::number(total(presType.value()))));
