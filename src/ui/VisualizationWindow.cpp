@@ -15,6 +15,11 @@ void VisualizationWindow::init(const QList<PresentationRecord> &records, QString
 
     QList<PresentationRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
     QList<PresentationRecord> recordsMatchingMember;
+    ui.GraphTitleLabel->setText("Visualization for " + memberName);
+    ui.GraphTitleLabel->setAlignment(Qt::AlignHCenter);
+    ui.DateRangeLabel->setText(startDate.toString("'From' MMMM d',' yyyy") +
+                                endDate.toString("' to' MMMM d',' yyyy"));
+    ui.DateRangeLabel->setAlignment(Qt::AlignHCenter);
 
     // all records matching the given member
     for (const PresentationRecord &record : recordsInRange) {
