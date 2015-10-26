@@ -9,6 +9,8 @@
 #include "../records/PresentationRecord.h"
 #include "../parser/PresentationParser.h"
 #include "../utils/Utils.h"
+#include "VisualizationWindow.h"
+
 
 PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 	PresentationParser parser;
@@ -85,14 +87,19 @@ void PresentationDashboardWindow::on_treeWidget_doubleClicked()
     //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
     if(selected->text(facultyMemberNameColumn) != "") {
         //Use this line as the faculty name string
-        selected->text(facultyMemberNameColumn);
+        //selected->text(facultyMemberNameColumn);
 
         //Use this line as the QList<PresentationRecord>
-        records;
+        //records;
 
         //Use these lines as the date filter
-        ui.startDateSelector->date();
-        ui.endDateSelector->date();
+        //ui.startDateSelector->date();
+        //ui.endDateSelector->date();
+
+        VisualizationWindow vw(this);
+        vw.init(records, selected->text(facultyMemberNameColumn), ui.startDateSelector->date(), ui.endDateSelector->date());
+        //vw.show();
+        vw.exec();
 
         //Call something like makeVisualizationWindow() with the above items as parameters
     }

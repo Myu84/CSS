@@ -91,7 +91,7 @@
     <string>Scatter Plot</string>
    </property>
   </widget>
-  <widget class="QCustomPlot" name="widget" native="true">
+  <widget class="QCustomPlot" name="Visualization" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
