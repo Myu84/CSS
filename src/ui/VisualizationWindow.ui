@@ -13,12 +13,12 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="GraphTitleLabel">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>30</x>
      <y>30</y>
-     <width>261</width>
+     <width>361</width>
      <height>20</height>
     </rect>
    </property>
@@ -26,12 +26,12 @@
     <string>[Graph Title (if not included in QCustomPlot)]</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="DateRangeLabel">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>30</x>
      <y>50</y>
-     <width>201</width>
+     <width>361</width>
      <height>20</height>
     </rect>
    </property>
