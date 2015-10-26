@@ -9,6 +9,8 @@
 #include "../records/PresentationRecord.h"
 #include "../parser/PresentationParser.h"
 #include "../utils/Utils.h"
+#include "VisualizationWindow.h"
+
 
 PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 	PresentationParser parser;
@@ -48,17 +50,23 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	}
 	
 	//build the view
-	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, {"Presentations", "", "", 
-									QString::number(recordsInRange.size())});
+    QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << "Presentations" << "" << "" << QString::number(recordsInRange.size())));
+	ui.treeWidget->expandItem(root);
+
+
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
-		QTreeWidgetItem *presNode = new QTreeWidgetItem(root, {"", presType.key(), "", 
-											QString::number(total(presType.value()))});
+        QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << "" << presType.key() << "" << QString::number(total(presType.value()))));
 		
 		for (auto name = presType.value().begin(); name != presType.value().end(); ++name) {
-			new QTreeWidgetItem(presNode, {"", "", name.key(), QString::number(name.value())});
+            new QTreeWidgetItem(presNode, (QStringList() << "" << "" << name.key() << QString::number(name.value())));
 		}
 	}
+
+    // for now, make sure that column width is at least equal to contents
+    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
+        ui.treeWidget->resizeColumnToContents(i);
+    }
 }
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
@@ -78,16 +86,13 @@ void PresentationDashboardWindow::on_treeWidget_doubleClicked()
 
     //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
     if(selected->text(facultyMemberNameColumn) != "") {
-        //Use this line as the faculty name string
-        selected->text(facultyMemberNameColumn);
-
-        //Use this line as the QList<PresentationRecord>
-        records;
-
-        //Use these lines as the date filter
-        ui.startDateSelector->date();
-        ui.endDateSelector->date();
-
-        //Call something like makeVisualizationWindow() with the above items as parameters
+        VisualizationWindow vw(this);
+        QString memberName = selected->text(facultyMemberNameColumn);
+        QDate sDate, eDate;
+        sDate = ui.startDateSelector->date();
+        eDate = ui.endDateSelector->date();
+        //vw.init(records, selected->text(facultyMemberNameColumn), ui.startDateSelector->date(), ui.endDateSelector->date());
+        vw.init(records, memberName, sDate, eDate);
+        vw.exec();
     }
 }

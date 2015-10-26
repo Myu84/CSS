@@ -1,4 +1,5 @@
 #include "csv_vs2013_compat.h"
+#include "csv_qstring_support.h"
 
 // Copyright: (2012-2014) Ben Strasser <code@ben-strasser.net>
 // License: BSD-3
