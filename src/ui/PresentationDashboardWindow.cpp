@@ -66,3 +66,34 @@ void PresentationDashboardWindow::updateTreeWidget() {
         ui.treeWidget->resizeColumnToContents(i);
     }
 }
+
+//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
+void PresentationDashboardWindow::on_treeWidget_doubleClicked()
+{
+    QTreeWidgetItem *header = ui.treeWidget->headerItem();
+    int facultyMemberNameColumn = 0;
+    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
+        if (header->text(i) == "Faculty Name") {
+            facultyMemberNameColumn = i;
+        }
+    }
+
+    //Gets the row that was doubleclicked; I believe selectedItems() only returns what has keyboard focus, which can only be one row in our case
+    //Therefore it should work because it can only ever return the one line that was doubleclicked; still kind of hacky though
+    QTreeWidgetItem *selected = ui.treeWidget->selectedItems().first();
+
+    //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
+    if(selected->text(facultyMemberNameColumn) != "") {
+        //Use this line as the faculty name string
+        selected->text(facultyMemberNameColumn);
+
+        //Use this line as the QList<PresentationRecord>
+        records;
+
+        //Use these lines as the date filter
+        ui.startDateSelector->date();
+        ui.endDateSelector->date();
+
+        //Call something like makeVisualizationWindow() with the above items as parameters
+    }
+}

@@ -16,6 +16,8 @@ class PresentationDashboardWindow : public DashboardWindow {
  protected:
 	virtual void updateTreeWidget();
 	
+    virtual void on_treeWidget_doubleClicked();
+
  private:
 	QList<PresentationRecord> records;
 };
