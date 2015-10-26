@@ -30,6 +30,14 @@ void DashboardWindow::on_dateFilterButton_clicked() {
 	updateTreeWidget();
 }
 
+void DashboardWindow::on_backButton_clicked() {
+    close();
+    DashboardWindow *dashboard = DashboardWindow::makeDashboard();
+    if (dashboard != nullptr)
+        dashboard->show();
+
+}
+
 void DashboardWindow::updateDateLabel() {
 	ui.dateRangeLabel->setText("Showing records from " + 
 							   ui.startDateSelector->date().toString("yyyy/MM/dd") + 
