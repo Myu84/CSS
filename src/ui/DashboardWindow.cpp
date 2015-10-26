@@ -48,3 +48,21 @@ void DashboardWindow::updateDateLabel() {
 void DashboardWindow::on_actionExit_triggered() {
 	close();
 }
+
+
+
+void DashboardWindow::on_treeWidget_collapsed()
+{
+    // for now, make sure that column width is at least equal to contents
+    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
+        ui.treeWidget->resizeColumnToContents(i);
+    }
+}
+
+void DashboardWindow::on_treeWidget_expanded()
+{
+    // for now, make sure that column width is at least equal to contents
+    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
+        ui.treeWidget->resizeColumnToContents(i);
+    }
+}

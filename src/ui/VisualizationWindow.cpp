@@ -21,6 +21,8 @@ void VisualizationWindow::init(const QList<PresentationRecord> &records, QString
                                 endDate.toString("' to' MMMM d',' yyyy"));
     ui.DateRangeLabel->setAlignment(Qt::AlignHCenter);
 
+    setWindowTitle("Visualizations - " + memberName);
+
     // all records matching the given member
     for (const PresentationRecord &record : recordsInRange) {
         if (record.memberName == memberName) {

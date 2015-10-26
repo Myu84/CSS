@@ -14,9 +14,11 @@ class DashboardWindow : public QMainWindow {
  private slots:
 	void on_actionExit_triggered();
 	void on_dateFilterButton_clicked();
-    void on_backButton_clicked();
-	
- protected slots:
+    void on_backButton_clicked();	
+    void on_treeWidget_collapsed();
+    void on_treeWidget_expanded();
+
+protected slots:
     virtual void on_treeWidget_doubleClicked() = 0;
 
  protected:
