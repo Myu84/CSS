@@ -110,13 +110,6 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="4">
-     <widget class="QPushButton" name="backButton">
-      <property name="text">
-       <string>Back</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -125,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>472</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -143,7 +136,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Open...</string>
