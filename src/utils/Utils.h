@@ -8,7 +8,9 @@
 template <typename T>
 QPair<QDate, QDate> findDateRange(const T &records) {
 	QDate min, max;
-	
+    // this will crash if records is empty
+    min = records[0].date;
+    max = records[0].date;
 	for (const auto &record : records) {
 		if (record.date < min) {
 			min = record.date;
@@ -17,7 +19,7 @@ QPair<QDate, QDate> findDateRange(const T &records) {
 			max = record.date;
 		}
 	}
-	
+
 	return qMakePair(min, max);
 }
 
