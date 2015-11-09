@@ -84,6 +84,7 @@ void VisualizationWindow::init(const QList<PresentationRecord> &records, QString
     // these four methods force the y-axis to increment integers only
     ui.Visualization->yAxis->setAutoTickStep(false);
     ui.Visualization->yAxis->setAutoSubTicks(false);
+    ui.Visualization->yAxis->setSubTickCount(0);
     ui.Visualization->yAxis->setRange(0, valueMax + 0.1);
     ui.Visualization->yAxis->setTickStep(1);
 

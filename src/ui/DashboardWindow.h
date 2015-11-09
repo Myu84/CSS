@@ -12,9 +12,9 @@ class DashboardWindow : public QMainWindow {
 	static DashboardWindow *makeDashboard();
 
  private slots:
+	void on_actionOpen_triggered();	
 	void on_actionExit_triggered();
 	void on_dateFilterButton_clicked();
-    void on_backButton_clicked();	
     void on_treeWidget_collapsed();
     void on_treeWidget_expanded();
 

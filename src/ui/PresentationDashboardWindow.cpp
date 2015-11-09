@@ -46,14 +46,12 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	//count the records
 	QMap<QString, QMap<QString, int>> recordsSummary;
 	for (const PresentationRecord &record : recordsInRange) {
-		++recordsSummary[record.activityType][record.memberName];
+        ++recordsSummary[record.type][record.memberName];
 	}
 	
 	//build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << "Presentations" << "" << "" << QString::number(recordsInRange.size())));
 	ui.treeWidget->expandItem(root);
-
-
 	
 	for (auto presType = recordsSummary.begin(); presType != recordsSummary.end(); ++presType) {
         QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << "" << presType.key() << "" << QString::number(total(presType.value()))));

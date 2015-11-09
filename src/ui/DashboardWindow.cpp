@@ -30,7 +30,7 @@ void DashboardWindow::on_dateFilterButton_clicked() {
 	updateTreeWidget();
 }
 
-void DashboardWindow::on_backButton_clicked() {
+void DashboardWindow::on_actionOpen_triggered() {
     close();
     DashboardWindow *dashboard = DashboardWindow::makeDashboard();
     if (dashboard != nullptr)
