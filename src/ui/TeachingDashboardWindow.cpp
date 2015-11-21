@@ -125,10 +125,11 @@ void TeachingDashboardWindow::updateTreeWidget() {
     }
 }
 
-/*
+
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
- void PresentationDashboardWindow::on_treeWidget_doubleClicked()
+ void TeachingDashboardWindow::on_treeWidget_doubleClicked()
 {
+/*
     QTreeWidgetItem *header = ui.treeWidget->headerItem();
     int facultyMemberNameColumn = 0;
     for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
@@ -152,6 +153,6 @@ void TeachingDashboardWindow::updateTreeWidget() {
         vw.init(records, memberName, sDate, eDate);
         vw.exec();
     }
+    */
 
 }
-*/

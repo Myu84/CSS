@@ -137,7 +137,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
             curr_record.programType="UME";
         else if(curr_pro.compare("Continuing Medical Education")==0)
             curr_record.programType="CME";
-        else curr_record.programType="Others";//other
+        else curr_record.programType="Other";//other
         
 		
 		//validate Type of Course / Activity
@@ -163,8 +163,6 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
         }
         
 
-        int numStu;
-        double hours;
         //get number of trainee
         if(curr_numTra.isEmpty()){
             //TODO: handle missing
@@ -173,12 +171,12 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
         }
         else{
             bool ok1;
-            numStu=curr_numTra.toInt(&ok1,10);
+            curr_record.numStudent=curr_numTra.toInt(&ok1,10);
             if(!ok1){
                 qDebug() << "[number of trainee] is not integer on line " << count;
                 continue;
             }
-            if(numStu<0){
+            if(curr_record.numStudent<0){
                 qDebug() << "[number of trainee] is negative on line " << count;
                 continue;
             }
@@ -192,21 +190,17 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
         }
         else{
             bool ok2;
-            hours=curr_totalH.toDouble(&ok2);
+            curr_record.totalhours=curr_totalH.toDouble(&ok2);
             if(!ok2){
                 qDebug() << "[total hours] is not double on line" << count;
                 continue;
             }
-            if(hours<0){
+            if(curr_record.totalhours<0){
                 qDebug() << "[total hours] is negative on line " << count;
                 continue;
             }
 
         }
-
-        curr_record.totalhours=hours;
-        curr_record.numStudent=numStu;
-        
 		records.append(curr_record);
         ++count;
 	}
