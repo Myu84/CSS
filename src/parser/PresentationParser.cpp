@@ -40,7 +40,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 	PresentationRecord curr_record;
 	QString curr_datestr;
 	
-    int count = 2; // keep track of csv line being read. Start at 2 to account for the header
+    int count = 1; // keep track of csv line being read. Start at 2 to account for the header
 	while (parser.read_row(curr_record.memberName, 
 						   curr_record.primaryDomain, 
 						   curr_datestr, 
@@ -62,6 +62,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 						   curr_record.restOfCitation, 
 						   curr_record.personalRemuneration)) {
 		//validate date entry
+        count++;
 		curr_record.date = QDate::fromString(curr_datestr, "yyyy/M/d");
 		if (!curr_record.date.isValid()) {
 			curr_record.date = QDate::fromString(curr_datestr, "yyyy/M");
@@ -97,7 +98,7 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 		}
 		
 		records.append(curr_record);
-        ++count;
+
 	}
 	
 	return records;

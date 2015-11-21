@@ -1,6 +1,7 @@
 #include "FileInputDialog.h"
 #include "DashboardWindow.h"
 #include "PresentationDashboardWindow.h"
+#include "TeachingDashboardWindow.h"
 #include "ui_DashboardWindow.h"
 #include <QDesktopWidget>
 #include <QRect>
@@ -17,7 +18,11 @@ DashboardWindow *DashboardWindow::makeDashboard() {
 	if (inputDialog.exec() == QDialog::Accepted) {
 		if (inputDialog.getSubjectArea() == Presentation) {
 			return new PresentationDashboardWindow(inputDialog.getFilename());
-		} else {
+        }
+        else if(inputDialog.getSubjectArea() == Teaching){
+            return new TeachingDashboardWindow(inputDialog.getFilename());
+        }
+        else {
 			throw "Unimplemented subject area";
 		}
 	} else {

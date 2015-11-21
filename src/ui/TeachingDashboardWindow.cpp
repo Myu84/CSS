@@ -45,14 +45,15 @@ void TeachingDashboardWindow::updateTreeWidget() {
 
     //loop all records in rang to modify the startDate
     //                         and to count the value for Hour and numStudent
+
     QMap<QString, QMap<QString,QMap<QString,double>>> recordsSummaryHour;
     QMap<QString, QMap<QString,QMap<QString,int>>> recordsSummaryStudent;
+
 	for (const TeachingRecord &record : recordsInRange) {
         recordsSummaryHour[record.programType][record.academicYear][record.memberName]+=record.totalhours;
         recordsSummaryStudent[record.programType][record.academicYear][record.memberName]+=record.numStudent;
 	}
-    
-    
+
 
     //build the view for recorded within range
 
@@ -65,7 +66,7 @@ void TeachingDashboardWindow::updateTreeWidget() {
     auto progTypeH = recordsSummaryHour.begin();
     auto progTypeS = recordsSummaryStudent.begin();
     //for program level
-    while ( (progTypeH != recordsSummaryHour.end()) && (progTypeS!=recordsSummaryStudent.end())){
+    while ( progTypeH != recordsSummaryHour.end()){
         QTreeWidgetItem *progNode = new QTreeWidgetItem(root);
         //for key of academicYear
         
@@ -74,7 +75,7 @@ void TeachingDashboardWindow::updateTreeWidget() {
         
         auto yearH = progTypeH.value().begin();
         auto yearS = progTypeS.value().begin();
-        while (yearH != progTypeH.value().end() && yearS != progTypeS.value().end()) {
+        while (yearH != progTypeH.value().end()) {
             QTreeWidgetItem *yearNode =new QTreeWidgetItem(progNode);
             
             double count_yearH=0;
@@ -83,7 +84,7 @@ void TeachingDashboardWindow::updateTreeWidget() {
             //for faculty level
             auto nameH = yearH.value().begin();
             auto nameS = yearS.value().begin();
-            while (nameH!=yearH.value().end() && nameS!=yearS.value().end()) {
+            while (nameH!=yearH.value().end()) {
                 QTreeWidgetItem *nameNode= new QTreeWidgetItem(yearNode);
                 nameNode->setText(0,nameH.key());//facutly name
                 nameNode->setText(1,QString::number(nameH.value()));//hour/faculty
@@ -114,7 +115,7 @@ void TeachingDashboardWindow::updateTreeWidget() {
         ++progTypeS;
 	}
 
-    root->setText(0,"Teaching");
+    root->setText(0,QString("Teaching"));
     root->setText(1,QString::number(count_tchH));
     root->setText(2,QString::number(count_tchS));
 

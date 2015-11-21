@@ -36,18 +36,19 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
     QString curr_numTra;
     QString curr_totalH;
     
-    int count = 2; // keep track of csv line being read. Start at 2 to account for the header
+    int count = 1; // keep track of csv line being read. Start at 2 to account for the header
     while (parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_startDate,
                            curr_endDate,
-                           curr_pro,curr_record.activityType,
+                           curr_pro,
+                           curr_record.activityType,
                            curr_record.geographicalScope,
                            curr_record.hoursPerSession,
                            curr_numTra,
                            curr_totalH))
     {
-		
+        count++;
         //validate name
         if (curr_record.memberName.isEmpty()) {
             //TODO: handle missing name
@@ -68,15 +69,14 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
         //validate start date entry
         //category the academic year
         //rule: [2012-09-01, 2013-08-31] ==> academicYear="2012-2013"
-        startDate = QDate::fromString(curr_startDate, "yyyy-MM-dd");
-
+        startDate = QDate::fromString(curr_startDate, "yyyy/MM/dd");
         if (!startDate.isValid()) {
-            startDate = QDate::fromString(curr_startDate, "yyyy-MM");
+            startDate = QDate::fromString(curr_startDate, "yyyy/MM");
             if (!startDate.isValid()) {
                 startDate = QDate::fromString(curr_startDate, "yyyy");
                 if (!startDate.isValid()) {
 					//TODO: handle invalid date entry
-                    qDebug() << "Invalid date entry: " << curr_startDate << " on line " << count;
+                    qDebug() << "Invalid startDate entry: " << curr_startDate << " on line " << count;
 					continue;
 				}
                 else{
@@ -105,21 +105,21 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 
 
         //validate end date entry
-        endDate = QDate::fromString(curr_endDate, "yyyy-MM-dd");
+        endDate = QDate::fromString(curr_endDate, "yyyy/MM/dd");
         if (!endDate.isValid()) {
-            endDate = QDate::fromString(curr_endDate, "yyyy-MM");
+            endDate = QDate::fromString(curr_endDate, "yyyy/MM");
             if (!endDate.isValid()) {
                 endDate = QDate::fromString(curr_endDate, "yyyy");
                 if (!endDate.isValid()) {
                     //TODO: handle invalid date entry
-                    qDebug() << "Invalid date entry: " << curr_endDate << " on line " << count;
+                    qDebug() << "Invalid endDate entry: " << curr_endDate << " on line " << count;
                     continue;
                 }
             }
         }
         //verify the range
         if(startDate>endDate){
-                 qDebug() << "Incorrect date range: "<<startDate<<" to "<<endDate<< "on line " << count;
+                 qDebug() << "Incorrect date range: "<<curr_startDate<<" to "<<curr_endDate<< "on line " << count;
                  continue;
         }
         
@@ -202,7 +202,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 
         }
 		records.append(curr_record);
-        ++count;
+
 	}
 	
 	return records;
