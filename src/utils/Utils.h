@@ -12,11 +12,11 @@ QPair<QDate, QDate> findDateRange(const T &records) {
     min = records[0].date;
     max = records[0].date;
 	for (const auto &record : records) {
-		if (record.date < min) {
-			min = record.date;
+        if (record.date < min) {
+            min = record.date;
 		}
-		if (record.date > max) {
-			max = record.date;
+        if (record.date > max) {
+            max = record.date;
 		}
 	}
 

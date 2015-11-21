@@ -9,6 +9,7 @@ win32 {
 
 SOURCES += main.cpp \
     parser/PresentationParser.cpp ui/PresentationDashboardWindow.cpp \
+    parser/TeachingParser.cpp ui/TeachingDashboardWindow.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
     ../external/qcustomplot.cpp
 
@@ -16,6 +17,7 @@ FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
 HEADERS += \
 	parser/PresentationParser.h ui/PresentationDashboardWindow.h \
+        parser/TeachingParser.h ui/TeachingDashboardWindow.h \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	utils/Utils.h \
