@@ -16,9 +16,9 @@ static const int facultyMemberNameColumn = 3;
 
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
-		return QString::number(date.year());
+		return QString::number(date.year() - 1) + "-" + QString::number(date.year());
 	} else { //after September 1
-		return QString::number(date.year() + 1);
+		return QString::number(date.year()) + "-" + QString::number(date.year() + 1);
 	}
 }
 
