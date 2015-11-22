@@ -126,12 +126,15 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
             continue;
         }
         
+		//geographicalScope is missing too often to check
+		/*
         //validate geographicalScope
         if (curr_record.geographicalScope.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing geographical scope on line " << lineNum;
             continue;
         }
+		*/
         
         //validate hoursPerSession
 		curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
@@ -163,6 +166,8 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
             //TODO: handle warning
             qDebug() << "Invalid number of trainees on line " << lineNum;
         }
+		
+		records.append(curr_record);
 	}
 	
 	return records;
