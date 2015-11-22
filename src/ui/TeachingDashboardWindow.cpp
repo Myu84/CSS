@@ -1,9 +1,11 @@
 #include <cstdlib>
+#include <exception>
 #include <QtGlobal>
 #include <QMessageBox>
 #include <QString>
 #include <QDate>
 #include <QPair>
+#include <QDebug>
 #include <QTreeWidgetItem>
 
 #include "TeachingDashboardWindow.h"
@@ -33,7 +35,8 @@ TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 	
 	try {
 		records = parser.parse(csv_filename);
-	} catch (...) {
+	} catch (const std::exception &e) {
+		qDebug() << e.what();
 		QMessageBox::critical(this, "Error", "A fatal error occurred while parsing the CSV file");
 		exit(1);
 	}
