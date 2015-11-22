@@ -5,11 +5,15 @@
 #include <QDate>
 
 struct PresentationRecord {
+	//mandatory fields
 	QString memberName;
 	QString primaryDomain;
 	QDate date;
 	QString type;
 	QString role;
+	QString title;
+	
+	//optional fields
 	QString activityType;
 	QString geographicalScope;
 	QString host;
@@ -22,7 +26,6 @@ struct PresentationRecord {
 	QString educationPresentation;
 	QString remarks;
 	QString authorship;
-	QString title;
 	QString restOfCitation;
 	QString personalRemuneration;
 };

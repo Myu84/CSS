@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <QtGlobal>
 #include <QMessageBox>
 #include <QString>
 #include <QDate>
@@ -8,9 +9,24 @@
 #include "TeachingDashboardWindow.h"
 #include "../records/TeachingRecord.h"
 #include "../parser/TeachingParser.h"
-#include "../utils/Utils.h"
+#include "UIUtils.h"
 #include "VisualizationWindow.h"
 
+static const int facultyMemberNameColumn = 3;
+
+QString toAcademicYear(const QDate &date) {
+	if (date.month() < 9) { //before September 1
+		return QString::number(date.year());
+	} else { //after September 1
+		return QString::number(date.year() + 1);
+	}
+}
+
+QString shortProgramName(QString program) {
+	return program.replace("Undergraduate Medical Education", "UME", Qt::CaseInsensitive)
+				  .replace("Postgraduate Medical Education", "PME", Qt::CaseInsensitive)
+				  .replace("Continuing Medical Education", "CME", Qt::CaseInsensitive);
+}
 
 TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 	TeachingParser parser;
@@ -22,12 +38,20 @@ TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 		exit(1);
 	}
 	
+	if (records.empty()) {
+		QMessageBox::critical(this, "Error", "The CSV file has no records");
+		exit(1);
+	}
+	
+	ui.treeWidget->setHeaderLabels(QStringList() << 
+						"" << "Program" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
+	
 	ui.subjectAreaLabel->setText("Teaching Summary");
 	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Teaching - " + records[0].primaryDomain + " - " + csv_filename);
 	
-	QPair<QDate, QDate> dateInterval = findDateRange(records);
+	QPair<QDate, QDate> dateInterval = findDateRangeStartEnd(records);
 	ui.startDateSelector->setDate(dateInterval.first);
 	ui.endDateSelector->setDate(dateInterval.second);
 	
@@ -39,98 +63,62 @@ void TeachingDashboardWindow::updateTreeWidget() {
 	ui.treeWidget->clear();
 	
 	//find records in range
-	QList<TeachingRecord> recordsInRange = filterByDateRange(records,
-													ui.startDateSelector->date(),
-													ui.endDateSelector->date());
+	QList<TeachingRecord> recordsInRange = filterByDateRangeStartEnd(records,
+												ui.startDateSelector->date(),
+												ui.endDateSelector->date());
 
-    //loop all records in rang to modify the startDate
-    //                         and to count the value for Hour and numStudent
-
-    QMap<QString, QMap<QString,QMap<QString,double>>> recordsSummaryHour;
-    QMap<QString, QMap<QString,QMap<QString,int>>> recordsSummaryStudent;
+    //total the records
+	QPair<double, uint> allSummary;
+    QMap<QString, QPair<double, uint>> programSummary;
+    QMap<QString, QMap<QString, QPair<double, uint>>> yearSummary;
+    QMap<QString, QMap<QString, QMap<QString, QPair<double, uint>>>> nameSummary;
 
 	for (const TeachingRecord &record : recordsInRange) {
-        recordsSummaryHour[record.programType][record.academicYear][record.memberName]+=record.totalhours;
-        recordsSummaryStudent[record.programType][record.academicYear][record.memberName]+=record.numStudent;
+		QString programName = shortProgramName(record.program);
+		QString academicYear = toAcademicYear(record.startDate);
+		
+		allSummary.first += record.totalHours;
+        allSummary.second += record.numTrainees;
+		
+		programSummary[programName].first += record.totalHours;
+        programSummary[programName].second += record.numTrainees;
+		
+		yearSummary[programName][academicYear].first += record.totalHours;
+        yearSummary[programName][academicYear].second += record.numTrainees;
+		
+        nameSummary[programName][academicYear][record.memberName].first += record.totalHours;
+        nameSummary[programName][academicYear][record.memberName].second += record.numTrainees;
 	}
 
-
-    //build the view for recorded within range
-
-
-    double count_tchH=0;
-    int count_tchS=0;
-    QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget);
-    ui.treeWidget->expandItem(root);
+    //build the view
+    QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
+									"Teaching" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+	ui.treeWidget->expandItem(root);
 	
-    auto progTypeH = recordsSummaryHour.begin();
-    auto progTypeS = recordsSummaryStudent.begin();
-    //for program level
-    while ( progTypeH != recordsSummaryHour.end()){
-        QTreeWidgetItem *progNode = new QTreeWidgetItem(root);
-        //for key of academicYear
-        
-        double count_progH=0;
-        int count_proS=0;
-        
-        auto yearH = progTypeH.value().begin();
-        auto yearS = progTypeS.value().begin();
-        while (yearH != progTypeH.value().end()) {
-            QTreeWidgetItem *yearNode =new QTreeWidgetItem(progNode);
-            
-            double count_yearH=0;
-            int count_yearS=0;
-            
-            //for faculty level
-            auto nameH = yearH.value().begin();
-            auto nameS = yearS.value().begin();
-            while (nameH!=yearH.value().end()) {
-                QTreeWidgetItem *nameNode= new QTreeWidgetItem(yearNode);
-                nameNode->setText(0,nameH.key());//facutly name
-                nameNode->setText(1,QString::number(nameH.value()));//hour/faculty
-                nameNode->setText(2,QString::number(nameS.value()));//student/faculty
-                count_yearH+=nameH.value();//hours/year
-                count_yearS+=nameS.value();//students/year
-                ++nameH;
-                ++nameS;
-            }
-            yearNode->setText(0,yearH.key());
-            yearNode->setText(1,QString::number(count_yearH));
-            yearNode->setText(2,QString::number(count_yearS));
-
-            count_progH+=count_yearH;//hour/program
-            count_proS+=count_yearS;//student/program
-            ++yearH;
-            ++yearS;
+	for (auto program = programSummary.begin(); program != programSummary.end(); ++program) {
+        QTreeWidgetItem *programNode = new QTreeWidgetItem(root, (QStringList() << 
+											"" << program.key() << "" << "" << QString::number(program.value().first) << QString::number(program.value().second)));
+		
+		QMap<QString, QPair<double, uint>> &currYearSummary = yearSummary[program.key()];
+		for (auto year = currYearSummary.begin(); year != currYearSummary.end(); ++year) {
+            QTreeWidgetItem *yearNode = new QTreeWidgetItem(programNode, (QStringList() << 
+												"" << "" << year.key() << "" << QString::number(year.value().first) << QString::number(year.value().second)));
+		
+			QMap<QString, QPair<double, uint>> &currNameSummary = nameSummary[program.key()][year.key()];
+			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
+				new QTreeWidgetItem(yearNode, (QStringList() << 
+						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+			}
 		}
-
-        progNode->setText(0,progTypeH.key());
-        progNode->setText(1,QString::number(count_progH));
-        progNode->setText(2,QString::number(count_proS));
-
-        count_tchH+=count_progH;
-        count_tchS+=count_proS;
-
-        ++progTypeH;
-        ++progTypeS;
 	}
 
-    root->setText(0,QString("Teaching"));
-    root->setText(1,QString::number(count_tchH));
-    root->setText(2,QString::number(count_tchS));
-
-
-    // for now, make sure that column width is at least equal to contents
-    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
-        ui.treeWidget->resizeColumnToContents(i);
-    }
+	setColumnWidths();
 }
 
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
- void TeachingDashboardWindow::on_treeWidget_doubleClicked()
-{
-/*
+void TeachingDashboardWindow::on_treeWidget_doubleClicked() {
+	/*
     QTreeWidgetItem *header = ui.treeWidget->headerItem();
     int facultyMemberNameColumn = 0;
     for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
@@ -155,5 +143,4 @@ void TeachingDashboardWindow::updateTreeWidget() {
         vw.exec();
     }
     */
-
 }

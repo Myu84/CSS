@@ -18,12 +18,13 @@ class DashboardWindow : public QMainWindow {
     void on_treeWidget_collapsed();
     void on_treeWidget_expanded();
 
-protected slots:
+ protected slots:
     virtual void on_treeWidget_doubleClicked() = 0;
 
  protected:
     DashboardWindow();
 	void updateDateLabel();
+	void setColumnWidths();
 	virtual void updateTreeWidget() = 0;
 	
     Ui::DashboardWindow ui;

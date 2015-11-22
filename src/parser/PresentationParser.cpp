@@ -38,12 +38,14 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 	QList<PresentationRecord> records;
 	
 	PresentationRecord curr_record;
-	QString curr_datestr;
 	
-    int count = 1; // keep track of csv line being read. Start at 2 to account for the header
+	//strings to be converted
+	QString curr_date;
+	
+    int lineNum = 1;
 	while (parser.read_row(curr_record.memberName, 
 						   curr_record.primaryDomain, 
-						   curr_datestr, 
+						   curr_date, 
 						   curr_record.type, 
 						   curr_record.role, 
 						   curr_record.activityType, 
@@ -61,44 +63,46 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 						   curr_record.title, 
 						   curr_record.restOfCitation, 
 						   curr_record.personalRemuneration)) {
-		//validate date entry
-        count++;
-		curr_record.date = QDate::fromString(curr_datestr, "yyyy/M/d");
+		bool parseOK;
+		lineNum++;
+		
+		//validate date
+		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-			curr_record.date = QDate::fromString(curr_datestr, "yyyy/M");
-			if (!curr_record.date.isValid()) {
-				curr_record.date = QDate::fromString(curr_datestr, "yyyy");
-				if (!curr_record.date.isValid()) {
-					//TODO: handle invalid date entry
-                    qDebug() << "Invalid date entry: " << curr_datestr << " on line " << count;
-					continue;
-				}
-			}
+			//TODO: handle error
+			qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
+			continue;
 		}
 		
-		//validate name
+		//validate memberName
 		if (curr_record.memberName.isEmpty()) {
-			//TODO: handle missing name
-			qDebug() << "Missing member name on line " << count;
+			//TODO: handle error
+			qDebug() << "Missing member name on line " << lineNum;
 			continue;
 		}
 		
 		//validate type
 		if (curr_record.type.isEmpty()) {
-			//TODO: handle missing type
-			qDebug() << "Missing type on line " << count;
+			//TODO: handle error
+			qDebug() << "Missing type on line " << lineNum;
+			continue;
+		}
+		
+		//validate role
+		if (curr_record.role.isEmpty()) {
+			//TODO: handle error
+			qDebug() << "Missing role on line " << lineNum;
 			continue;
 		}
 		
 		//validate title
 		if (curr_record.title.isEmpty()) {
-			//TODO: handle missing title
-			qDebug() << "Missing title on line " << count;
+			//TODO: handle error
+			qDebug() << "Missing title on line " << lineNum;
 			continue;
 		}
 		
 		records.append(curr_record);
-
 	}
 	
 	return records;

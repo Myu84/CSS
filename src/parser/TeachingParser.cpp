@@ -11,198 +11,158 @@ using namespace std;
 
 // file_name should be path to file
 QList<TeachingRecord> TeachingParser::parse(QString file_name) {
-	CSVParser<10> parser(file_name.toStdString());
+	CSVParser<22> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
-                       "Member Name",
-                       "Primary Domain",
-                       "Start Date",
-                       "End Date",
-                       "Program",
-                       "Type of Course / Activity",
-                       "Geographical Scope",
-                       "Hours per Teaching Session or Week",
-                       "Number Of Trainees",
-                       "Total Hours"
-		);
+        "Member Name",
+		"Primary Domain",
+		"Start Date",
+		"End Date",
+		"Program",
+		"Type of Course / Activity",
+		"Course / Activity",
+		"Geographical Scope",
+		"Institution / Organization",
+		"Faculty",
+		"Department",
+		"Division",
+		"Location",
+		"Hours per Teaching Session or Week",
+		"Number of Teaching Sessions or Weeks",
+		"Faculty Member Additional Comments",
+		"Number Of Trainees",
+		"Student Name(s)",
+		"Initial Lecture",
+		"Faculty Development",
+		"Comment",
+		"Total Hours");
 	
 	QList<TeachingRecord> records;
 	
 	TeachingRecord curr_record;
-    //for converting purposes
+	
+    //strings to be converted
     QString curr_startDate;
     QString curr_endDate;
-    QString curr_pro;
-    QString curr_numTra;
-    QString curr_totalH;
+    QString curr_hoursPerSession;
+    QString curr_numberOfSessions;
+    QString curr_numTrainees;
+    QString curr_totalHours;
     
-    int count = 1; // keep track of csv line being read. Start at 2 to account for the header
+    int lineNum = 1;
     while (parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_startDate,
                            curr_endDate,
-                           curr_pro,
+                           curr_record.program,
                            curr_record.activityType,
+                           curr_record.activity,
                            curr_record.geographicalScope,
-                           curr_record.hoursPerSession,
-                           curr_numTra,
-                           curr_totalH))
-    {
-        count++;
-        //validate name
+                           curr_record.institution,
+                           curr_record.faculty,
+                           curr_record.department,
+                           curr_record.division,
+                           curr_record.location,
+                           curr_hoursPerSession,
+                           curr_numberOfSessions,
+						   curr_record.additionalComments,
+                           curr_numTrainees,
+						   curr_record.studentNames,
+						   curr_record.initialLecture,
+						   curr_record.facultyDevelopment,
+                           curr_record.comment,
+						   curr_totalHours)) {
+		bool parseOK;
+        lineNum++;
+		
+        //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            //TODO: handle missing name
-            qDebug() << "Missing [member name] on line " << count;
+            //TODO: handle error
+            qDebug() << "Missing member name on line " << lineNum;
             continue;
         }
         
-        //validate Primary Domain
+        //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            //TODO: handle missing name
-            qDebug() << "Missing [Primary Domainon] on line " << count;
+            //TODO: handle error
+            qDebug() << "Missing primary domain on line " << lineNum;
             continue;
         }
         
-        QDate startDate;
-        QDate endDate;
-
-        //validate start date entry
-        //category the academic year
-        //rule: [2012-09-01, 2013-08-31] ==> academicYear="2012-2013"
-        startDate = QDate::fromString(curr_startDate, "yyyy/MM/dd");
-        if (!startDate.isValid()) {
-            startDate = QDate::fromString(curr_startDate, "yyyy/MM");
-            if (!startDate.isValid()) {
-                startDate = QDate::fromString(curr_startDate, "yyyy");
-                if (!startDate.isValid()) {
-					//TODO: handle invalid date entry
-                    qDebug() << "Invalid startDate entry: " << curr_startDate << " on line " << count;
-					continue;
-				}
-                else{
-                    //YYYY 2012-01-01 is 2011-2012
-                    curr_record.academicYear= QString::number(startDate.year()-1)+"-"+ QString::number(startDate.year());
-                }
-			}
-            else{
-                //YYYY-MM
-                if (startDate.month()<9)
-                    //2012-01 is 2011-2012
-                    curr_record.academicYear=QString::number(startDate.year()-1)+"-"+QString::number(startDate.year());
-                else
-                    //2012-10 is 2012-2013
-                    curr_record.academicYear= QString::number(startDate.year())+"-"+ QString::number(startDate.year()+1);
-            }
-		}
-        else{
-            //YYYY-MM-dd
-            if (startDate.month()<9)
-                curr_record.academicYear = QString::number(startDate.year()-1)+"-"+ QString::number(startDate.year());
-            else
-                curr_record.academicYear= QString::number(startDate.year())+"-"+QString::number(startDate.year()+1);
-        }
-    curr_record.date=startDate;//for date filter
-
-
-        //validate end date entry
-        endDate = QDate::fromString(curr_endDate, "yyyy/MM/dd");
-        if (!endDate.isValid()) {
-            endDate = QDate::fromString(curr_endDate, "yyyy/MM");
-            if (!endDate.isValid()) {
-                endDate = QDate::fromString(curr_endDate, "yyyy");
-                if (!endDate.isValid()) {
-                    //TODO: handle invalid date entry
-                    qDebug() << "Invalid endDate entry: " << curr_endDate << " on line " << count;
-                    continue;
-                }
-            }
-        }
-        //verify the range
-        if(startDate>endDate){
-                 qDebug() << "Incorrect date range: "<<curr_startDate<<" to "<<curr_endDate<< "on line " << count;
-                 continue;
-        }
-        
-
-		
-        //assign program type number
-        if (curr_pro.isEmpty()) {
-			//TODO: handle missing
-                        qDebug() << "Missing [programe] on line " << count;
+        //validate startDate
+		curr_record.startDate = parseDate(curr_startDate);
+		if (!curr_record.startDate.isValid()) {
+			//TODO: handle error
+			qDebug() << "Invalid start date: " << curr_startDate << " on line " << lineNum;
 			continue;
-        }
-        else if(curr_pro.compare("Postgraduate Medical Education")==0)
-            curr_record.programType="PME";
-        else if(curr_pro.compare("Undergraduate Medical Education")==0)
-            curr_record.programType="UME";
-        else if(curr_pro.compare("Continuing Medical Education")==0)
-            curr_record.programType="CME";
-        else curr_record.programType="Other";//other
-        
+		}
 		
-		//validate Type of Course / Activity
-		if (curr_record.activityType.isEmpty()) {
-			//TODO: handle missing
-                        qDebug() << "Missing [Type of Course / Activity] on line " << count;
+		//validate endDate
+		curr_record.endDate = parseDate(curr_endDate);
+		if (!curr_record.endDate.isValid()) {
+			//TODO: handle error
+			qDebug() << "Invalid end date: " << curr_endDate << " on line " << lineNum;
+			continue;
+		}
+		
+		//validate date range
+		if (curr_record.startDate > curr_record.endDate) {
+			//TODO: handle error
+			qDebug() << "Start date after end date on line " << lineNum;
 			continue;
 		}
         
+		//validate program
+        if (curr_record.program.isEmpty()) {
+            //TODO: handle error
+            qDebug() << "Missing program on line " << lineNum;
+            continue;
+        }
+		
+		//validate activityType
+        if (curr_record.activityType.isEmpty()) {
+            //TODO: handle error
+            qDebug() << "Missing activity type on line " << lineNum;
+            continue;
+        }
         
-        //validate Geographical Scope
+        //validate geographicalScope
         if (curr_record.geographicalScope.isEmpty()) {
-            //TODO: handle missing
-            qDebug() << "Missing [Geographical Scope] on line " << count;
+            //TODO: handle error
+            qDebug() << "Missing geographical scope on line " << lineNum;
             continue;
         }
         
-        //validate Hours per Teaching Session or Week
-        if (curr_record.hoursPerSession.isEmpty()) {
-            //TODO: handle missing
-            qDebug() << "Missing [Hours per Teaching Session or Week] on line " << count;
+        //validate hoursPerSession
+		curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
+        if (!parseOK || curr_record.hoursPerSession < 0) {
+            //TODO: handle error
+            qDebug() << "Invalid hours per session on line " << lineNum;
             continue;
         }
-        
 
-        //get number of trainee
-        if(curr_numTra.isEmpty()){
-            //TODO: handle missing
-            qDebug() << "Missing [number of trainees] on line " << count;
+        //validate numberOfSessions
+		curr_record.numberOfSessions = curr_numberOfSessions.toDouble(&parseOK);
+        if (!parseOK || curr_record.numberOfSessions < 0) {
+            //TODO: handle error
+            qDebug() << "Invalid number of sessions on line " << lineNum;
             continue;
         }
-        else{
-            bool ok1;
-            curr_record.numStudent=curr_numTra.toInt(&ok1,10);
-            if(!ok1){
-                qDebug() << "[number of trainee] is not integer on line " << count;
-                continue;
-            }
-            if(curr_record.numStudent<0){
-                qDebug() << "[number of trainee] is negative on line " << count;
-                continue;
-            }
-        }
-        
-        //get total hour
-        if(curr_totalH.isEmpty()){
-            //TODO: handle missing
-            qDebug() << "Missing [total hours] on line " << count;
+		
+		//validate totalHours
+		curr_record.totalHours = curr_totalHours.toDouble(&parseOK);
+        if (!parseOK || curr_record.totalHours < 0) {
+            //TODO: handle error
+            qDebug() << "Invalid total hours on line " << lineNum;
             continue;
         }
-        else{
-            bool ok2;
-            curr_record.totalhours=curr_totalH.toDouble(&ok2);
-            if(!ok2){
-                qDebug() << "[total hours] is not double on line" << count;
-                continue;
-            }
-            if(curr_record.totalhours<0){
-                qDebug() << "[total hours] is negative on line " << count;
-                continue;
-            }
-
+		
+		//validate numTrainees
+		curr_record.numTrainees = curr_numTrainees.toUInt(&parseOK);
+        if (!parseOK) {
+            //TODO: handle warning
+            qDebug() << "Invalid number of trainees on line " << lineNum;
         }
-		records.append(curr_record);
-
 	}
 	
 	return records;

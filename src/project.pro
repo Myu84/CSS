@@ -17,8 +17,8 @@ FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
 HEADERS += \
 	parser/PresentationParser.h ui/PresentationDashboardWindow.h \
-        parser/TeachingParser.h ui/TeachingDashboardWindow.h \
+    parser/TeachingParser.h ui/TeachingDashboardWindow.h \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
-	utils/Utils.h \
+	ui/UIUtils.h \
     ../external/qcustomplot.h ../external/csv.h

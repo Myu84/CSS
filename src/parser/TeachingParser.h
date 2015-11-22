@@ -9,7 +9,7 @@
 
 class TeachingParser : public Parser {
  public:
-        QList<TeachingRecord> parse(QString file_name);
+    QList<TeachingRecord> parse(QString file_name);
 };
 
 #endif

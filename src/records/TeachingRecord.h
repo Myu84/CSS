@@ -1,31 +1,36 @@
 #ifndef TEACHING_RECORD_H
 #define TEACHING_RECORD_H
 
+#include <QtGlobal>
 #include <QString>
 #include <QDate>
-#include <QPair>
 
 struct TeachingRecord {
-	
-
-   
+	//required fields
     QString memberName;
     QString primaryDomain;
-    QString academicYear;
-    QDate date;
-    QString programType;
-    /*
-     1. PME: Postgraduate Medical Education
-     2. UME: Undergraduate Medical Education
-     3. CME: Continuing Medical Education
-     4. Other
-    */
-    
+    QDate startDate;
+    QDate endDate;
+    QString program;
     QString activityType;
-    QString geographicalScope;
-    QString hoursPerSession;//wont be used
-    double  totalhours;
-    int numStudent;
+	QString geographicalScope;
+	double hoursPerSession;
+	double numberOfSessions;
+	double totalHours;
+	
+	//optional fields
+	uint numTrainees;
+	QString activity;
+    QString institution;
+    QString faculty;
+    QString department;
+    QString division;
+    QString location;
+    QString additionalComments;
+    QString studentNames;
+    QString initialLecture;
+    QString facultyDevelopment;
+    QString comment;
 };
 
 #endif

@@ -15,6 +15,18 @@ class Parser {
 									io::empty_line_comment>;
 	
 	static const io::ignore_column column_policy = io::ignore_extra_column;
+	
+	inline QDate parseDate(QString date_str) {
+		QDate output = QDate::fromString(date_str, "yyyy/M/d");
+		if (!output.isValid()) {
+			output = QDate::fromString(date_str, "yyyy/M");
+			if (!output.isValid()) {
+				output = QDate::fromString(date_str, "yyyy");
+			}
+		}
+		
+		return output;
+	}
 };
 
 #endif

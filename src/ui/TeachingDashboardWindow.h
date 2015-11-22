@@ -11,14 +11,15 @@ class TeachingDashboardWindow : public DashboardWindow {
 	Q_OBJECT
 
  public:
-	TeachingDashboardWindow(QString csv_filename);//constructor
+	TeachingDashboardWindow(QString csv_filename);
+	
+ protected slots:
+    virtual void on_treeWidget_doubleClicked();
 	
  protected:
 	virtual void updateTreeWidget();
-	
-    virtual void on_treeWidget_doubleClicked();
 
- private://attributes
+ private:
 	QList<TeachingRecord> records;
 };
 
