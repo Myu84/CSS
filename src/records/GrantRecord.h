@@ -26,7 +26,6 @@ struct GrantRecord {
     QString grantPurpose;
     QString area;
     QString grantNumber;
-    QString proratedAmount;
 	QString administeredBy;
 	QString fundingSource;
 	QString project;

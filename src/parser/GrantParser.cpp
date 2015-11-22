@@ -11,7 +11,7 @@ using namespace std;
 
 // file_name should be path to file
 QList<GrantRecord> GrantParser::parse(QString file_name) {
-	CSVParser<32> parser(file_name.toStdString());
+	CSVParser<31> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
                        "Member Name",
@@ -31,7 +31,6 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
                        "Principal Investigator",
                        "Co-Investigators",
                        "Grant and/or Account #",
-                       "Prorated Amount",
                        "Administered By",
                        "Funding Source",
                        "Project",
@@ -68,21 +67,20 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
                            curr_peerReviewed,
                            curr_industryGrant,
                            curr_record.role,
-                           curr_record.title,
-                           curr_record.principalInvestigator,
-                           curr_record.coInvestigators,
-                           curr_totalAmount,
                            curr_record.shortTitle,
+                           curr_record.title,
                            curr_record.applicationSummary,
                            curr_record.grantPurpose,
 						   curr_record.area,
+						   curr_record.principalInvestigator,
+						   curr_record.coInvestigators,
 						   curr_record.grantNumber,
-						   curr_record.proratedAmount,
 						   curr_record.administeredBy,
                            curr_record.fundingSource,
                            curr_record.project,
                            curr_record.currency,
                            curr_record.receivedAmount,
+                           curr_totalAmount,
                            curr_record.memberShare,
                            curr_record.monetary,
                            curr_record.reportable,
