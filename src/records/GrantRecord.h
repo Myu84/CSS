@@ -12,14 +12,12 @@ struct GrantRecord {
     QDate endDate;
     QString fundingType;
     QString status;
-    bool peerReviewed;
-    bool industryGrant;
+    QString fundingPurpose;//either peerReview or industryGrant, but not both
     QString role;
 	QString title;
 	QString principalInvestigator;
     QString coInvestigators;
 	double totalAmount;
-	
 	//optional fields
     QString shortTitle;
     QString applicationSummary;
