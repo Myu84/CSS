@@ -12,6 +12,19 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
+static const int facultyMemberNameColumn = 3;
+
+QString grantDescription(bool peerReviewed, bool industryGrant) {
+	if (peerReviewed && industryGrant) {
+		return "Peer Reviewed Industry Grant";
+	} else if (peerReviewed) {
+		return "Peer Reviewed";
+	} else if (industryGrant) {
+		return "Industry Grant";
+	} else {
+		return "Other";
+	}
+}
 
 GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
 	GrantParser parser;
@@ -29,7 +42,7 @@ GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Grant Type" << "Funding purpose" << "Faculty Name" << "Total#" << "Total$");
+						"" << "Funding Type" << "Funding Description" << "Faculty Name" << "Total #" << "Total $");
 	
 	ui.subjectAreaLabel->setText("Grant/Funding Summary");
 	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
@@ -49,47 +62,48 @@ void GrantDashboardWindow::updateTreeWidget() {
 	
 	//find records in range
     QList<GrantRecord> recordsInRange = filterByDateRangeStartEnd(records,
-												ui.startDateSelector->date(),
-												ui.endDateSelector->date());
+											ui.startDateSelector->date(),
+											ui.endDateSelector->date());
 
     //total the records
-    QPair<int,double> allSummary;
-    QMap<QString, QPair<int,double>> typeSummary;
-    QMap<QString, QMap<QString, QPair<int,double>>> fundingPurposeSummary;
+    QPair<int, double> allSummary;
+    QMap<QString, QPair<int, double>> typeSummary;
+    QMap<QString, QMap<QString, QPair<int, double>>> descSummary;
     QMap<QString, QMap<QString, QMap<QString, QPair<int, double>>>> nameSummary;
 
 	for (const GrantRecord &record : recordsInRange) {
+		QString desc = grantDescription(record.peerReviewed, record.industryGrant);
 		
-		allSummary.first+=1;
+		++allSummary.first;
         allSummary.second += record.totalAmount;
 		
         ++typeSummary[record.fundingType].first;
-        typeSummary[record.fundingType].second +=record.totalAmount;
+        typeSummary[record.fundingType].second += record.totalAmount;
         
-        ++fundingPurposeSummary[record.fundingType][record.fundingPurpose].first;
-        fundingPurposeSummary[record.fundingType][record.fundingPurpose].second += record.totalAmount;
+        ++descSummary[record.fundingType][desc].first;
+        descSummary[record.fundingType][desc].second += record.totalAmount;
 		
-        ++nameSummary[record.fundingType][record.fundingPurpose][record.memberName].first;
-        nameSummary[record.fundingType][record.fundingPurpose][record.memberName].second += record.totalAmount;
+        ++nameSummary[record.fundingType][desc][record.memberName].first;
+        nameSummary[record.fundingType][desc][record.memberName].second += record.totalAmount;
 	}
 
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
-                                    "Grant/Funding" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
 	ui.treeWidget->expandItem(root);
 	
     for (auto type = typeSummary.begin(); type != typeSummary.end(); ++type) {
         QTreeWidgetItem *typeNode = new QTreeWidgetItem(root, (QStringList() <<
                                             "" << type.key() << "" << "" << QString::number(type.value().first) << QString::number(type.value().second)));
 		
-        QMap<QString, QPair<int, double>> &currFundingPurposeSummary = fundingPurposeSummary[type.key()];
-        for (auto purpose = currFundingPurposeSummary.begin(); type != currFundingPurposeSummary.end(); ++purpose) {
-            QTreeWidgetItem *purposeNode = new QTreeWidgetItem(typeNode, (QStringList() <<
-                                                "" << "" << purpose.key() << "" << QString::number(purpose.value().first) << QString::number(purpose.value().second)));
+        QMap<QString, QPair<int, double>> &currDescSummary = descSummary[type.key()];
+        for (auto desc = currDescSummary.begin(); desc != currDescSummary.end(); ++desc) {
+            QTreeWidgetItem *descNode = new QTreeWidgetItem(typeNode, (QStringList() <<
+                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << QString::number(desc.value().second)));
 		
-            QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][purpose.key()];
+            QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][desc.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-                new QTreeWidgetItem(purposeNode, (QStringList() <<
+                new QTreeWidgetItem(descNode, (QStringList() <<
 						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
 			}
 		}

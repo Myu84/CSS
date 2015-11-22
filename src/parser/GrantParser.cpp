@@ -57,7 +57,6 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
     QString curr_peerReviewed;
     QString curr_industryGrant;
     QString curr_totalAmount;
-
     
     int lineNum = 1;
     while (parser.read_row(curr_record.memberName,
@@ -132,55 +131,35 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
 			continue;
 		}
         
-		//validate program
+		//validate fundingType
         if (curr_record.fundingType.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing funding type on line " << lineNum;
             continue;
         }
 		
-		//validate activityType
+		//validate status
         if (curr_record.status.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing status on line " << lineNum;
             continue;
         }
         
-        
-        //validate peerRevied
-        if (curr_peerReviewed.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing peer review info on line " << lineNum;
-            continue;
-        }
-        else
+        //validate peerReviewed
+        curr_record.peerReviewed = parseBool(curr_peerReviewed, &parseOK);
+		if (!parseOK) {
+			//TODO: handle error
+			qDebug() << "Invalid peer reviwed: " << curr_peerReviewed << " on line " << lineNum;
+			continue;
+		}
 
-        
-        
         //validate industryGrant
-        if (curr_industryGrant.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing industry grant info on line " << lineNum;
-            continue;
-        }
-        
-        //validate that there is either peerReviewed or industryGrant but not both
-        if(curr_peerReviewed=="TRUE"){
-            if(curr_industryGrant=="TRUE"){
-                qDebug() << "Peer reviewed and industry grant both true on line " << lineNum;
-                continue;
-            }
-            else
-                curr_record.fundingPurpose="Peer Reviewed";
-        }
-        else{
-            if(curr_industryGrant=="FALSE"){
-                qDebug() << "Peer reviewed and industry grant both false on line " << lineNum;
-                continue;
-            }
-            else
-                curr_record.fundingPurpose="Industry Sponsored";
-        }
+        curr_record.industryGrant = parseBool(curr_industryGrant, &parseOK);
+		if (!parseOK) {
+			//TODO: handle error
+			qDebug() << "Invalid industry grant: " << curr_industryGrant << " on line " << lineNum;
+			continue;
+		}
         
         //validate role
         if (curr_record.role.isEmpty()) {
@@ -210,10 +189,9 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
             continue;
         }
         
-        
         //validate totalAmount
 		curr_record.totalAmount = curr_totalAmount.toDouble(&parseOK);
-        if (!parseOK || curr_record.totalAmount< 0) {
+        if (!parseOK || curr_record.totalAmount < 0) {
             //TODO: handle error
             qDebug() << "Invalid total amount on line " << lineNum;
             continue;
