@@ -15,7 +15,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 3;
+static const int memberNameColumn = 3;
 
 QString grantDescription(bool peerReviewed, bool industryGrant) {
 	if (peerReviewed && industryGrant) {
@@ -129,7 +129,7 @@ void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	
-	QList<GrantRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
+	QList<GrantRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
 	
 	//count the records
 	QMap<QString, double> typeSummary;

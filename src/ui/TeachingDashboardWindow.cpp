@@ -14,7 +14,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 3;
+static const int memberNameColumn = 3;
 
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
@@ -128,7 +128,7 @@ void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *i
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	
-	QList<TeachingRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
+	QList<TeachingRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
 	
 	//count the records
 	QMap<QString, double> programSummary;

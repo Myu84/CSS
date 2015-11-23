@@ -1,5 +1,7 @@
-#include <QSet>
-#include <QVector>
+#include <QList>
+#include <QMap>
+#include <QString>
+#include <QDate>
 #include <QPen>
 
 #include "VisualizationWindow.h"
@@ -7,8 +9,8 @@
 #include "../../external/qcustomplot.h"
 #include "UIUtils.h"
 
-VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
-					const QString &memberName, const QDate &startDate, const QDate &endDate)
+VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
+										 const QString &memberName, const QDate &startDate, const QDate &endDate)
  : plotData(plotData), plotNames(plotNames), memberName(memberName), startDate(startDate), endDate(endDate) {
 	ui.GraphTitleLabel->setText("Visualization for " + memberName);
     ui.GraphTitleLabel->setAlignment(Qt::AlignHCenter);
