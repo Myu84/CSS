@@ -11,7 +11,7 @@ class VisualizationWindow : public QDialog {
 	Q_OBJECT
 
 public:
-	VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
+    VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 						const QString &memberName, const QDate &startDate, const QDate &endDate);
 
 private:

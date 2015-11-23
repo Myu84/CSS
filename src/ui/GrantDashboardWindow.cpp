@@ -139,8 +139,13 @@ void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item
 		}
 	}
 	
+    QList<QMap<QString,double>> plotList;
+    plotList.append(typeSummary);
+
+    QList<QString> plotNames;
+    plotNames.append("Funding Types");
     //open a VisualizationWindow
-	VisualizationWindow *vw = new VisualizationWindow({typeSummary}, {"Funding Types"}, 
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
 }

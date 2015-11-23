@@ -103,8 +103,13 @@ void PresentationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetIte
 		}
 	}
 	
+    QList<QMap<QString,double>> plotList;
+    plotList.append(presTypeSummary);
+
+    QList<QString> plotNames;
+    plotNames.append("Presentation Types");
     //open a VisualizationWindow
-	VisualizationWindow *vw = new VisualizationWindow({presTypeSummary}, {"Presentation Types"}, 
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
 }

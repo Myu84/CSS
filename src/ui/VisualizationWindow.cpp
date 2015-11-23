@@ -46,7 +46,7 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
 
 void VisualizationWindow::drawBarGraph() {
     //just for now
-	QMap<QString, double> currPlotData = plotData[0];
+    QMap<QString, double> currPlotData = plotData[0];
 	QString currPlotName = plotNames[0];
 	
 	QVector<QString> currKeys = currPlotData.keys().toVector();

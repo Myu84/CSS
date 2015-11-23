@@ -141,9 +141,17 @@ void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *i
 			typeSummary[record.activityType] += record.numTrainees;
 		}
 	}
+
+    QList<QMap<QString,double>> plotList;
+    plotList.append(programSummary);
+    plotList.append(typeSummary);
+
+    QList<QString> plotNames;
+    plotNames.append("Program Level");
+    plotNames.append("Activity Type");
 	
     //open a VisualizationWindow
-	VisualizationWindow *vw = new VisualizationWindow({programSummary, typeSummary}, {"Program Level", "Activity Type"}, 
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
 }

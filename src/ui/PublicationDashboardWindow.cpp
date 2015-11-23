@@ -103,9 +103,15 @@ void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem
 			++pubTypeSummary[record.type];
 		}
 	}
+
+    QList<QMap<QString,double>> plotList;
+    plotList.append(pubTypeSummary);
 	
+    QList<QString> plotNames;
+    plotNames.append("Publication Types");
+
     //open a VisualizationWindow
-	VisualizationWindow *vw = new VisualizationWindow({pubTypeSummary}, {"Publication Types"}, 
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
 }
