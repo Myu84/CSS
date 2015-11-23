@@ -13,13 +13,14 @@ struct PublicationRecord {
     QDate starusDate;
     QString role;
     QString publishedIn;
+    QString author;
+    QString title;
     
     //optional fields
     QString pubmedID;
     QString area;
     QString peerReviewed;
     QString authorNum;
-    QString longInfo;
     QString volume;
     QString issue;
     QString pageRange;

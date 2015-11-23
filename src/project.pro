@@ -11,6 +11,7 @@ SOURCES += main.cpp \
     parser/PresentationParser.cpp ui/PresentationDashboardWindow.cpp \
     parser/TeachingParser.cpp ui/TeachingDashboardWindow.cpp \
     parser/GrantParser.cpp ui/GrantDashboardWindow.cpp \
+    parser/PublicationParser.cpp ui/PublicationDashboardWindow.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
     ../external/qcustomplot.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     parser/PresentationParser.h ui/PresentationDashboardWindow.h \
     parser/TeachingParser.h ui/TeachingDashboardWindow.h \
     parser/GrantParser.h ui/GrantDashboardWindow.h \
+    parser/PublicationParser.h ui/PublicationDashboardWindow.h \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	ui/UIUtils.h \
