@@ -1,11 +1,11 @@
-#include "VisualizationWindow.h"
-#include "ui_VisualizationWindow.h"
-#include "../../external/qcustomplot.h"
-#include "../utils/Utils.h"
-
 #include <QSet>
 #include <QVector>
 #include <QPen>
+
+#include "VisualizationWindow.h"
+#include "ui_VisualizationWindow.h"
+#include "../../external/qcustomplot.h"
+#include "UIUtils.h"
 
 VisualizationWindow::VisualizationWindow(QWidget *parent) : QDialog(parent) {
 	ui.setupUi(this);
@@ -91,6 +91,4 @@ void VisualizationWindow::init(const QList<PresentationRecord> &records, QString
     // info for graph name should be sent in the method call?
     barGraph->setName("Test name 1");
     barGraph->setData(ticks, valueData);
-
-
 }

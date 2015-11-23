@@ -117,7 +117,7 @@
      </widget>
      <widget class="QPushButton" name="grantsButton">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -139,7 +139,7 @@
      </widget>
      <widget class="QPushButton" name="teachingButton">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>

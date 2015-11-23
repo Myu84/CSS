@@ -13,10 +13,11 @@ class PresentationDashboardWindow : public DashboardWindow {
  public:
 	PresentationDashboardWindow(QString csv_filename);
 	
+ protected slots:
+    virtual void on_treeWidget_doubleClicked();
+	
  protected:
 	virtual void updateTreeWidget();
-	
-    virtual void on_treeWidget_doubleClicked();
 
  private:
 	QList<PresentationRecord> records;

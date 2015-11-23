@@ -66,28 +66,8 @@
     <item row="4" column="0" colspan="5">
      <widget class="QTreeWidget" name="treeWidget">
       <property name="columnCount">
-       <number>4</number>
+       <number>0</number>
       </property>
-      <column>
-       <property name="text">
-        <string/>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Presentation Type</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Faculty Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Total #</string>
-       </property>
-      </column>
      </widget>
     </item>
     <item row="2" column="0">
