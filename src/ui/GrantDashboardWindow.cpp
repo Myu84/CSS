@@ -28,6 +28,10 @@ QString grantDescription(bool peerReviewed, bool industryGrant) {
 	}
 }
 
+QString moneyToStr(double amount) {
+	return "$" + QString::number(amount, 'f', 2);
+}
+
 GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
 	GrantParser parser;
 	
@@ -92,22 +96,22 @@ void GrantDashboardWindow::updateTreeWidget() {
 
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
-                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << moneyToStr(allSummary.second)));
 	ui.treeWidget->expandItem(root);
 	
     for (auto type = typeSummary.begin(); type != typeSummary.end(); ++type) {
         QTreeWidgetItem *typeNode = new QTreeWidgetItem(root, (QStringList() <<
-                                            "" << type.key() << "" << "" << QString::number(type.value().first) << QString::number(type.value().second)));
+                                            "" << type.key() << "" << "" << QString::number(type.value().first) << moneyToStr(type.value().second)));
 		
         QMap<QString, QPair<int, double>> &currDescSummary = descSummary[type.key()];
         for (auto desc = currDescSummary.begin(); desc != currDescSummary.end(); ++desc) {
             QTreeWidgetItem *descNode = new QTreeWidgetItem(typeNode, (QStringList() <<
-                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << QString::number(desc.value().second)));
+                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << moneyToStr(desc.value().second)));
 		
             QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][desc.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
                 new QTreeWidgetItem(descNode, (QStringList() <<
-						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+						"" << "" << "" << name.key() << QString::number(name.value().first) << moneyToStr(name.value().second)));
 			}
 		}
 	}
