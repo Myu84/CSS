@@ -48,11 +48,11 @@ PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
 	updateTreeWidget();
 }
 
-void PresentationDashboardWindow::updateTreeWidget() {
+void PublicationDashboardWindow::updateTreeWidget() {
 	ui.treeWidget->clear();
 
 	//find records in range
-	QList<PresentationRecord> recordsInRange = filterByDateRange(records,
+	QList<PublicationRecord> recordsInRange = filterByDateRange(records,
 																 ui.startDateSelector->date(),
 																 ui.endDateSelector->date());
 
@@ -60,7 +60,7 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	QMap<QString, int> pubTypeSummary;
 	QMap<QString, QMap<QString, int>> nameSummary;
 
-	for (const PresentationRecord &record : recordsInRange) {
+	for (const PublicationRecord &record : recordsInRange) {
 		++pubTypeSummary[record.type];
 
 		++nameSummary[record.type][record.memberName];
@@ -86,6 +86,6 @@ void PresentationDashboardWindow::updateTreeWidget() {
 }
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void TeachingDashboardWindow::on_treeWidget_doubleClicked() {
+void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
 
 }

@@ -10,7 +10,7 @@ struct PublicationRecord {
     QString primaryDomain;
     QString publicationStatus;
     QString type;
-    QDate starusDate;
+    QDate date;
     QString role;
     QString publishedIn;
     QString author;

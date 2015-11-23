@@ -18,10 +18,10 @@ SOURCES += main.cpp \
 FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
 HEADERS += \
-    parser/PresentationParser.h ui/PresentationDashboardWindow.h \
-    parser/TeachingParser.h ui/TeachingDashboardWindow.h \
-    parser/GrantParser.h ui/GrantDashboardWindow.h \
-    parser/PublicationParser.h ui/PublicationDashboardWindow.h \
+    records/PresentationRecord.h parser/PresentationParser.h ui/PresentationDashboardWindow.h \
+    records/TeachingRecord.h parser/TeachingParser.h ui/TeachingDashboardWindow.h \
+    records/GrantRecord.h parser/GrantParser.h ui/GrantDashboardWindow.h \
+    records/PublicationRecord.h parser/PublicationParser.h ui/PublicationDashboardWindow.h \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	ui/UIUtils.h \

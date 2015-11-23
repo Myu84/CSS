@@ -5,7 +5,7 @@
 #include <QDate>
 
 struct PresentationRecord {
-	//mandatory fields
+	//required fields
 	QString memberName;
 	QString primaryDomain;
 	QDate date;

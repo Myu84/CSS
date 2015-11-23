@@ -37,7 +37,6 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                        "Personal Remuneration",
                        "Trainee Details",
                        "Is Most Significant Publication?",
-                       "Most Significant Contribution Details",
                        "Education Publication",
                        "Author(s)",
                        "Title",
@@ -117,13 +116,12 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
         }
 
         //validate date
-                curr_record.starusDate = parseDate(curr_date);
-                if (!curr_record.starusDate.isValid()) {
-                        //TODO: handle error
-                        qDebug() << "Invalid start date: " << curr_date << " on line " << lineNum;
-                        continue;
-                }
-
+		curr_record.date = parseDate(curr_date);
+		if (!curr_record.date.isValid()) {
+				//TODO: handle error
+				qDebug() << "Invalid start date: " << curr_date << " on line " << lineNum;
+				continue;
+		}
 
         //validate role
         if (curr_record.role.isEmpty()) {
