@@ -180,18 +180,21 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
             continue;
         }
         
+		//coInvestigators is missing too often to check
+		/*
         //validate coInvestigators
         if (curr_record.coInvestigators.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing coInvestigators on line " << lineNum;
             continue;
         }
+		*/
         
         //validate totalAmount
-		curr_record.totalAmount = curr_totalAmount.toDouble(&parseOK);
+		curr_record.totalAmount = parseMoney(curr_totalAmount, &parseOK);
         if (!parseOK || curr_record.totalAmount < 0) {
             //TODO: handle error
-            qDebug() << "Invalid total amount on line " << lineNum;
+            qDebug() << "Invalid total amount: " << curr_totalAmount << " on line " << lineNum;
             continue;
         }
         

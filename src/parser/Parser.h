@@ -2,7 +2,8 @@
 #define PARSER_H
 
 #include <string>
-#include <vector>
+#include <QString>
+#include <QDate>
 #include "../../external/csv.h"
 
 class Parser {
@@ -42,6 +43,15 @@ class Parser {
 				*ok = false;
 			return false;
 		}
+	}
+	
+	inline double parseMoney(QString money_str, bool *ok = nullptr) {
+		money_str.remove('$').remove(',');
+		double val = money_str.toDouble(ok);
+		
+		if (val < 0 && ok)
+			*ok = false;
+		return val;
 	}
 };
 

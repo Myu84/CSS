@@ -140,7 +140,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 		curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
         if (!parseOK || curr_record.hoursPerSession < 0) {
             //TODO: handle error
-            qDebug() << "Invalid hours per session on line " << lineNum;
+            qDebug() << "Invalid hours per session: " << curr_hoursPerSession << " on line " << lineNum;
             continue;
         }
 
@@ -148,7 +148,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 		curr_record.numberOfSessions = curr_numberOfSessions.toDouble(&parseOK);
         if (!parseOK || curr_record.numberOfSessions < 0) {
             //TODO: handle error
-            qDebug() << "Invalid number of sessions on line " << lineNum;
+            qDebug() << "Invalid number of sessions: " << curr_numberOfSessions << " on line " << lineNum;
             continue;
         }
 		
@@ -156,7 +156,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 		curr_record.totalHours = curr_totalHours.toDouble(&parseOK);
         if (!parseOK || curr_record.totalHours < 0) {
             //TODO: handle error
-            qDebug() << "Invalid total hours on line " << lineNum;
+            qDebug() << "Invalid total hours: " << curr_totalHours << " on line " << lineNum;
             continue;
         }
 		
@@ -164,7 +164,7 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 		curr_record.numTrainees = curr_numTrainees.toUInt(&parseOK);
         if (!parseOK) {
             //TODO: handle warning
-            qDebug() << "Invalid number of trainees on line " << lineNum;
+            qDebug() << "Invalid number of trainees: " << curr_numTrainees << " on line " << lineNum;
         }
 		
 		records.append(curr_record);
