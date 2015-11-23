@@ -6,6 +6,7 @@
 #include "PresentationDashboardWindow.h"
 #include "TeachingDashboardWindow.h"
 #include "GrantDashboardWindow.h"
+#include "PublicationDashboardWindow.h"
 #include "ui_DashboardWindow.h"
 
 DashboardWindow::DashboardWindow() {
@@ -29,9 +30,9 @@ DashboardWindow *DashboardWindow::makeDashboard() {
         else if(inputDialog.getSubjectArea() == Grants){
             return new GrantDashboardWindow(inputDialog.getFilename());
         }
-        else {
-			throw "Unimplemented subject area";
-		}
+        else if(inputDialog.getSubjectArea() == Publications){
+            return new GrantDashboardWindow(inputDialog.getFilename());
+        }
 	} else {
 		return nullptr;
 	}

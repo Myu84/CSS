@@ -11,9 +11,9 @@ using namespace std;
 
 // file_name should be path to file
 QList<PublicationRecord> PublicationParser::parse(QString file_name) {
-    CSVParser<28> parser(file_name.toStdString());
-    
-    parser.read_header(column_policy,
+	CSVParser<28> parser(file_name.toStdString());
+
+	parser.read_header(column_policy,
                        "Member Name",
                        "Primary Domain",
                        "Publication Status",
@@ -42,19 +42,20 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                        "Author(s)",
                        "Title",
                        "ISBNISSN");
-    
-    QList<GrantRecord> records;
-    
-    TeachingRecord curr_record;
-    
+	
+	QList<GrantRecord> records;
+	
+	TeachingRecord curr_record;
+	
     //strings to be converted
     QString curr_date;
 
+    
     int lineNum = 1;
     while (parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_record.publicationStatus,
-                           curr_record.PubmedID,
+                           curr_record.pubmedID,
                            curr_record.type,
                            curr_record.area,
                            curr_date,
@@ -78,9 +79,9 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.author,
                            curr_record.title,
                            curr_record.ISB)) {
-        bool parseOK;
+		bool parseOK;
         lineNum++;
-        
+		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
             //TODO: handle error
@@ -94,87 +95,68 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
             qDebug() << "Missing primary domain on line " << lineNum;
             continue;
         }
-        
-        //validate startDate
-        curr_record.startDate = parseDate(curr_startDate);
-        if (!curr_record.startDate.isValid()) {
+
+        //validate publication status
+        if (curr_record.publicationStatus.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Invalid start date: " << curr_startDate << " on line " << lineNum;
+            qDebug() << "Missing publication status on line " << lineNum;
             continue;
         }
-        
-        //validate endDate
-        curr_record.endDate = parseDate(curr_endDate);
-        if (!curr_record.endDate.isValid()) {
+
+        //validate type
+        if (curr_record.type.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Invalid end date: " << curr_endDate << " on line " << lineNum;
+            qDebug() << "Missing type on line " << lineNum;
             continue;
         }
-        
-        //validate date range
-        if (curr_record.startDate > curr_record.endDate) {
+        else{
+            if(curr_record.type!="Published Abstracts"
+                       ||curr_record.type!="Journal Articles"
+                            ||curr_record.type!="Books"
+                                ||curr_record.type!="Book Chapters"
+                                    ||curr_record.type!="Letters to Editor"){
+                continue;//ignore other type
+            }
+        }
+
+        //validate starusDate
+                curr_record.starusDate = parseDate(curr_date);
+                if (!curr_record.starusDate.isValid()) {
+			//TODO: handle error
+                        qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
+			continue;
+		}
+		
+        //validate role
+        if (curr_record.role.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Start date after end date on line " << lineNum;
+            qDebug() << "Missing role on line " << lineNum;
             continue;
         }
-        
-        //validate program
-        if (curr_record.program.isEmpty()) {
+		
+        //validate info: Journal Name | Published In | Book Title | etc.
+        if (curr_record.longInfo.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing program on line " << lineNum;
+            qDebug() << "Missing Journal Name | Published In | Book Title | etc. on line " << lineNum;
             continue;
         }
-        
-        //validate activityType
-        if (curr_record.activityType.isEmpty()) {
+
+        //validate Author(s)
+        if (curr_record.author.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing activity type on line " << lineNum;
+            qDebug() << "Missing author on line " << lineNum;
             continue;
         }
-        
-        //geographicalScope is missing too often to check
-        /*
-         //validate geographicalScope
-         if (curr_record.geographicalScope.isEmpty()) {
-         //TODO: handle error
-         qDebug() << "Missing geographical scope on line " << lineNum;
-         continue;
-         }
-         */
-        
-        //validate hoursPerSession
-        curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
-        if (!parseOK || curr_record.hoursPerSession < 0) {
+
+        //validate title
+        if (curr_record.title.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Invalid hours per session on line " << lineNum;
+            qDebug() << "Missing title on line " << lineNum;
             continue;
         }
-        
-        //validate numberOfSessions
-        curr_record.numberOfSessions = curr_numberOfSessions.toDouble(&parseOK);
-        if (!parseOK || curr_record.numberOfSessions < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid number of sessions on line " << lineNum;
-            continue;
-        }
-        
-        //validate totalHours
-        curr_record.totalHours = curr_totalHours.toDouble(&parseOK);
-        if (!parseOK || curr_record.totalHours < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid total hours on line " << lineNum;
-            continue;
-        }
-        
-        //validate numTrainees
-        curr_record.numTrainees = curr_numTrainees.toUInt(&parseOK);
-        if (!parseOK) {
-            //TODO: handle warning
-            qDebug() << "Invalid number of trainees on line " << lineNum;
-        }
-        
+		
         records.append(curr_record);
-    }
-    
-    return records;
+	}
+	
+	return records;
 }
