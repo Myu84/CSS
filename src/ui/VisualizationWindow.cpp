@@ -7,29 +7,22 @@
 #include "../../external/qcustomplot.h"
 #include "UIUtils.h"
 
-VisualizationWindow::VisualizationWindow(QWidget *parent) : QDialog(parent) {
-	ui.setupUi(this);
-}
-
-void VisualizationWindow::init(const QList<PresentationRecord> &records, QString &memberName, QDate &startDate, QDate &endDate) {
-
-    QList<PresentationRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
-    QList<PresentationRecord> recordsMatchingMember;
-    ui.GraphTitleLabel->setText("Visualization for " + memberName);
+VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
+					const QString &memberName, const QDate &startDate, const QDate &endDate)
+ : plotData(plotData), plotNames(plotNames), memberName(memberName), startDate(startDate), endDate(endDate) {
+	ui.GraphTitleLabel->setText("Visualization for " + memberName);
     ui.GraphTitleLabel->setAlignment(Qt::AlignHCenter);
     ui.DateRangeLabel->setText(startDate.toString("'From' MMMM d',' yyyy") +
                                 endDate.toString("' to' MMMM d',' yyyy"));
     ui.DateRangeLabel->setAlignment(Qt::AlignHCenter);
 
     setWindowTitle("Visualizations - " + memberName);
+	
+	//just for now
+	drawBarGraph();
+}
 
-    // all records matching the given member
-    for (const PresentationRecord &record : recordsInRange) {
-        if (record.memberName == memberName) {
-            recordsMatchingMember.append(record);
-        }
-    }
-
+void VisualizationWindow::drawBarGraph() {
     QSet<QString> typeSet;
     QMap<QString, int> typeMap;
     // from records matching member, we need each unique type, and the count

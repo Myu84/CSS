@@ -11,11 +11,20 @@ class VisualizationWindow : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit VisualizationWindow(QWidget *parent = nullptr);
-    void init(const QList<PresentationRecord> &records, QString &memberName, QDate &startDate, QDate &endDate);
+	VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
+						const QString &memberName, const QDate &startDate, const QDate &endDate);
 
 private:
+	void drawBarGraph();
+	
 	Ui::VisualizationWindow ui;
+	
+	QList<QMap<QString, double>> plotData;
+	QList<QString> plotNames;
+	
+	QString memberName;
+	QDate startDate;
+	QDate endDate;
 };
 
 #endif
