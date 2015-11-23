@@ -19,7 +19,6 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                        "Publication Status",
                        "Pubmed Article ID",
                        "Type",
-                       "Area",
                        "Status Date",
                        "Role",
                        "Peer Reviewed?",
@@ -37,7 +36,8 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                        "Personal Remuneration",
                        "Trainee Details",
                        "Is Most Significant Publication?",
-                       "Education Publication",
+                       "Most Significant Contribution Details",
+					   "Education Publication",
                        "Author(s)",
                        "Title",
                        "ISBNISSN");
@@ -55,7 +55,6 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.publicationStatus,
                            curr_record.pubmedID,
                            curr_record.type,
-                           curr_record.area,
                            curr_date,
                            curr_record.role,
                            curr_record.peerReviewed,
@@ -70,14 +69,14 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.international,
                            curr_record.publisher,
                            curr_record.isPresentation,
-                           curr_record.remunation,
-                           curr_record.details,
-                           curr_record.significance,
-                           curr_record.educationPublic,
-                           curr_record.author,
+                           curr_record.remumeration,
+                           curr_record.traineeDetails,
+                           curr_record.isMostSignificant,
+                           curr_record.mostSignificantDetails,
+                           curr_record.educationPublication,
+                           curr_record.authors,
                            curr_record.title,
-                           curr_record.ISB)) {
-
+                           curr_record.isbn)) {
         lineNum++;
 
         //validate memberName
@@ -106,21 +105,13 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
             qDebug() << "Missing publication type  on line " << lineNum;
             continue;
         }
-        else{
-            if(curr_record.type!="Published Abstracts"
-                    ||curr_record.type!="Journal Articles"
-                    ||curr_record.type!="Books"
-                    ||curr_record.type!="Book Chapters"
-                    ||curr_record.type!="Letters to Editor")
-                continue;//ignore all other types
-        }
 
         //validate date
 		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-				//TODO: handle error
-				qDebug() << "Invalid start date: " << curr_date << " on line " << lineNum;
-				continue;
+			//TODO: handle error
+			qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
+			continue;
 		}
 
         //validate role
@@ -136,11 +127,11 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
             qDebug() << "Missing published Infomation on line " << lineNum;
             continue;
         }
+		
         //validate author
-
-        if (curr_record.author.isEmpty()) {
+        if (curr_record.authors.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing author on line " << lineNum;
+            qDebug() << "Missing authors on line " << lineNum;
             continue;
         }
 

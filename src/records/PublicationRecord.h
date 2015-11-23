@@ -13,12 +13,11 @@ struct PublicationRecord {
     QDate date;
     QString role;
     QString publishedIn;
-    QString author;
+    QString authors;
     QString title;
     
     //optional fields
     QString pubmedID;
-    QString area;
     QString peerReviewed;
     QString authorNum;
     QString volume;
@@ -30,11 +29,12 @@ struct PublicationRecord {
     QString international;
     QString publisher;
     QString isPresentation;
-    QString remunation;
-    QString details;
-    QString significance;
-    QString educationPublic;
-    QString ISB;
+    QString remumeration;
+    QString traineeDetails;
+    QString isMostSignificant;
+    QString mostSignificantDetails;
+    QString educationPublication;
+    QString isbn;
 };
 
 #endif
