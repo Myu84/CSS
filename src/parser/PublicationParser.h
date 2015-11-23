@@ -1,15 +1,15 @@
-#ifndef TEACHING_PARSER_H
-#define TEACHING_PARSER_H
+#ifndef PUBLICATION_PARSER_H
+#define PUBLICATION_PARSER_H
 
 #include <QString>
 #include <QList>
 
-#include "../records/TeachingRecord.h"
+#include "../records/PublicationRecord.h"
 #include "Parser.h"
 
-class TeachingParser : public Parser {
+class PublicationParser : public Parser {
  public:
-    QList<TeachingRecord> parse(QString file_name);
+    QList<PublicationRecord> parse(QString file_name);
 };
 
 #endif

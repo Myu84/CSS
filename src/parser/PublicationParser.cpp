@@ -11,7 +11,7 @@ using namespace std;
 
 // file_name should be path to file
 QList<PublicationRecord> PublicationParser::parse(QString file_name) {
-	CSVParser<28> parser(file_name.toStdString());
+	CSVParser<27> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
                        "Member Name",
@@ -42,15 +42,14 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                        "Author(s)",
                        "Title",
                        "ISBNISSN");
-	
-	QList<GrantRecord> records;
-	
-	TeachingRecord curr_record;
-	
+
+	QList<PublicationRecord> records;
+
+	PublicationRecord curr_record;
+
     //strings to be converted
     QString curr_date;
 
-    
     int lineNum = 1;
     while (parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
@@ -62,8 +61,8 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.role,
                            curr_record.peerReviewed,
                            curr_record.authorNum,
-                           curr_record.longInfo,
-                           curr_record.volumne,
+                           curr_record.publishedIn,
+                           curr_record.volume,
                            curr_record.issue,
                            curr_record.pageRange,
                            curr_record.doi,
@@ -72,23 +71,23 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.international,
                            curr_record.publisher,
                            curr_record.isPresentation,
-                           corr_record.remunation,
-                           corr_record.details,
-                           corr_record.significance,
-                           corr_record.educationPublic,
+                           curr_record.remunation,
+                           curr_record.details,
+                           curr_record.significance,
+                           curr_record.educationPublic,
                            curr_record.author,
                            curr_record.title,
                            curr_record.ISB)) {
-		bool parseOK;
+
         lineNum++;
-		
+
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing member name on line " << lineNum;
             continue;
         }
-        
+
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
             //TODO: handle error
@@ -96,52 +95,51 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
             continue;
         }
 
-        //validate publication status
+        //validate publicationStatus
         if (curr_record.publicationStatus.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing publication status on line " << lineNum;
+            qDebug() << "Missing publication Status  on line " << lineNum;
             continue;
         }
-
-        //validate type
+        //validate publication type
         if (curr_record.type.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing type on line " << lineNum;
+            qDebug() << "Missing publication type  on line " << lineNum;
             continue;
         }
         else{
             if(curr_record.type!="Published Abstracts"
-                       ||curr_record.type!="Journal Articles"
-                            ||curr_record.type!="Books"
-                                ||curr_record.type!="Book Chapters"
-                                    ||curr_record.type!="Letters to Editor"){
-                continue;//ignore other type
-            }
+                    ||curr_record.type!="Journal Articles"
+                    ||curr_record.type!="Books"
+                    ||curr_record.type!="Book Chapters"
+                    ||curr_record.type!="Letters to Editor")
+                continue;//ignore all other types
         }
 
-        //validate starusDate
+        //validate date
                 curr_record.starusDate = parseDate(curr_date);
                 if (!curr_record.starusDate.isValid()) {
-			//TODO: handle error
-                        qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
-			continue;
-		}
-		
+                        //TODO: handle error
+                        qDebug() << "Invalid start date: " << curr_date << " on line " << lineNum;
+                        continue;
+                }
+
+
         //validate role
         if (curr_record.role.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing role on line " << lineNum;
             continue;
         }
-		
-        //validate info: Journal Name | Published In | Book Title | etc.
-        if (curr_record.longInfo.isEmpty()) {
+
+        //validate publishedIn
+        if (curr_record.publishedIn.isEmpty()) {
             //TODO: handle error
-            qDebug() << "Missing Journal Name | Published In | Book Title | etc. on line " << lineNum;
+            qDebug() << "Missing published Infomation on line " << lineNum;
             continue;
         }
+        //validate author
 
-        //validate Author(s)
         if (curr_record.author.isEmpty()) {
             //TODO: handle error
             qDebug() << "Missing author on line " << lineNum;
@@ -154,9 +152,9 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
             qDebug() << "Missing title on line " << lineNum;
             continue;
         }
-		
+
         records.append(curr_record);
 	}
-	
+
 	return records;
 }

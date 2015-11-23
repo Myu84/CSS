@@ -7,11 +7,11 @@
 #include "DashboardWindow.h"
 #include "../records/PublicationRecord.h"
 
-class PublicationboardWindow : public DashboardWindow {
+class PublicationDashboardWindow : public DashboardWindow {
 	Q_OBJECT
 
  public:
-        PublicationboardWindow(QString csv_filename);
+    PublicationDashboardWindow(QString csv_filename);
 	
  protected slots:
     virtual void on_treeWidget_doubleClicked();
@@ -20,7 +20,7 @@ class PublicationboardWindow : public DashboardWindow {
 	virtual void updateTreeWidget();
 
  private:
-        QList<PublicationRecord> records;
+    QList<PublicationRecord> records;
 };
 
 #endif

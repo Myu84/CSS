@@ -24,15 +24,18 @@ DashboardWindow *DashboardWindow::makeDashboard() {
 		if (inputDialog.getSubjectArea() == Presentation) {
 			return new PresentationDashboardWindow(inputDialog.getFilename());
         }
-        else if(inputDialog.getSubjectArea() == Teaching){
+        else if (inputDialog.getSubjectArea() == Teaching) {
             return new TeachingDashboardWindow(inputDialog.getFilename());
         }
-        else if(inputDialog.getSubjectArea() == Grants){
+        else if (inputDialog.getSubjectArea() == Grants) {
             return new GrantDashboardWindow(inputDialog.getFilename());
         }
-        else if(inputDialog.getSubjectArea() == Publications){
-            return new GrantDashboardWindow(inputDialog.getFilename());
+        else if (inputDialog.getSubjectArea() == Publications) {
+            return new PublicationDashboardWindow(inputDialog.getFilename());
         }
+        else {
+			throw "Unimplemented subject area";
+		}
 	} else {
 		return nullptr;
 	}

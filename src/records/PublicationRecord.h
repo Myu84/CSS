@@ -12,9 +12,10 @@ struct PublicationRecord {
     QString type;
     QDate starusDate;
     QString role;
-    QString longInfo;
+    QString publishedIn;
     QString author;
     QString title;
+    
     //optional fields
     QString pubmedID;
     QString area;
