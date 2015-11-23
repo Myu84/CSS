@@ -71,7 +71,7 @@ void VisualizationWindow::drawBarGraph() {
     ui.Visualization->xAxis->setTickLength(0, 4);
     ui.Visualization->xAxis->grid()->setVisible(true);
     ui.Visualization->xAxis->setSubTickCount(0);
-    ui.Visualization->xAxis->setRange(0, currKeys.size());
+    ui.Visualization->xAxis->setRange(0, currKeys.size() + 1);
 
     /* y axis */
     // these four methods force the y-axis to increment integers only
