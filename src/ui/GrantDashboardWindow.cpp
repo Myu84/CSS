@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QPair>
 #include <QDebug>
+#include <QLocale>
 #include <QTreeWidgetItem>
 
 #include "GrantDashboardWindow.h"
@@ -29,7 +30,7 @@ QString grantDescription(bool peerReviewed, bool industryGrant) {
 }
 
 QString moneyToStr(double amount) {
-	return "$" + QString::number(amount, 'f', 2);
+	return QLocale("en").toCurrencyString(amount);
 }
 
 GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
