@@ -14,7 +14,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 2;
+static const int memberNameColumn = 2;
 
 PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
 	PublicationParser parser;
@@ -33,7 +33,7 @@ PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
 	}
 
 	ui.treeWidget->setHeaderLabels(QStringList() <<
-									"" << "Publication Type" << "Faculty Name" << "Total");
+						"" << "Publication Type" << "Faculty Name" << "Total");
 
 	ui.subjectAreaLabel->setText("Publication Summary");
 	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
@@ -53,8 +53,8 @@ void PublicationDashboardWindow::updateTreeWidget() {
 
 	//find records in range
 	QList<PublicationRecord> recordsInRange = filterByDateRange(records,
-																 ui.startDateSelector->date(),
-																 ui.endDateSelector->date());
+												ui.startDateSelector->date(),
+												ui.endDateSelector->date());
 
 	//count the records
 	QMap<QString, int> pubTypeSummary;
@@ -68,17 +68,17 @@ void PublicationDashboardWindow::updateTreeWidget() {
 
 	//build the view
 	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() <<
-																	"Publications" << "" << "" << QString::number(recordsInRange.size())));
+									"Publications" << "" << "" << QString::number(recordsInRange.size())));
 	ui.treeWidget->expandItem(root);
 
 	for (auto pubType = pubTypeSummary.begin(); pubType != pubTypeSummary.end(); ++pubType) {
 		QTreeWidgetItem *pubNode = new QTreeWidgetItem(root, (QStringList() <<
-																"" << pubType.key() << "" << QString::number(pubType.value())));
+											"" << pubType.key() << "" << QString::number(pubType.value())));
 
 		QMap<QString, int> &currNameSummary = nameSummary[pubType.key()];
 		for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
 			new QTreeWidgetItem(pubNode, (QStringList() <<
-											"" << "" << name.key() << QString::number(name.value())));
+					"" << "" << name.key() << QString::number(name.value())));
 		}
 	}
 
@@ -87,5 +87,25 @@ void PublicationDashboardWindow::updateTreeWidget() {
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
 void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (memberName.isEmpty())
+		return;
 
+	QDate startDate = ui.startDateSelector->date();
+	QDate endDate = ui.endDateSelector->date();
+	
+	QList<PublicationRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
+	
+	//count the records
+	QMap<QString, double> pubTypeSummary;
+	for (const PublicationRecord &record : recordsInRange) {
+		if (record.memberName == memberName) {
+			++pubTypeSummary[record.type];
+		}
+	}
+	
+    //open a VisualizationWindow
+	VisualizationWindow *vw = new VisualizationWindow({pubTypeSummary}, {"Publication Types"}, 
+													  memberName, startDate, endDate);
+	vw->exec();
 }
