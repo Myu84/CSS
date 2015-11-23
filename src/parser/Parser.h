@@ -16,7 +16,7 @@ class Parser {
 	
 	static const io::ignore_column column_policy = io::ignore_extra_column;
 	
-	inline QDate parseDate(QString date_str) {
+	inline QDate parseDate(const QString &date_str) {
 		QDate output = QDate::fromString(date_str, "yyyy/M/d");
 		if (!output.isValid()) {
 			output = QDate::fromString(date_str, "yyyy/M");
@@ -26,6 +26,22 @@ class Parser {
 		}
 		
 		return output;
+	}
+	
+	inline bool parseBool(const QString &bool_str, bool *ok = nullptr) {
+		if (bool_str.toLower() == "true" || bool_str == "1") {
+			if (ok)
+				*ok = true;
+			return true;
+		} else if (bool_str.toLower() == "false" || bool_str == "0") {
+			if (ok)
+				*ok = true;
+			return false;
+		} else {
+			if (ok)
+				*ok = false;
+			return false;
+		}
 	}
 };
 

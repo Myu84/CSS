@@ -63,7 +63,6 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 						   curr_record.title, 
 						   curr_record.restOfCitation, 
 						   curr_record.personalRemuneration)) {
-		bool parseOK;
 		lineNum++;
 		
 		//validate date
