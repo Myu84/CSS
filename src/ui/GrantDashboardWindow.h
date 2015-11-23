@@ -14,7 +14,7 @@ class GrantDashboardWindow : public DashboardWindow {
 	GrantDashboardWindow(QString csv_filename);
 	
  protected slots:
-    virtual void on_treeWidget_doubleClicked();
+    virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item);
 	
  protected:
 	virtual void updateTreeWidget();

@@ -1,8 +1,10 @@
 #include <cstdlib>
+#include <exception>
 #include <QMessageBox>
 #include <QString>
 #include <QDate>
 #include <QPair>
+#include <QDebug>
 #include <QTreeWidgetItem>
 
 #include "PresentationDashboardWindow.h"
@@ -11,14 +13,15 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 2;
+static const int memberNameColumn = 2;
 
 PresentationDashboardWindow::PresentationDashboardWindow(QString csv_filename) {
 	PresentationParser parser;
 	
 	try {
 		records = parser.parse(csv_filename);
-	} catch (...) {
+	} catch (const std::exception &e) {
+		qDebug() << e.what();
 		QMessageBox::critical(this, "Error", "A fatal error occurred while parsing the CSV file");
 		exit(1);
 	}
@@ -82,19 +85,31 @@ void PresentationDashboardWindow::updateTreeWidget() {
 }
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void PresentationDashboardWindow::on_treeWidget_doubleClicked() {
-    //Gets the row that was doubleclicked; I believe selectedItems() only returns what has keyboard focus, which can only be one row in our case
-    //Therefore it should work because it can only ever return the one line that was doubleclicked; still kind of hacky though
-    QTreeWidgetItem *selected = ui.treeWidget->selectedItems().first();
+void PresentationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (memberName.isEmpty())
+		return;
 
-    //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
-    if (selected->text(facultyMemberNameColumn) != "") {
-        VisualizationWindow vw(this);
-		
-        QString memberName = selected->text(facultyMemberNameColumn);
-        QDate sDate = ui.startDateSelector->date();
-        QDate eDate = ui.endDateSelector->date();
-        vw.init(records, memberName, sDate, eDate);
-        vw.exec();
-    }
+	QDate startDate = ui.startDateSelector->date();
+	QDate endDate = ui.endDateSelector->date();
+	
+	QList<PresentationRecord> recordsInRange = filterByDateRange(records, startDate, endDate);
+	
+	//count the records
+	QMap<QString, double> presTypeSummary;
+	for (const PresentationRecord &record : recordsInRange) {
+		if (record.memberName == memberName) {
+			++presTypeSummary[record.type];
+		}
+	}
+	
+    QList<QMap<QString,double>> plotList;
+    plotList.append(presTypeSummary);
+
+    QList<QString> plotNames;
+    plotNames.append("Presentation Types");
+    //open a VisualizationWindow
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
+													  memberName, startDate, endDate);
+	vw->show();
 }

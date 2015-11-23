@@ -1,9 +1,11 @@
 #include <cstdlib>
+#include <exception>
 #include <QtGlobal>
 #include <QMessageBox>
 #include <QString>
 #include <QDate>
 #include <QPair>
+#include <QDebug>
 #include <QTreeWidgetItem>
 
 #include "TeachingDashboardWindow.h"
@@ -12,7 +14,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 3;
+static const int memberNameColumn = 3;
 
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
@@ -33,7 +35,8 @@ TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 	
 	try {
 		records = parser.parse(csv_filename);
-	} catch (...) {
+	} catch (const std::exception &e) {
+		qDebug() << e.what();
 		QMessageBox::critical(this, "Error", "A fatal error occurred while parsing the CSV file");
 		exit(1);
 	}
@@ -44,7 +47,7 @@ TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Program" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
+						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
 	
 	ui.subjectAreaLabel->setText("Teaching Summary");
 	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
@@ -117,30 +120,38 @@ void TeachingDashboardWindow::updateTreeWidget() {
 
 
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void TeachingDashboardWindow::on_treeWidget_doubleClicked() {
-	/*
-    QTreeWidgetItem *header = ui.treeWidget->headerItem();
-    int facultyMemberNameColumn = 0;
-    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
-        if (header->text(i) == "Faculty Name") {
-            facultyMemberNameColumn = i;
-        }
-    }
+void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (memberName.isEmpty())
+		return;
 
-    //Gets the row that was doubleclicked; I believe selectedItems() only returns what has keyboard focus, which can only be one row in our case
-    //Therefore it should work because it can only ever return the one line that was doubleclicked; still kind of hacky though
-    QTreeWidgetItem *selected = ui.treeWidget->selectedItems().first();
+	QDate startDate = ui.startDateSelector->date();
+	QDate endDate = ui.endDateSelector->date();
+	
+	QList<TeachingRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
+	
+	//count the records
+	QMap<QString, double> programSummary;
+	QMap<QString, double> typeSummary;
+	for (const TeachingRecord &record : recordsInRange) {
+		if (record.memberName == memberName) {
+			QString programName = shortProgramName(record.program);
+			
+			programSummary[programName] += record.numTrainees;
+			typeSummary[record.activityType] += record.numTrainees;
+		}
+	}
 
-    //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
-    if(selected->text(facultyMemberNameColumn) != "") {
-        VisualizationWindow vw(this);
-        QString memberName = selected->text(facultyMemberNameColumn);
-        QDate sDate, eDate;
-        sDate = ui.startDateSelector->date();
-        eDate = ui.endDateSelector->date();
-        //vw.init(records, selected->text(facultyMemberNameColumn), ui.startDateSelector->date(), ui.endDateSelector->date());
-        vw.init(records, memberName, sDate, eDate);
-        vw.exec();
-    }
-    */
+    QList<QMap<QString,double>> plotList;
+    plotList.append(programSummary);
+    plotList.append(typeSummary);
+
+    QList<QString> plotNames;
+    plotNames.append("Program Level");
+    plotNames.append("Activity Type");
+	
+    //open a VisualizationWindow
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
+													  memberName, startDate, endDate);
+	vw->show();
 }

@@ -1,9 +1,12 @@
 #include <cstdlib>
+#include <exception>
 #include <QtGlobal>
 #include <QMessageBox>
 #include <QString>
 #include <QDate>
 #include <QPair>
+#include <QDebug>
+#include <QLocale>
 #include <QTreeWidgetItem>
 
 #include "GrantDashboardWindow.h"
@@ -12,7 +15,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int facultyMemberNameColumn = 3;
+static const int memberNameColumn = 3;
 
 QString grantDescription(bool peerReviewed, bool industryGrant) {
 	if (peerReviewed && industryGrant) {
@@ -26,12 +29,17 @@ QString grantDescription(bool peerReviewed, bool industryGrant) {
 	}
 }
 
+QString moneyToStr(double amount) {
+	return QLocale("en").toCurrencyString(amount);
+}
+
 GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
 	GrantParser parser;
 	
 	try {
 		records = parser.parse(csv_filename);
-	} catch (...) {
+	} catch (const std::exception &e) {
+		qDebug() << e.what();
 		QMessageBox::critical(this, "Error", "A fatal error occurred while parsing the CSV file");
 		exit(1);
 	}
@@ -89,22 +97,22 @@ void GrantDashboardWindow::updateTreeWidget() {
 
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
-                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << moneyToStr(allSummary.second)));
 	ui.treeWidget->expandItem(root);
 	
     for (auto type = typeSummary.begin(); type != typeSummary.end(); ++type) {
         QTreeWidgetItem *typeNode = new QTreeWidgetItem(root, (QStringList() <<
-                                            "" << type.key() << "" << "" << QString::number(type.value().first) << QString::number(type.value().second)));
+                                            "" << type.key() << "" << "" << QString::number(type.value().first) << moneyToStr(type.value().second)));
 		
         QMap<QString, QPair<int, double>> &currDescSummary = descSummary[type.key()];
         for (auto desc = currDescSummary.begin(); desc != currDescSummary.end(); ++desc) {
             QTreeWidgetItem *descNode = new QTreeWidgetItem(typeNode, (QStringList() <<
-                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << QString::number(desc.value().second)));
+                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << moneyToStr(desc.value().second)));
 		
             QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][desc.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
                 new QTreeWidgetItem(descNode, (QStringList() <<
-						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+						"" << "" << "" << name.key() << QString::number(name.value().first) << moneyToStr(name.value().second)));
 			}
 		}
 	}
@@ -112,32 +120,32 @@ void GrantDashboardWindow::updateTreeWidget() {
 	setColumnWidths();
 }
 
-
 //Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void GrantDashboardWindow::on_treeWidget_doubleClicked() {
-	/*
-    QTreeWidgetItem *header = ui.treeWidget->headerItem();
-    int facultyMemberNameColumn = 0;
-    for (int i = 0; i < ui.treeWidget->columnCount(); i++) {
-        if (header->text(i) == "Faculty Name") {
-            facultyMemberNameColumn = i;
-        }
-    }
+void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (memberName.isEmpty())
+		return;
 
-    //Gets the row that was doubleclicked; I believe selectedItems() only returns what has keyboard focus, which can only be one row in our case
-    //Therefore it should work because it can only ever return the one line that was doubleclicked; still kind of hacky though
-    QTreeWidgetItem *selected = ui.treeWidget->selectedItems().first();
+	QDate startDate = ui.startDateSelector->date();
+	QDate endDate = ui.endDateSelector->date();
+	
+	QList<GrantRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
+	
+	//count the records
+	QMap<QString, double> typeSummary;
+	for (const GrantRecord &record : recordsInRange) {
+		if (record.memberName == memberName) {
+			++typeSummary[record.fundingType];
+		}
+	}
+	
+    QList<QMap<QString,double>> plotList;
+    plotList.append(typeSummary);
 
-    //If the row contains a faculty member name, it's graphable so open a VisualizationWindow
-    if(selected->text(facultyMemberNameColumn) != "") {
-        VisualizationWindow vw(this);
-        QString memberName = selected->text(facultyMemberNameColumn);
-        QDate sDate, eDate;
-        sDate = ui.startDateSelector->date();
-        eDate = ui.endDateSelector->date();
-        //vw.init(records, selected->text(facultyMemberNameColumn), ui.startDateSelector->date(), ui.endDateSelector->date());
-        vw.init(records, memberName, sDate, eDate);
-        vw.exec();
-    }
-    */
+    QList<QString> plotNames;
+    plotNames.append("Funding Types");
+    //open a VisualizationWindow
+    VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
+													  memberName, startDate, endDate);
+	vw->show();
 }
