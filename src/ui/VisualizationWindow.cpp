@@ -41,8 +41,7 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     setWindowTitle("Visualizations - " + memberName);
 	
 	//just for now
-    //drawBarGraph();
-    drawScatterPlot();
+    drawBarGraph();
 }
 
 void VisualizationWindow::drawScatterPlot() {
@@ -132,4 +131,16 @@ void VisualizationWindow::drawBarGraph() {
 void VisualizationWindow::clearVis() {
     ui.Visualization->clearPlottables();
     ui.Visualization->clearGraphs();
+}
+
+void VisualizationWindow::on_barGraph_button_clicked()
+{
+    drawBarGraph();
+    ui.Visualization->replot();
+}
+
+void VisualizationWindow::on_scatter_button_clicked()
+{
+    drawScatterPlot();
+    ui.Visualization->replot();
 }
