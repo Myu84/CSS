@@ -19,6 +19,8 @@ private slots:
 
     void on_scatter_button_clicked();
 
+    void on_printButton_clicked();
+
 private:
 	void drawBarGraph();
     void drawScatterPlot();

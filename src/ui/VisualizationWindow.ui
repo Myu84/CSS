@@ -48,9 +48,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="printButton">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Print</string>
@@ -67,7 +67,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <zorder>horizontalLayoutWidget_2</zorder>
     </widget>
    </item>
    <item>
