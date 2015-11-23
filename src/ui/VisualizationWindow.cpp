@@ -41,7 +41,50 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     setWindowTitle("Visualizations - " + memberName);
 	
 	//just for now
-	drawBarGraph();
+    //drawBarGraph();
+    drawScatterPlot();
+}
+
+void VisualizationWindow::drawScatterPlot() {
+    //just for now
+    QMap<QString, double> currPlotData = plotData[0];
+    QString currPlotName = plotNames[0];
+
+    QVector<QString> currKeys = currPlotData.keys().toVector();
+    QVector<double> ticks = rangeVector(currKeys.size());
+    QVector<double> currValues = currPlotData.values().toVector();
+
+    ui.Visualization->addGraph();
+    ui.Visualization->graph(0)->setData(ticks, currValues);
+    ui.Visualization->graph(0)->setName(currPlotName);
+    ui.Visualization->graph(0)->setLineStyle(QCPGraph::lsNone);
+
+    /* Scatter style */
+    QCPScatterStyle scatterStyle;
+    scatterStyle.setShape(QCPScatterStyle::ssCircle);
+    scatterStyle.setPen(QPen(Qt::blue));
+    scatterStyle.setBrush(Qt::white);
+    scatterStyle.setSize(5);
+    ui.Visualization->graph(0)->setScatterStyle(scatterStyle);
+
+    /* x axis */
+    ui.Visualization->xAxis->setAutoTicks(false);
+    ui.Visualization->xAxis->setAutoTickLabels(false);
+    ui.Visualization->xAxis->setTickVector(ticks);
+    ui.Visualization->xAxis->setTickVectorLabels(currKeys);
+    ui.Visualization->xAxis->setTickLabelRotation(60);
+    ui.Visualization->xAxis->setTickLength(0, 4);
+    ui.Visualization->xAxis->grid()->setVisible(true);
+    ui.Visualization->xAxis->setSubTickCount(0);
+    ui.Visualization->xAxis->setRange(0, currKeys.size() + 1);
+
+    /* y axis */
+    // these four methods force the y-axis to increment integers only
+    ui.Visualization->yAxis->setAutoTickStep(false);
+    ui.Visualization->yAxis->setAutoSubTicks(false);
+    ui.Visualization->yAxis->setSubTickCount(0);
+    ui.Visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
+    ui.Visualization->yAxis->setTickStep(1);
 }
 
 void VisualizationWindow::drawBarGraph() {

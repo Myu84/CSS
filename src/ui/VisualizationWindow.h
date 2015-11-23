@@ -16,6 +16,7 @@ public:
 
 private:
 	void drawBarGraph();
+    void drawScatterPlot();
 	
 	Ui::VisualizationWindow ui;
 	
