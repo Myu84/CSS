@@ -2,6 +2,7 @@
 #define DASHBOARDWINDOW_H
 
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 
 #include "ui_DashboardWindow.h"
 
@@ -19,7 +20,7 @@ class DashboardWindow : public QMainWindow {
     void on_treeWidget_expanded();
 
  protected slots:
-    virtual void on_treeWidget_doubleClicked() = 0;
+    virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) = 0;
 
  protected:
     DashboardWindow();
