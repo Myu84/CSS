@@ -17,6 +17,7 @@ public:
 private:
 	void drawBarGraph();
     void drawScatterPlot();
+    void clearVis();        // clears all bars/graphs from the visualization
 	
 	Ui::VisualizationWindow ui;
 	

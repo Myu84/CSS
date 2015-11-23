@@ -46,6 +46,7 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
 }
 
 void VisualizationWindow::drawScatterPlot() {
+    clearVis();
     //just for now
     QMap<QString, double> currPlotData = plotData[0];
     QString currPlotName = plotNames[0];
@@ -88,6 +89,7 @@ void VisualizationWindow::drawScatterPlot() {
 }
 
 void VisualizationWindow::drawBarGraph() {
+    clearVis();
     //just for now
     QMap<QString, double> currPlotData = plotData[0];
 	QString currPlotName = plotNames[0];
@@ -125,4 +127,9 @@ void VisualizationWindow::drawBarGraph() {
     ui.Visualization->yAxis->setTickStep(1);
 
     barGraph->setData(ticks, currValues);
+}
+
+void VisualizationWindow::clearVis() {
+    ui.Visualization->clearPlottables();
+    ui.Visualization->clearGraphs();
 }
