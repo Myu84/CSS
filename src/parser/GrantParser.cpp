@@ -47,18 +47,23 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
                        "Duplicate Reported");
 	
 	QList<GrantRecord> records;
-	
-	GrantRecord curr_record;
-	
-    //strings to be converted
-    QString curr_startDate;
-    QString curr_endDate;
-    QString curr_peerReviewed;
-    QString curr_industryGrant;
-    QString curr_totalAmount;
     
     int lineNum = 1;
-    while (parser.read_row(curr_record.memberName,
+    while (true) {
+		lineNum++;
+		
+		GrantRecord curr_record;
+	
+		//strings to be converted
+		QString curr_startDate;
+		QString curr_endDate;
+		QString curr_peerReviewed;
+		QString curr_industryGrant;
+		QString curr_totalAmount;
+	
+		bool continueParsing;
+		try {
+			continueParsing = parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_startDate,
                            curr_endDate,
@@ -88,9 +93,17 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
                            curr_record.personnelPaid,
                            curr_record.rnw,
                            curr_record.educationGrant,
-                           curr_record.duplicateReported)) {
+                           curr_record.duplicateReported);
+		} catch (const std::exception &e) {
+			qDebug() << e.what();
+			continue;
+		}
+		
+		if (!continueParsing) {
+			break;
+		}
+		
 		bool parseOK;
-        lineNum++;
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
