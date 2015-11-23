@@ -6,8 +6,6 @@
 #include <QPen>
 #include <QMessageBox>
 
-#include <QDebug>
-
 #include "VisualizationWindow.h"
 #include "ui_VisualizationWindow.h"
 #include "../../external/qcustomplot.h"
@@ -151,26 +149,21 @@ void VisualizationWindow::on_scatter_button_clicked()
 
 void VisualizationWindow::on_printButton_clicked()
 {
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("Files (*.pdf, *jpg, *png)"));
+    QString ext;
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
 
-    // we're going to cheat since all the file extensions are three characters
-    int len = filename.length();
+    std::string stdext = ext.toStdString();
 
-    QStringRef extRef(&filename, len-3, len-1);
-    QString ext = extRef.toString();
-
-    std::string filestd = ext.toStdString();
-
-    if (filestd == "pdf") {
+    if (stdext == "PDF (*.pdf)") {
         ui.Visualization->savePdf(filename);
     }
-    else if (filestd == "png") {
+    else if (stdext == "PNG (*.png)") {
         ui.Visualization->savePng(filename);
     }
-    else if (filestd == "jpg") {
+    else if (stdext == "JPG (*.jpg)") {
         ui.Visualization->saveJpg(filename);
     } else {
         // show failure dialog
-        QMessageBox::critical(this, "Error", ext);
+        QMessageBox::critical(this, "Error", "Could not save file.");
     }
 }
