@@ -145,5 +145,5 @@ void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *i
     //open a VisualizationWindow
 	VisualizationWindow *vw = new VisualizationWindow({programSummary, typeSummary}, {"Program Level", "Activity Type"}, 
 													  memberName, startDate, endDate);
-	vw->exec();
+	vw->show();
 }

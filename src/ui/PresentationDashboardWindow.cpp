@@ -106,5 +106,5 @@ void PresentationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetIte
     //open a VisualizationWindow
 	VisualizationWindow *vw = new VisualizationWindow({presTypeSummary}, {"Presentation Types"}, 
 													  memberName, startDate, endDate);
-	vw->exec();
+	vw->show();
 }

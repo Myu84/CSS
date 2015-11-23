@@ -107,5 +107,5 @@ void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem
     //open a VisualizationWindow
 	VisualizationWindow *vw = new VisualizationWindow({pubTypeSummary}, {"Publication Types"}, 
 													  memberName, startDate, endDate);
-	vw->exec();
+	vw->show();
 }

@@ -9,15 +9,15 @@
 #include "../../external/qcustomplot.h"
 #include "UIUtils.h"
 
-QVector<double> range(int n) {
-	QVector<double> output(n);
+QVector<double> rangeVector(int n) {
+	QVector<double> output;
 	for (int i = 1; i <= n; ++i) {
 		output.append(i);
 	}
 	return output;
 }
 
-double max(QVector<double> vect) {
+double vectorMax(QVector<double> vect) {
 	double output = 0;
 	for (double x : vect) {
 		if (x > output) {
@@ -30,6 +30,8 @@ double max(QVector<double> vect) {
 VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 										 const QString &memberName, const QDate &startDate, const QDate &endDate)
  : plotData(plotData), plotNames(plotNames), memberName(memberName), startDate(startDate), endDate(endDate) {
+	ui.setupUi(this);
+	
 	ui.GraphTitleLabel->setText("Visualization for " + memberName);
     ui.GraphTitleLabel->setAlignment(Qt::AlignHCenter);
     ui.DateRangeLabel->setText(startDate.toString("'From' MMMM d',' yyyy") +
@@ -48,13 +50,13 @@ void VisualizationWindow::drawBarGraph() {
 	QString currPlotName = plotNames[0];
 	
 	QVector<QString> currKeys = currPlotData.keys().toVector();
-	QVector<double> ticks = range(currKeys.size());
+	QVector<double> ticks = rangeVector(currKeys.size());
 	QVector<double> currValues = currPlotData.values().toVector();
 	
     QCPBars *barGraph = new QCPBars(ui.Visualization->xAxis, ui.Visualization->yAxis);
 	barGraph->setName(currPlotName);
     ui.Visualization->addPlottable(barGraph);
-
+	
     // bar outline thickness
     QPen pen;
     pen.setWidthF(1.2);
@@ -72,12 +74,11 @@ void VisualizationWindow::drawBarGraph() {
     ui.Visualization->xAxis->setRange(0, currKeys.size());
 
     /* y axis */
-
     // these four methods force the y-axis to increment integers only
     ui.Visualization->yAxis->setAutoTickStep(false);
     ui.Visualization->yAxis->setAutoSubTicks(false);
     ui.Visualization->yAxis->setSubTickCount(0);
-    ui.Visualization->yAxis->setRange(0, max(currValues) + 0.1);
+    ui.Visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
     ui.Visualization->yAxis->setTickStep(1);
 
     barGraph->setData(ticks, currValues);

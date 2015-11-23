@@ -142,5 +142,5 @@ void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item
     //open a VisualizationWindow
 	VisualizationWindow *vw = new VisualizationWindow({typeSummary}, {"Funding Types"}, 
 													  memberName, startDate, endDate);
-	vw->exec();
+	vw->show();
 }
