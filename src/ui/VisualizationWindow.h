@@ -1,13 +1,15 @@
 #ifndef VISUALIZATIONWINDOW_H
 #define VISUALIZATIONWINDOW_H
 
-#include <QDialog>
+#include <QMainWindow>
 #include <QList>
+#include <QMap>
+#include <QString>
 
 #include "ui_VisualizationWindow.h"
 #include "../records/PresentationRecord.h"
 
-class VisualizationWindow : public QDialog {
+class VisualizationWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
@@ -15,25 +17,19 @@ public:
 						const QString &memberName, const QDate &startDate, const QDate &endDate);
 
 private slots:
-    void on_barGraph_button_clicked();
-
-    void on_scatter_button_clicked();
-
-    void on_printButton_clicked();
+    void on_plotButton_clicked();
+    void on_actionPrint_triggered();
+    void on_actionClose_triggered();
 
 private:
-	void drawBarGraph();
-    void drawScatterPlot();
+	void drawBarGraph(const QMap<QString, double> &plotData);
+    void drawScatterPlot(const QMap<QString, double> &plotData);
+	
     void clearVis();        // clears all bars/graphs from the visualization
 	
 	Ui::VisualizationWindow ui;
 	
-	QList<QMap<QString, double>> plotData;
-	QList<QString> plotNames;
-	
-	QString memberName;
-	QDate startDate;
-	QDate endDate;
+	QList<QMap<QString, double>> allPlotData;
 };
 
 #endif

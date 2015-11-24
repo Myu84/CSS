@@ -31,35 +31,46 @@ double vectorMax(QVector<double> vect) {
 
 VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 										 const QString &memberName, const QDate &startDate, const QDate &endDate)
- : plotData(plotData), plotNames(plotNames), memberName(memberName), startDate(startDate), endDate(endDate) {
+ : allPlotData(plotData) {
 	ui.setupUi(this);
 	
-	ui.GraphTitleLabel->setText("Visualization for " + memberName);
-    ui.GraphTitleLabel->setAlignment(Qt::AlignHCenter);
-    ui.DateRangeLabel->setText(startDate.toString("'From' MMMM d',' yyyy") +
-                                endDate.toString("' to' MMMM d',' yyyy"));
-    ui.DateRangeLabel->setAlignment(Qt::AlignHCenter);
+	ui.memberNameLabel->setText("Visualization for " + memberName);
+    ui.dateRangeLabel->setText("Showing records from " + 
+							   startDate.toString("MMM d yyyy") + 
+							   " to " + 
+							   endDate.toString("MMM d yyyy"));
+	ui.plotDataSelect->addItems(plotNames);
 
     setWindowTitle("Visualizations - " + memberName);
 	
-	//just for now
-    drawBarGraph();
+	on_plotButton_clicked();
 }
 
-void VisualizationWindow::drawScatterPlot() {
+void VisualizationWindow::on_actionClose_triggered() {
+	close();
+}
+
+void VisualizationWindow::on_plotButton_clicked() {
+	int plotDataIndex = ui.plotDataSelect->currentIndex();
+	QString plotType = ui.plotTypeSelect->currentText();
+	
+	if (plotType == "Bar Graph") {
+		drawBarGraph(allPlotData[plotDataIndex]);
+	} else if (plotType == "Scatter Plot") {
+		drawScatterPlot(allPlotData[plotDataIndex]);
+	}
+}
+
+void VisualizationWindow::drawScatterPlot(const QMap<QString, double> &plotData) {
     clearVis();
-    //just for now
-    QMap<QString, double> currPlotData = plotData[0];
-    QString currPlotName = plotNames[0];
 
-    QVector<QString> currKeys = currPlotData.keys().toVector();
+    QVector<QString> currKeys = plotData.keys().toVector();
     QVector<double> ticks = rangeVector(currKeys.size());
-    QVector<double> currValues = currPlotData.values().toVector();
+    QVector<double> currValues = plotData.values().toVector();
 
-    ui.Visualization->addGraph();
-    ui.Visualization->graph(0)->setData(ticks, currValues);
-    ui.Visualization->graph(0)->setName(currPlotName);
-    ui.Visualization->graph(0)->setLineStyle(QCPGraph::lsNone);
+    ui.visualization->addGraph();
+    ui.visualization->graph(0)->setData(ticks, currValues);
+    ui.visualization->graph(0)->setLineStyle(QCPGraph::lsNone);
 
     /* Scatter style */
     QCPScatterStyle scatterStyle;
@@ -67,41 +78,39 @@ void VisualizationWindow::drawScatterPlot() {
     scatterStyle.setPen(QPen(Qt::blue));
     scatterStyle.setBrush(Qt::white);
     scatterStyle.setSize(5);
-    ui.Visualization->graph(0)->setScatterStyle(scatterStyle);
+    ui.visualization->graph(0)->setScatterStyle(scatterStyle);
 
     /* x axis */
-    ui.Visualization->xAxis->setAutoTicks(false);
-    ui.Visualization->xAxis->setAutoTickLabels(false);
-    ui.Visualization->xAxis->setTickVector(ticks);
-    ui.Visualization->xAxis->setTickVectorLabels(currKeys);
-    ui.Visualization->xAxis->setTickLabelRotation(60);
-    ui.Visualization->xAxis->setTickLength(0, 4);
-    ui.Visualization->xAxis->grid()->setVisible(true);
-    ui.Visualization->xAxis->setSubTickCount(0);
-    ui.Visualization->xAxis->setRange(0, currKeys.size() + 1);
+    ui.visualization->xAxis->setAutoTicks(false);
+    ui.visualization->xAxis->setAutoTickLabels(false);
+    ui.visualization->xAxis->setTickVector(ticks);
+    ui.visualization->xAxis->setTickVectorLabels(currKeys);
+    ui.visualization->xAxis->setTickLabelRotation(60);
+    ui.visualization->xAxis->setTickLength(0, 4);
+    ui.visualization->xAxis->grid()->setVisible(true);
+    ui.visualization->xAxis->setSubTickCount(0);
+    ui.visualization->xAxis->setRange(0, currKeys.size() + 1);
 
     /* y axis */
     // these four methods force the y-axis to increment integers only
-    ui.Visualization->yAxis->setAutoTickStep(false);
-    ui.Visualization->yAxis->setAutoSubTicks(false);
-    ui.Visualization->yAxis->setSubTickCount(0);
-    ui.Visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
-    ui.Visualization->yAxis->setTickStep(1);
+    ui.visualization->yAxis->setAutoTickStep(false);
+    ui.visualization->yAxis->setAutoSubTicks(false);
+    ui.visualization->yAxis->setSubTickCount(0);
+    ui.visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
+    ui.visualization->yAxis->setTickStep(1);
+	
+	ui.visualization->replot();
 }
 
-void VisualizationWindow::drawBarGraph() {
+void VisualizationWindow::drawBarGraph(const QMap<QString, double> &plotData) {
     clearVis();
-    //just for now
-    QMap<QString, double> currPlotData = plotData[0];
-	QString currPlotName = plotNames[0];
 	
-	QVector<QString> currKeys = currPlotData.keys().toVector();
+	QVector<QString> currKeys = plotData.keys().toVector();
 	QVector<double> ticks = rangeVector(currKeys.size());
-	QVector<double> currValues = currPlotData.values().toVector();
+	QVector<double> currValues = plotData.values().toVector();
 	
-    QCPBars *barGraph = new QCPBars(ui.Visualization->xAxis, ui.Visualization->yAxis);
-	barGraph->setName(currPlotName);
-    ui.Visualization->addPlottable(barGraph);
+    QCPBars *barGraph = new QCPBars(ui.visualization->xAxis, ui.visualization->yAxis);
+    ui.visualization->addPlottable(barGraph);
 	
     // bar outline thickness
     QPen pen;
@@ -109,59 +118,47 @@ void VisualizationWindow::drawBarGraph() {
     barGraph->setPen(pen);
 
     /* x axis */
-    ui.Visualization->xAxis->setAutoTicks(false);
-    ui.Visualization->xAxis->setAutoTickLabels(false);
-    ui.Visualization->xAxis->setTickVector(ticks);
-    ui.Visualization->xAxis->setTickVectorLabels(currKeys);
-    ui.Visualization->xAxis->setTickLabelRotation(60);
-    ui.Visualization->xAxis->setTickLength(0, 4);
-    ui.Visualization->xAxis->grid()->setVisible(true);
-    ui.Visualization->xAxis->setSubTickCount(0);
-    ui.Visualization->xAxis->setRange(0, currKeys.size() + 1);
+    ui.visualization->xAxis->setAutoTicks(false);
+    ui.visualization->xAxis->setAutoTickLabels(false);
+    ui.visualization->xAxis->setTickVector(ticks);
+    ui.visualization->xAxis->setTickVectorLabels(currKeys);
+    ui.visualization->xAxis->setTickLabelRotation(60);
+    ui.visualization->xAxis->setTickLength(0, 4);
+    ui.visualization->xAxis->grid()->setVisible(true);
+    ui.visualization->xAxis->setSubTickCount(0);
+    ui.visualization->xAxis->setRange(0, currKeys.size() + 1);
 
     /* y axis */
     // these four methods force the y-axis to increment integers only
-    ui.Visualization->yAxis->setAutoTickStep(false);
-    ui.Visualization->yAxis->setAutoSubTicks(false);
-    ui.Visualization->yAxis->setSubTickCount(0);
-    ui.Visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
-    ui.Visualization->yAxis->setTickStep(1);
+    ui.visualization->yAxis->setAutoTickStep(false);
+    ui.visualization->yAxis->setAutoSubTicks(false);
+    ui.visualization->yAxis->setSubTickCount(0);
+    ui.visualization->yAxis->setRange(0, vectorMax(currValues) + 0.1);
+    ui.visualization->yAxis->setTickStep(1);
 
     barGraph->setData(ticks, currValues);
+	ui.visualization->replot();
 }
 
 void VisualizationWindow::clearVis() {
-    ui.Visualization->clearPlottables();
-    ui.Visualization->clearGraphs();
+    ui.visualization->clearPlottables();
+    ui.visualization->clearGraphs();
 }
 
-void VisualizationWindow::on_barGraph_button_clicked()
-{
-    drawBarGraph();
-    ui.Visualization->replot();
-}
-
-void VisualizationWindow::on_scatter_button_clicked()
-{
-    drawScatterPlot();
-    ui.Visualization->replot();
-}
-
-void VisualizationWindow::on_printButton_clicked()
-{
+void VisualizationWindow::on_actionPrint_triggered() {
     QString ext;
     QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
 
     std::string stdext = ext.toStdString();
 
     if (stdext == "PDF (*.pdf)") {
-        ui.Visualization->savePdf(filename);
+        ui.visualization->savePdf(filename);
     }
     else if (stdext == "PNG (*.png)") {
-        ui.Visualization->savePng(filename);
+        ui.visualization->savePng(filename);
     }
     else if (stdext == "JPG (*.jpg)") {
-        ui.Visualization->saveJpg(filename);
+        ui.visualization->saveJpg(filename);
     } else {
         // show failure dialog
         QMessageBox::critical(this, "Error", "Could not save file.");

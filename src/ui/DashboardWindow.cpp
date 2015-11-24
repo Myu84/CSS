@@ -61,9 +61,9 @@ void DashboardWindow::on_actionOpen_triggered() {
 
 void DashboardWindow::updateDateLabel() {
 	ui.dateRangeLabel->setText("Showing records from " + 
-							   ui.startDateSelector->date().toString("yyyy/MM/dd") + 
+							   ui.startDateSelector->date().toString("MMM d yyyy") + 
 							   " to " + 
-							   ui.endDateSelector->date().toString("yyyy/MM/dd"));
+							   ui.endDateSelector->date().toString("MMM d yyyy"));
 }
 
 void DashboardWindow::on_actionExit_triggered() {
