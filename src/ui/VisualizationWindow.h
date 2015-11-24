@@ -18,7 +18,7 @@ public:
 
 private slots:
     void on_plotButton_clicked();
-    void on_actionPrint_triggered();
+    void on_actionExport_triggered();
     void on_actionClose_triggered();
 
 private:

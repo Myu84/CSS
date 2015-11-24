@@ -85,13 +85,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionExport"/>
     <addaction name="actionPrint"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
    </widget>
    <action name="actionPrint">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="text">
      <string>Print...</string>
@@ -104,6 +105,11 @@
    </action>
    <addaction name="fileMenu"/>
   </widget>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

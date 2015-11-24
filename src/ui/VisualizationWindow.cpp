@@ -145,7 +145,7 @@ void VisualizationWindow::clearVis() {
     ui.visualization->clearGraphs();
 }
 
-void VisualizationWindow::on_actionPrint_triggered() {
+void VisualizationWindow::on_actionExport_triggered() {
     QString ext;
     QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
 
