@@ -1,5 +1,9 @@
 #include <QDesktopWidget>
 #include <QRect>
+#include <QPrinter>
+#include <Qpainter>
+#include <QPrintDialog>
+#include <QtGlobal>
 
 #include "FileInputDialog.h"
 #include "DashboardWindow.h"
@@ -79,4 +83,24 @@ void DashboardWindow::on_treeWidget_collapsed() {
 
 void DashboardWindow::on_treeWidget_expanded() {
     setColumnWidths();
+}
+
+void DashboardWindow::on_actionPrint_triggered()
+{
+    // set up the printer
+    QPrinter printer;
+
+    printer.setOrientation(QPrinter::Landscape);
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    // actual printing starts here
+    QPainter painter;
+    painter.begin(&printer);
+    ui.treeWidget->render(&painter);
+
 }

@@ -19,7 +19,9 @@ class DashboardWindow : public QMainWindow {
     void on_treeWidget_collapsed();
     void on_treeWidget_expanded();
 
- protected slots:
+    void on_actionPrint_triggered();
+
+protected slots:
     virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) = 0;
 
  protected:
