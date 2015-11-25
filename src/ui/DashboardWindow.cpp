@@ -1,7 +1,7 @@
 #include <QDesktopWidget>
 #include <QRect>
 #include <QPrinter>
-#include <Qpainter>
+#include <QPainter>
 #include <QPrintDialog>
 #include <QtGlobal>
 
@@ -85,8 +85,7 @@ void DashboardWindow::on_treeWidget_expanded() {
     setColumnWidths();
 }
 
-void DashboardWindow::on_actionPrint_triggered()
-{
+void DashboardWindow::on_actionPrint_triggered() {
     // set up the printer
     QPrinter printer;
 

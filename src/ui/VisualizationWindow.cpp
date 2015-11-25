@@ -162,10 +162,7 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
     ui.visualization->yAxis->setTickStep(tickstep);
 }
 
-void VisualizationWindow::on_actionPrint_triggered() {
-    // set up the printer
-    QPrinter printer;
-
+void VisualizationWindow::on_actionExport_triggered() {
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     dialog->setWindowTitle(tr("Print Graph"));
 
