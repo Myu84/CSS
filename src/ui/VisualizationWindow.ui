@@ -83,7 +83,7 @@
    </widget>
    <action name="actionPrint">
     <property name="text">
-     <string>Print...</string>
+     <string>&amp;Print...</string>
     </property>
    </action>
    <action name="actionClose">

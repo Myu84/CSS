@@ -37,7 +37,7 @@ void NightchartsWidget::paintEvent(QPaintEvent * e)
     int h = (this->height() - _margin_top - 100);
     int size = (w<h)?w:h;
 
-    int xcoord = (this->width() - size)/2;
+    int xcoord = (this->width() - size)/4;
     //_chart.setCords(_margin_left, _margin_top,size, size);
     _chart.setCords(xcoord, _margin_top,size, size);
 

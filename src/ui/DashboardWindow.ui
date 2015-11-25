@@ -127,7 +127,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Print...</string>
+    <string>&amp;Print...</string>
    </property>
   </action>
   <action name="actionExit">

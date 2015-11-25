@@ -201,12 +201,16 @@ void VisualizationWindow::on_actionPrint_triggered() {
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     dialog->setWindowTitle(tr("Print Graph"));
 
+    printer.setPaperSize(ui.visWidget->size(), QPrinter::DevicePixel);
+    printer.setOrientation(QPrinter::Landscape);
+
     if (dialog->exec() != QDialog::Accepted)
         return;
 
     // actual printing starts here
     QPainter painter;
     painter.setRenderHints(QPainter::Antialiasing);
+
     painter.begin(&printer);
 
     if (graphs->isVisible()) {
@@ -218,17 +222,19 @@ void VisualizationWindow::on_actionPrint_triggered() {
 
 void VisualizationWindow::on_actionExport_triggered() {
     QString ext;
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
+    //QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (.*pdf)"), &ext);
 
     std::string stdext = ext.toStdString();
 
     if (stdext == "PDF (*.pdf)") {
         graphs->savePdf(filename);
     }
+    /*
     else if (stdext == "PNG (*.png)") {
         graphs->savePng(filename);
     }
     else if (stdext == "JPG (*.jpg)") {
         graphs->saveJpg(filename);
-    }
+    }*/
 }
