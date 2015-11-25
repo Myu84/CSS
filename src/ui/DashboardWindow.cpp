@@ -88,6 +88,26 @@ void DashboardWindow::on_treeWidget_expanded() {
     setColumnWidths();
 }
 
+int treeWidgetToTextTable(QTreeWidgetItem *item, QTextTable *table, int rowNum) {
+	for (int c = 0; c < item->childCount(); ++c) {
+		QTreeWidgetItem *child = item->child(c);
+		
+		//export child
+		table->appendRows(1);
+		for (int colNum = 0; colNum < child->columnCount(); ++colNum) {
+			table->cellAt(rowNum, colNum).firstCursorPosition().insertText(child->text(colNum));
+		}
+		++rowNum;
+		
+		//recurse to children
+		if (child->isExpanded() && child->childCount() > 0) {
+			rowNum = treeWidgetToTextTable(child, table, rowNum);
+		}
+	}
+	
+	return rowNum;
+}
+
 void DashboardWindow::on_actionPrint_triggered() {
     // set up the printer
     QPrinter printer;
@@ -98,25 +118,18 @@ void DashboardWindow::on_actionPrint_triggered() {
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    // actual printing starts here
+    //build a table
     QTextDocument doc;
 	QTextCursor cursor(&doc);
-	
 	QTextTable *table = cursor.insertTable(1, ui.treeWidget->columnCount());
 	
 	//header
-	for (int colNum = 0; colNum < ui.treeWidget->columnCount(); ++colNum)
+	for (int colNum = 0; colNum < ui.treeWidget->columnCount(); ++colNum) {
 		table->cellAt(0, colNum).firstCursorPosition().insertText(ui.treeWidget->headerItem()->text(colNum));
+	}
 	
 	//table content
-	int rowNum = 1;
-    for (QTreeWidgetItemIterator it(ui.treeWidget); *it; ++it) {
-		table->appendRows(1);
-		for (int colNum = 0; colNum < ui.treeWidget->columnCount(); ++colNum)
-			table->cellAt(rowNum, colNum).firstCursorPosition().insertText((*it)->text(colNum));
-		++rowNum;
-    }
-	
+	treeWidgetToTextTable(ui.treeWidget->invisibleRootItem(), table, 1);
 	
 	doc.print(&printer);
 }
