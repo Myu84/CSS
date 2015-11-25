@@ -45,8 +45,10 @@ void PieChartWidget::paintEvent(QPaintEvent *event)
 
     double startAngle = 0.0;
 
-    double rectSize = qMin(this->width(), this->height());
-    QRectF size = QRectF(10, 10, rectSize/2, rectSize/2);
+    double winSize = qMin(this->width(), this->height());
+    double rectSize = winSize * 0.75;
+    double yAlign = (winSize - rectSize)/2;
+    QRectF size = QRectF(10, yAlign, rectSize, rectSize);
 
     for (int i = 0; i < mKeys.size(); i++) {
         QString key = mKeys.at(i);
