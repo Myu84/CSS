@@ -35,11 +35,22 @@ double vectorMax(QVector<double> vect) {
 	return output;
 }
 
+double vectorSum(QVector<double> vect) {
+    double total = 0.0;
+    for (double x: vect) {
+        total+=x;
+    }
+    return total;
+}
+
+//QList<QColor> VisualizationWindow::colorList << Qt::red << Qt::blue << Qt::green << Qt::yellow << Qt::magenta << Qt::cyan << Qt::gray << Qt::darkRed << Qt::darkGreen << Qt::darkBlue;
+
 VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 										 const QString &memberName, const QDate &startDate, const QDate &endDate)
  : allPlotData(plotData) {
 	ui.setupUi(this);
 	
+    ui.visWidget->setStyleSheet("background-color:white;");
 	ui.memberNameLabel->setText("Visualization for " + memberName);
     ui.dateRangeLabel->setText("Showing records from " + 
 							   startDate.toString("MMM d yyyy") + 
@@ -51,10 +62,10 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
 
     QGridLayout* layout = new QGridLayout(ui.visWidget);
 
-    graphs = new QCustomPlot();
-    pieChart = new PieChartWidget();
+    graphs = new QCustomPlot(ui.visWidget);
+    pieChart = new NightchartsWidget(ui.visWidget);
+    graphs->raise();
 
-    //ui.visWidget->setLayout(layout);
     graphs->setAccessibleName("graphs");
     pieChart->setAccessibleName("pieChart");
 
@@ -62,7 +73,7 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     pieChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     layout->addWidget(graphs, 0, 0);
-    layout->addWidget(pieChart, 0 , 0);
+    layout->addWidget(pieChart, 0, 0);
 
     graphs->xAxis->setAutoTicks(false);
     graphs->xAxis->setAutoTickLabels(false);
@@ -75,7 +86,8 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->yAxis->setAutoSubTicks(false);
     graphs->yAxis->setSubTickCount(0);
 
-    //ui.visWidget->setLayout(layout);
+    colorList << Qt::red << Qt::blue << Qt::green << Qt::magenta << Qt::yellow << Qt::cyan;
+    colorList << Qt::gray << Qt::darkRed << Qt::darkBlue << Qt::darkGreen << Qt::black;
 
     on_plotButton_clicked();
 }
@@ -92,15 +104,12 @@ void VisualizationWindow::on_plotButton_clicked() {
 
 	if (plotType == "Bar Graph") {
 		drawBarGraph(allPlotData[plotDataIndex]);
-        graphs->raise();
-        //ui.vis2->setVisible(false);
+        graphs->setVisible(true);
 	} else if (plotType == "Scatter Plot") {
 		drawScatterPlot(allPlotData[plotDataIndex]);
-        graphs->raise();
-        //ui.vis2->setVisible(false);
+        graphs->setVisible(true);
     } else if (plotType == "Pie Graph") {
-        //ui.vis2->setVisible(true);
-        pieChart->raise();
+        graphs->setVisible(false);
         drawPieGraph(allPlotData[plotDataIndex]);
     }
 
@@ -132,8 +141,21 @@ void VisualizationWindow::drawPieGraph(const QMap<QString, double> &plotData)
     QVector<QString> currKeys = plotData.keys().toVector();
     QVector<double> currValues = plotData.values().toVector();
 
-    pieChart->setData(currKeys, currValues);
-    pieChart->resize(ui.visWidget->width(), ui.visWidget->height());
+    int color = 0;
+    double total = vectorSum(currValues);
+    int cSize = colorList.size();
+
+    pieChart->clear();
+    pieChart->setType(Nightcharts::Pie);
+
+    for (int i = 0; i < currKeys.size(); i++) {
+        double value = currValues.at(i);
+
+        double pSize = (value/total) * 100;
+
+        pieChart->addItem(currKeys.at(i), colorList.at(color%cSize), pSize);
+        color++;
+    }
 }
 
 void VisualizationWindow::drawBarGraph(const QMap<QString, double> &plotData) {
@@ -187,7 +209,12 @@ void VisualizationWindow::on_actionPrint_triggered() {
     QPainter painter;
     painter.setRenderHints(QPainter::Antialiasing);
     painter.begin(&printer);
-    graphs->render(&painter);
+
+    if (graphs->isVisible()) {
+        graphs->render(&painter);
+    } else {
+        pieChart->render(&painter);
+    }
 }
 
 void VisualizationWindow::on_actionExport_triggered() {
