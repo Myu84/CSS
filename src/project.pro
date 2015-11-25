@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     parser/GrantParser.cpp ui/GrantDashboardWindow.cpp \
     parser/PublicationParser.cpp ui/PublicationDashboardWindow.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
-    ../external/qcustomplot.cpp
+    ../external/qcustomplot.cpp \
+    ui/PieChartWidget.cpp
 
 FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
@@ -25,4 +26,5 @@ HEADERS += \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	ui/UIUtils.h \
-    ../external/qcustomplot.h ../external/csv.h
+    ../external/qcustomplot.h ../external/csv.h \
+    ui/PieChartWidget.h

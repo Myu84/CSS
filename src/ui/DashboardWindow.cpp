@@ -90,8 +90,6 @@ void DashboardWindow::on_actionPrint_triggered()
     // set up the printer
     QPrinter printer;
 
-    printer.setOrientation(QPrinter::Landscape);
-
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     dialog->setWindowTitle(tr("Print Document"));
 
@@ -102,5 +100,4 @@ void DashboardWindow::on_actionPrint_triggered()
     QPainter painter;
     painter.begin(&printer);
     ui.treeWidget->render(&painter);
-
 }

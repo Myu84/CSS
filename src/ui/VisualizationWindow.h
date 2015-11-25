@@ -5,6 +5,7 @@
 #include <QList>
 #include <QMap>
 #include <QString>
+#include <QPaintEvent>
 
 #include "ui_VisualizationWindow.h"
 #include "../records/PresentationRecord.h"
@@ -24,8 +25,11 @@ private slots:
 private:
 	void drawBarGraph(const QMap<QString, double> &plotData);
     void drawScatterPlot(const QMap<QString, double> &plotData);
-	
-    void clearVis();        // clears all bars/graphs from the visualization
+    void drawPieGraph(const QMap<QString, double> &plotData);
+    // clears all bars/graphs from the visualization
+    void clearVis();
+    // format the graph
+    void styleGraph(QVector<double> &values, QVector<double> &ticks, QVector<QString> &keys);
 	
 	Ui::VisualizationWindow ui;
 	
