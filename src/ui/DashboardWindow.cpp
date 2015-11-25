@@ -1,3 +1,6 @@
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextTable>
 #include <QDesktopWidget>
 #include <QRect>
 #include <QPrinter>
@@ -89,14 +92,31 @@ void DashboardWindow::on_actionPrint_triggered() {
     // set up the printer
     QPrinter printer;
 
-    QPrintDialog *dialog = new QPrintDialog(&printer, this);
-    dialog->setWindowTitle(tr("Print Document"));
+    QPrintDialog dialog(&printer, this);
+    dialog.setWindowTitle(tr("Print Document"));
 
-    if (dialog->exec() != QDialog::Accepted)
+    if (dialog.exec() != QDialog::Accepted)
         return;
 
     // actual printing starts here
-    QPainter painter;
-    painter.begin(&printer);
-    ui.treeWidget->render(&painter);
+    QTextDocument doc;
+	QTextCursor cursor(&doc);
+	
+	QTextTable *table = cursor.insertTable(1, ui.treeWidget->columnCount());
+	
+	//header
+	for (int colNum = 0; colNum < ui.treeWidget->columnCount(); ++colNum)
+		table->cellAt(0, colNum).firstCursorPosition().insertText(ui.treeWidget->headerItem()->text(colNum));
+	
+	//table content
+	int rowNum = 1;
+    for (QTreeWidgetItemIterator it(ui.treeWidget); *it; ++it) {
+		table->appendRows(1);
+		for (int colNum = 0; colNum < ui.treeWidget->columnCount(); ++colNum)
+			table->cellAt(rowNum, colNum).firstCursorPosition().insertText((*it)->text(colNum));
+		++rowNum;
+    }
+	
+	
+	doc.print(&printer);
 }
