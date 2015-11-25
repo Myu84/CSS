@@ -9,6 +9,8 @@
 
 #include "ui_VisualizationWindow.h"
 #include "../records/PresentationRecord.h"
+#include "../external/qcustomplot.h"
+#include "PieChartWidget.h"
 
 class VisualizationWindow : public QMainWindow {
 	Q_OBJECT
@@ -16,6 +18,11 @@ class VisualizationWindow : public QMainWindow {
 public:
     VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 						const QString &memberName, const QDate &startDate, const QDate &endDate);
+
+    ~VisualizationWindow() {
+        delete graphs;
+        delete pieChart;
+    }
 
 private slots:
     void on_plotButton_clicked();
@@ -34,6 +41,8 @@ private:
 	Ui::VisualizationWindow ui;
 	
 	QList<QMap<QString, double>> allPlotData;
+    PieChartWidget *pieChart;
+    QCustomPlot *graphs;
 };
 
 #endif

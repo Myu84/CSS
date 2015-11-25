@@ -15,6 +15,16 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="0" colspan="4">
+     <widget class="QWidget" name="visWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="dateRangeLabel">
       <property name="text">
@@ -44,17 +54,17 @@
       </item>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QPushButton" name="plotButton">
-      <property name="text">
-       <string>Plot</string>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="changeVisLabel">
       <property name="text">
        <string>Change Visualization:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="plotButton">
+      <property name="text">
+       <string>Plot</string>
       </property>
      </widget>
     </item>
@@ -63,43 +73,6 @@
       <property name="text">
        <string>[Member Name]</string>
       </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="4">
-     <widget class="QWidget" name="widget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QCustomPlot" name="visualization" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <zorder>vis2</zorder>
-         <zorder>vis2</zorder>
-         <zorder>vis2</zorder>
-         <zorder>vis2</zorder>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="PieChartWidget" name="vis2" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <zorder>visualization</zorder>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
    </layout>
@@ -143,20 +116,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>../external/qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PieChartWidget</class>
-   <extends>QWidget</extends>
-   <header>../src/ui/PieChartWidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
