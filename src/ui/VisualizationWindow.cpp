@@ -69,11 +69,15 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->setAccessibleName("graphs");
     pieChart->setAccessibleName("pieChart");
 
-    graphs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    pieChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //graphs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //pieChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    graphs->plotLayout()->insertRow(0);
+    graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs,
+                                                            memberName + " - " + startDate.toString("MMM d yyyy") +
+                                                            " to " + endDate.toString("MMM d yyyy")));
 
-    layout->addWidget(graphs, 0, 0);
-    layout->addWidget(pieChart, 0, 0);
+    layout->addWidget(graphs,0,0);
+    layout->addWidget(pieChart,0,0);
 
     graphs->xAxis->setAutoTicks(false);
     graphs->xAxis->setAutoTickLabels(false);
@@ -86,8 +90,8 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->yAxis->setAutoSubTicks(false);
     graphs->yAxis->setSubTickCount(0);
 
-    colorList << Qt::red << Qt::blue << Qt::green << Qt::magenta << Qt::yellow << Qt::cyan;
-    colorList << Qt::gray << Qt::darkRed << Qt::darkBlue << Qt::darkGreen << Qt::black;
+    colorList << QColor("#8dd3c7") << QColor("#ffffb3") << QColor("#bebada") << QColor("#fb8072") << QColor("#80b1d3") << QColor("#fbd462");
+    colorList << QColor("#b3de69") << QColor("#fccde5") << QColor("#d9d9d9") << QColor("#bc80bd") << QColor("#ccebc5") << QColor("#ffed6f");
 
     on_plotButton_clicked();
 }
@@ -103,10 +107,12 @@ void VisualizationWindow::on_plotButton_clicked() {
     clearVis();
 
 	if (plotType == "Bar Graph") {
-		drawBarGraph(allPlotData[plotDataIndex]);
+        drawBarGraph(allPlotData[plotDataIndex]);
+       // graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs, "test title"));
         graphs->setVisible(true);
 	} else if (plotType == "Scatter Plot") {
 		drawScatterPlot(allPlotData[plotDataIndex]);
+       // graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs, "test title"));
         graphs->setVisible(true);
     } else if (plotType == "Pie Graph") {
         graphs->setVisible(false);
@@ -188,13 +194,12 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
 
     /* y axis */
     double valueMax = vectorMax(values);
-    double yMax = valueMax + ceil(valueMax*0.01);
-
-    graphs->yAxis->setRange(0, yMax);
+    double yMax = valueMax;
 
     // set number of ticks on y-axis to a reasonable amount
     double tickstep = ceil(yMax/10);
     graphs->yAxis->setTickStep(tickstep);
+    graphs->yAxis->setRange(0, yMax+tickstep);
 }
 
 void VisualizationWindow::on_actionPrint_triggered() {

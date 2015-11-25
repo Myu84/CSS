@@ -14,6 +14,7 @@ void NightchartsWidget::clear()
     _chart = Nightcharts();
     _chart.setType(Nightcharts::Histogramm);
     _chart.setLegendType(Nightcharts::Vertical);
+    _chart.setShadows(true);
 
     _margin_left = 16;
     _margin_top = 16;
