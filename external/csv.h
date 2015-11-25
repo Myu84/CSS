@@ -1,4 +1,5 @@
 #pragma warning(push, 0)
+#pragma GCC system_header
 
 #include "csv_vs2013_compat.h"
 #include "csv_qstring_support.h"
