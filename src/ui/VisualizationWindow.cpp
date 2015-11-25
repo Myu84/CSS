@@ -43,7 +43,7 @@ double vectorSum(QVector<double> vect) {
     return total;
 }
 
-//QList<QColor> VisualizationWindow::colorList << Qt::red << Qt::blue << Qt::green << Qt::yellow << Qt::magenta << Qt::cyan << Qt::gray << Qt::darkRed << Qt::darkGreen << Qt::darkBlue;
+static const QList<QColor> colorList = {Qt::red, Qt::blue, Qt::green, Qt::yellow, Qt::magenta, Qt::cyan, Qt::gray, Qt::darkRed, Qt::darkGreen, Qt::darkBlue};
 
 VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 										 const QString &memberName, const QDate &startDate, const QDate &endDate)
@@ -85,9 +85,6 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->yAxis->setAutoTickStep(false);
     graphs->yAxis->setAutoSubTicks(false);
     graphs->yAxis->setSubTickCount(0);
-
-    colorList << Qt::red << Qt::blue << Qt::green << Qt::magenta << Qt::yellow << Qt::cyan;
-    colorList << Qt::gray << Qt::darkRed << Qt::darkBlue << Qt::darkGreen << Qt::black;
 
     on_plotButton_clicked();
 }

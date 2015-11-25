@@ -45,7 +45,6 @@ private:
 	QList<QMap<QString, double>> allPlotData;
     NightchartsWidget *pieChart;
     QCustomPlot *graphs;
-    QList<QColor> colorList;
 };
 
 #endif
