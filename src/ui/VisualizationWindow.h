@@ -6,11 +6,12 @@
 #include <QMap>
 #include <QString>
 #include <QPaintEvent>
+#include <QColor>
 
 #include "ui_VisualizationWindow.h"
 #include "../records/PresentationRecord.h"
 #include "../external/qcustomplot.h"
-#include "PieChartWidget.h"
+#include "../external/nightchart/nightchartswidget.h"
 
 class VisualizationWindow : public QMainWindow {
 	Q_OBJECT
@@ -42,8 +43,9 @@ private:
 	Ui::VisualizationWindow ui;
 	
 	QList<QMap<QString, double>> allPlotData;
-    PieChartWidget *pieChart;
+    NightchartsWidget *pieChart;
     QCustomPlot *graphs;
+    QList<QColor> colorList;
 };
 
 #endif

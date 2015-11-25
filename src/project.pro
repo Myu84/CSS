@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     parser/PublicationParser.cpp ui/PublicationDashboardWindow.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
     ../external/qcustomplot.cpp \
-    ui/PieChartWidget.cpp
+    ui/PieChartWidget.cpp \
+    ../external/nightchart/nightcharts.cpp ../external/nightchart/nightchartswidget.cpp
 
 FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
@@ -30,4 +31,5 @@ HEADERS += \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	ui/UIUtils.h \
     ../external/qcustomplot.h ../external/csv.h \
-    ui/PieChartWidget.h
+    ui/PieChartWidget.h \
+    ../external/nightchart/nightcharts.h ../external/nightchart/nightchartswidget.h
