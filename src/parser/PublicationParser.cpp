@@ -12,7 +12,7 @@ using namespace std;
 
 //workaround for strange header in publications sample
 Parser::CSVParser<27> *makePublicationParser(const QString &file_name) {
-	Parser::CSVParser<27> *parser;
+	Parser::CSVParser<27> *parser = nullptr;
 	
 	try {
 		parser = new Parser::CSVParser<27>(file_name.toStdString());
@@ -48,7 +48,9 @@ Parser::CSVParser<27> *makePublicationParser(const QString &file_name) {
 		   
 		return parser;
 	} catch (...) {
-		delete parser;
+		if (parser) {
+			delete parser;
+		}
 		parser = new Parser::CSVParser<27>(file_name.toStdString());
 
 		parser->read_header(Parser::column_policy,
