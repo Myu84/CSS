@@ -159,8 +159,7 @@ void VisualizationWindow::clearVis() {
     graphs->clearGraphs();
 }
 
-void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &ticks, QVector<QString> &keys)
-{
+void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &ticks, QVector<QString> &keys) {
     graphs->xAxis->setTickVector(ticks);
     graphs->xAxis->setTickVectorLabels(keys);
     graphs->xAxis->setRange(0, keys.size() + 1);
@@ -176,7 +175,7 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
     graphs->yAxis->setTickStep(tickstep);
 }
 
-void VisualizationWindow::on_actionExport_triggered() {
+void VisualizationWindow::on_actionPrint_triggered() {
     QPrinter printer;
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     dialog->setWindowTitle(tr("Print Graph"));
@@ -189,4 +188,21 @@ void VisualizationWindow::on_actionExport_triggered() {
     painter.setRenderHints(QPainter::Antialiasing);
     painter.begin(&printer);
     graphs->render(&painter);
+}
+
+void VisualizationWindow::on_actionExport_triggered() {
+    QString ext;
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
+
+    std::string stdext = ext.toStdString();
+
+    if (stdext == "PDF (*.pdf)") {
+        graphs->savePdf(filename);
+    }
+    else if (stdext == "PNG (*.png)") {
+        graphs->savePng(filename);
+    }
+    else if (stdext == "JPG (*.jpg)") {
+        graphs->saveJpg(filename);
+    }
 }

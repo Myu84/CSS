@@ -96,9 +96,6 @@
     <addaction name="actionClose"/>
    </widget>
    <action name="actionPrint">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
     <property name="text">
      <string>Print...</string>
     </property>
