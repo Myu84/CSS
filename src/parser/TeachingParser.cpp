@@ -11,7 +11,7 @@
 using namespace std;
 
 // file_name should be path to file
-QList<TeachingRecord> TeachingParser::parse(QString file_name) {
+QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 	CSVParser<22> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,

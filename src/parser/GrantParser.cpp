@@ -11,7 +11,7 @@
 using namespace std;
 
 // file_name should be path to file
-QList<GrantRecord> GrantParser::parse(QString file_name) {
+QList<GrantRecord> GrantParser::parse(const QString &file_name) {
 	CSVParser<31> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,

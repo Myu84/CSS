@@ -9,7 +9,7 @@
 
 class PresentationParser : public Parser {
  public:
-	QList<PresentationRecord> parse(QString file_name);
+	QList<PresentationRecord> parse(const QString &file_name);
 };
 
 #endif

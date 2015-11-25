@@ -10,38 +10,80 @@
 
 using namespace std;
 
-// file_name should be path to file
-QList<PublicationRecord> PublicationParser::parse(QString file_name) {
-	CSVParser<27> parser(file_name.toStdString());
+//workaround for strange header in publications sample
+CSVParser<27> makePublicationParser(const QString &file_name) {
+	try {
+		CSVParser<27> parser(file_name.toStdString());
 
-	parser.read_header(column_policy,
-	   "Member Name",
-	   "Primary Domain",
-	   "Publication Status",
-	   "Pubmed Article ID",
-	   "Type",
-	   "Status Date",
-	   "Role",
-	   "Peer Reviewed?",
-	   "Author #",
-	   "Journal Name | Published In | Book Title | etc.",
-	   "Volume",
-	   "Issue",
-	   "Page Range",
-	   "DOI",
-	   "Website",
-	   "Journal Impact Factor",
-	   "International",
-	   "Publisher",
-	   "Is Presentation?",
-	   "Personal Remuneration",
-	   "Trainee Details",
-	   "Is Most Significant Publication?",
-	   "Most Significant Contribution Details",
-	   "Education Publication",
-	   "Author(s)",
-	   "Title",
-	   "ISBNISSN");
+		parser.read_header(column_policy,
+		   "Member Name",
+		   "Primary Domain",
+		   "Publication Status",
+		   "Pubmed Article ID",
+		   "Type",
+		   "Status Date",
+		   "Role",
+		   "Peer Reviewed?",
+		   "Author #",
+		   "Journal Name | Published In | Book Title | etc.",
+		   "Volume",
+		   "Issue",
+		   "Page Range",
+		   "DOI",
+		   "Website",
+		   "Journal Impact Factor",
+		   "International",
+		   "Publisher",
+		   "Is Presentation?",
+		   "Personal Remuneration",
+		   "Trainee Details",
+		   "Is Most Significant Publication?",
+		   "Most Significant Contribution Details",
+		   "Education Publication",
+		   "Author(s)",
+		   "Title",
+		   "ISBNISSN");
+		   
+		return parser;
+	} catch (const std::exception &e) {
+		CSVParser<27> parser(file_name.toStdString());
+
+		parser.read_header(column_policy,
+		   "Member Name",
+		   "Primary Domain",
+		   "Publication Status",
+		   "Pubmed Article ID",
+		   "Type",
+		   "Status Date *", //strange column
+		   "Role *", //strange column
+		   "Peer Reviewed?",
+		   "Author #",
+		   "Journal Name | Published In | Book Title | etc.",
+		   "Volume",
+		   "Issue",
+		   "Page Range",
+		   "DOI",
+		   "Website",
+		   "Journal Impact Factor",
+		   "International",
+		   "Publisher",
+		   "Is Presentation?",
+		   "Personal Remuneration",
+		   "Trainee Details",
+		   "Is Most Significant Publication?",
+		   "Most Significant Contribution Details",
+		   "Education Publication",
+		   "Author(s)",
+		   "Title",
+		   "ISBNISSN");
+		   
+		return parser;
+	}
+}
+
+// file_name should be path to file
+QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
+	CSVParser<27> parser = makePublicationParser(file_name);
 
 	QList<PublicationRecord> records;
     int lineNum = 1;
