@@ -938,7 +938,7 @@ namespace io{
         public:
                 CSVReader() = delete;
                 CSVReader(const CSVReader&) = delete;
-                CSVReader&operator=(const CSVReader&);
+                CSVReader&operator=(const CSVReader&) = delete;
 
                 template<class ...Args>
                 explicit CSVReader(Args...args):in(std::forward<Args>(args)...){

@@ -11,11 +11,13 @@
 using namespace std;
 
 //workaround for strange header in publications sample
-CSVParser<27> makePublicationParser(const QString &file_name) {
+Parser::CSVParser<27> *makePublicationParser(const QString &file_name) {
+	Parser::CSVParser<27> *parser;
+	
 	try {
-		CSVParser<27> parser(file_name.toStdString());
+		parser = new Parser::CSVParser<27>(file_name.toStdString());
 
-		parser.read_header(column_policy,
+		parser->read_header(Parser::column_policy,
 		   "Member Name",
 		   "Primary Domain",
 		   "Publication Status",
@@ -45,10 +47,11 @@ CSVParser<27> makePublicationParser(const QString &file_name) {
 		   "ISBNISSN");
 		   
 		return parser;
-	} catch (const std::exception &e) {
-		CSVParser<27> parser(file_name.toStdString());
+	} catch (...) {
+		delete parser;
+		parser = new Parser::CSVParser<27>(file_name.toStdString());
 
-		parser.read_header(column_policy,
+		parser->read_header(Parser::column_policy,
 		   "Member Name",
 		   "Primary Domain",
 		   "Publication Status",
@@ -83,7 +86,7 @@ CSVParser<27> makePublicationParser(const QString &file_name) {
 
 // file_name should be path to file
 QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
-	CSVParser<27> parser = makePublicationParser(file_name);
+	CSVParser<27> &parser = *makePublicationParser(file_name);
 
 	QList<PublicationRecord> records;
     int lineNum = 1;
