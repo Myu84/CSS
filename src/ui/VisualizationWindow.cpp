@@ -43,8 +43,6 @@ double vectorSum(QVector<double> vect) {
     return total;
 }
 
-//QList<QColor> VisualizationWindow::colorList << Qt::red << Qt::blue << Qt::green << Qt::yellow << Qt::magenta << Qt::cyan << Qt::gray << Qt::darkRed << Qt::darkGreen << Qt::darkBlue;
-
 VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plotData, const QList<QString> &plotNames,
 										 const QString &memberName, const QDate &startDate, const QDate &endDate)
  : allPlotData(plotData) {
@@ -64,10 +62,11 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->setAccessibleName("graphs");
     pieChart->setAccessibleName("pieChart");
 
+    QString graphTitle = memberName + " - " + startDate.toString("MMM d yyyy") +
+            " to " + endDate.toString("MMM d yyyy");
     graphs->plotLayout()->insertRow(0);
-    graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs,
-                                                            memberName + " - " + startDate.toString("MMM d yyyy") +
-                                                            " to " + endDate.toString("MMM d yyyy")));
+    graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs, graphTitle));
+    pieChart->setTitle(graphTitle);
 
     layout->addWidget(graphs,0,0);
     layout->addWidget(pieChart,0,0);
@@ -102,11 +101,9 @@ void VisualizationWindow::on_plotButton_clicked() {
 
 	if (plotType == "Bar Graph") {
         drawBarGraph(allPlotData[plotDataIndex]);
-       // graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs, "test title"));
         graphs->setVisible(true);
 	} else if (plotType == "Scatter Plot") {
-		drawScatterPlot(allPlotData[plotDataIndex]);
-       // graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs, "test title"));
+        drawScatterPlot(allPlotData[plotDataIndex]);
         graphs->setVisible(true);
     } else if (plotType == "Pie Graph") {
         graphs->setVisible(false);
@@ -150,6 +147,9 @@ void VisualizationWindow::drawPieGraph(const QMap<QString, double> &plotData)
 
     for (int i = 0; i < currKeys.size(); i++) {
         double value = currValues.at(i);
+
+        if (value == 0)
+            continue;
 
         double pSize = (value/total) * 100;
 

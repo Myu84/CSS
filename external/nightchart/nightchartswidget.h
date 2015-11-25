@@ -12,12 +12,14 @@ public:
     void addItem(QString name, QColor color, float value);
     void setType(Nightcharts::type type);
     void clear();
+    void setTitle(QString title);
 protected:
     virtual void paintEvent(QPaintEvent * e);
 private:
     Nightcharts _chart;
     int _margin_left;
     int _margin_top;
+    QString _title;
 
 };
 

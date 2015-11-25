@@ -4,6 +4,7 @@ NightchartsWidget::NightchartsWidget(QWidget *parent) :
     QWidget(parent)
 {
     clear();
+    _title = "";
 }
 void NightchartsWidget::setType(Nightcharts::type t)
 {
@@ -14,11 +15,15 @@ void NightchartsWidget::clear()
     _chart = Nightcharts();
     _chart.setType(Nightcharts::Histogramm);
     _chart.setLegendType(Nightcharts::Vertical);
-    _chart.setShadows(true);
 
     _margin_left = 16;
-    _margin_top = 16;
+    _margin_top = 64;
 
+}
+
+void NightchartsWidget::setTitle(QString title)
+{
+    _title = title;
 }
 
 void NightchartsWidget::paintEvent(QPaintEvent * e)
@@ -31,12 +36,14 @@ void NightchartsWidget::paintEvent(QPaintEvent * e)
     int w = (this->width() - _margin_left - 150);
     int h = (this->height() - _margin_top - 100);
     int size = (w<h)?w:h;
-    _chart.setCords(_margin_left, _margin_top,size, size);
 
+    int xcoord = (this->width() - size)/2;
+    //_chart.setCords(_margin_left, _margin_top,size, size);
+    _chart.setCords(xcoord, _margin_top,size, size);
 
     _chart.draw(&painter);
     _chart.drawLegend(&painter);
-    //painter.end();
+    _chart.drawTitle(&painter, this->width(), _title);
 }
 
 void NightchartsWidget::addItem(QString name, QColor color, float value)

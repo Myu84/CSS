@@ -331,40 +331,15 @@ int Nightcharts::draw(QPainter *painter)
 
 int Nightcharts::drawLegend(QPainter *painter)
 {
-    //double ptext = 25;
     double angle = palpha;
     painter->setPen(Qt::SolidLine);
 
     switch(cltype)
     {
-    /*case Nightcharts::Horizontal:
-    {
-        int dist = 5;
-        painter->setBrush(Qt::white);
-        float x = cX;
-        float y = cY+cH+20+dist;
-        //painter->drawRoundRect(cX+cW+20,cY,dist*2+200,pieces.size()*(fontmetr.height()+2*dist)+dist,15,15);
-        for (int i=0;i<pieces.size();i++)
-        {
-            painter->setBrush(pieces[i].rgbColor);
-            x += fontmetr.height()+2*dist;
-            if (i%3 == 0)
-            {
-                x = cX;
-                y += dist+fontmetr.height();
-            }
-            painter->drawRect(x,y,fontmetr.height(),fontmetr.height());
-            QString label = pieces[i].pname + " - " + QString::number(pieces[i].pPerc)+"%";
-            painter->drawText(x+fontmetr.height()+dist,y+fontmetr.height()/2+dist,label);
-            x += fontmetr.width(label);
-        }
-        break;
-    }*/
     case Nightcharts::Vertical:
     {
         int dist = 5;
         painter->setBrush(Qt::white);
-        //painter->drawRoundRect(cX+cW+20,cY,dist*2+200,pieces.size()*(painter->fontMetrics().height()+2*dist)+dist,15,15);
         for (int i=pieces.size()-1;i>=0;i--)
         {
             painter->setBrush(pieces[i].rgbColor);
@@ -404,6 +379,16 @@ int Nightcharts::drawLegend(QPainter *painter)
     }
 
     return 0;
+}
+
+void Nightcharts::drawTitle(QPainter *painter, int width, QString title)
+{
+    painter->setPen(Qt::SolidLine);
+    QFont font = painter->font();
+
+    QFont newFont(font.family(), font.pointSize()*1.5, QFont::Bold);
+    painter->setFont(newFont);
+    painter->drawText((width - painter->fontMetrics().width(title))/2, painter->fontMetrics().height(), title);
 }
 
 QPointF Nightcharts::GetPoint(double angle, double R1, double R2)
