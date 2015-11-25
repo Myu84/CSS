@@ -51,11 +51,6 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
 	ui.setupUi(this);
 	
     ui.visWidget->setStyleSheet("background-color:white;");
-	ui.memberNameLabel->setText("Visualization for " + memberName);
-    ui.dateRangeLabel->setText("Showing records from " + 
-							   startDate.toString("MMM d yyyy") + 
-							   " to " + 
-							   endDate.toString("MMM d yyyy"));
 	ui.plotDataSelect->addItems(plotNames);
 
     setWindowTitle("Visualizations - " + memberName);
@@ -69,8 +64,6 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->setAccessibleName("graphs");
     pieChart->setAccessibleName("pieChart");
 
-    //graphs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //pieChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     graphs->plotLayout()->insertRow(0);
     graphs->plotLayout()->addElement(0, 0, new QCPPlotTitle(graphs,
                                                             memberName + " - " + startDate.toString("MMM d yyyy") +
@@ -92,6 +85,7 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
 
     colorList << QColor("#8dd3c7") << QColor("#ffffb3") << QColor("#bebada") << QColor("#fb8072") << QColor("#80b1d3") << QColor("#fbd462");
     colorList << QColor("#b3de69") << QColor("#fccde5") << QColor("#d9d9d9") << QColor("#bc80bd") << QColor("#ccebc5") << QColor("#ffed6f");
+    colorList << QColor("#1f78b4") << QColor("#33a02c") << QColor("#e31a1c") << QColor("#ff7f00") << QColor("#6a3d9a") << QColor("#a6cee3");
 
     on_plotButton_clicked();
 }
