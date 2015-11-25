@@ -6,6 +6,9 @@ CONFIG += c++11
 win32 {
 	CONFIG += windows
 }
+CONFIG(release, debug|release) {
+	DEFINES += "QT_NO_DEBUG_OUTPUT"
+}
 
 SOURCES += main.cpp \
     parser/PresentationParser.cpp ui/PresentationDashboardWindow.cpp \

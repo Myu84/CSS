@@ -1,3 +1,5 @@
+#pragma warning(push, 0)
+
 #include "csv_vs2013_compat.h"
 #include "csv_qstring_support.h"
 
@@ -1069,3 +1071,4 @@ namespace io{
 }
 #endif
 
+#pragma warning(pop)

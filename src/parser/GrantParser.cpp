@@ -2,6 +2,7 @@
 #include <QDate>
 #include <QList>
 #include <QDebug>
+#include <exception>
 
 #include "../records/GrantRecord.h"
 #include "Parser.h"
@@ -14,41 +15,41 @@ QList<GrantRecord> GrantParser::parse(QString file_name) {
 	CSVParser<31> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
-                       "Member Name",
-                       "Primary Domain",
-                       "Start Date",
-                       "End Date",
-                       "Funding Type",
-                       "Status",
-                       "Peer Reviewed?",
-                       "Industry Grant?",
-                       "Role",
-                       "Short Title",
-                       "Title",
-                       "Application Summary",
-                       "Grant Purpose",
-                       "Area",
-                       "Principal Investigator",
-                       "Co-Investigators",
-                       "Grant and/or Account #",
-                       "Administered By",
-                       "Funding Source",
-                       "Project",
-                       "Currency",
-                       "Received Amount",
-                       "Total Amount",
-                       "Member Share",
-                       "Monetary",
-                       "Rpt",
-                       "Hours Per Week",
-                       "Personnel Paid",
-                       "Rnw",
-                       "Education Grant",
-                       "Duplicate Reported");
+	   "Member Name",
+	   "Primary Domain",
+	   "Start Date",
+	   "End Date",
+	   "Funding Type",
+	   "Status",
+	   "Peer Reviewed?",
+	   "Industry Grant?",
+	   "Role",
+	   "Short Title",
+	   "Title",
+	   "Application Summary",
+	   "Grant Purpose",
+	   "Area",
+	   "Principal Investigator",
+	   "Co-Investigators",
+	   "Grant and/or Account #",
+	   "Administered By",
+	   "Funding Source",
+	   "Project",
+	   "Currency",
+	   "Received Amount",
+	   "Total Amount",
+	   "Member Share",
+	   "Monetary",
+	   "Rpt",
+	   "Hours Per Week",
+	   "Personnel Paid",
+	   "Rnw",
+	   "Education Grant",
+	   "Duplicate Reported");
 	
 	QList<GrantRecord> records;
-    
     int lineNum = 1;
+	
     while (true) {
 		lineNum++;
 		

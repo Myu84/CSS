@@ -2,6 +2,7 @@
 #include <QDate>
 #include <QList>
 #include <QDebug>
+#include <exception>
 
 #include "../records/PublicationRecord.h"
 #include "Parser.h"
@@ -14,43 +15,48 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
 	CSVParser<27> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
-                       "Member Name",
-                       "Primary Domain",
-                       "Publication Status",
-                       "Pubmed Article ID",
-                       "Type",
-                       "Status Date",
-                       "Role",
-                       "Peer Reviewed?",
-                       "Author #",
-                       "Journal Name | Published In | Book Title | etc.",
-                       "Volume",
-                       "Issue",
-                       "Page Range",
-                       "DOI",
-                       "Website",
-                       "Journal Impact Factor",
-                       "International",
-                       "Publisher",
-                       "Is Presentation?",
-                       "Personal Remuneration",
-                       "Trainee Details",
-                       "Is Most Significant Publication?",
-                       "Most Significant Contribution Details",
-					   "Education Publication",
-                       "Author(s)",
-                       "Title",
-                       "ISBNISSN");
+	   "Member Name",
+	   "Primary Domain",
+	   "Publication Status",
+	   "Pubmed Article ID",
+	   "Type",
+	   "Status Date",
+	   "Role",
+	   "Peer Reviewed?",
+	   "Author #",
+	   "Journal Name | Published In | Book Title | etc.",
+	   "Volume",
+	   "Issue",
+	   "Page Range",
+	   "DOI",
+	   "Website",
+	   "Journal Impact Factor",
+	   "International",
+	   "Publisher",
+	   "Is Presentation?",
+	   "Personal Remuneration",
+	   "Trainee Details",
+	   "Is Most Significant Publication?",
+	   "Most Significant Contribution Details",
+	   "Education Publication",
+	   "Author(s)",
+	   "Title",
+	   "ISBNISSN");
 
 	QList<PublicationRecord> records;
-
-	PublicationRecord curr_record;
-
-    //strings to be converted
-    QString curr_date;
-
     int lineNum = 1;
-    while (parser.read_row(curr_record.memberName,
+	
+    while (true) {
+		lineNum++;
+		
+		PublicationRecord curr_record;
+
+		//strings to be converted
+		QString curr_date;
+		
+		bool continueParsing;
+		try {
+			continueParsing = parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_record.publicationStatus,
                            curr_record.pubmedID,
@@ -76,9 +82,16 @@ QList<PublicationRecord> PublicationParser::parse(QString file_name) {
                            curr_record.educationPublication,
                            curr_record.authors,
                            curr_record.title,
-                           curr_record.isbn)) {
-        lineNum++;
-
+                           curr_record.isbn);
+        } catch (const std::exception &e) {
+			qDebug() << e.what();
+			continue;
+		}
+		
+		if (!continueParsing) {
+			break;
+		}
+		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
             //TODO: handle error

@@ -2,6 +2,7 @@
 #include <QDate>
 #include <QList>
 #include <QDebug>
+#include <exception>
 
 #include "../records/TeachingRecord.h"
 #include "Parser.h"
@@ -38,19 +39,24 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 		"Total Hours");
 	
 	QList<TeachingRecord> records;
+	int lineNum = 1;
 	
-	TeachingRecord curr_record;
+    while (true) {
+		lineNum++;
+		
+		TeachingRecord curr_record;
 	
-    //strings to be converted
-    QString curr_startDate;
-    QString curr_endDate;
-    QString curr_hoursPerSession;
-    QString curr_numberOfSessions;
-    QString curr_numTrainees;
-    QString curr_totalHours;
-    
-    int lineNum = 1;
-    while (parser.read_row(curr_record.memberName,
+		//strings to be converted
+		QString curr_startDate;
+		QString curr_endDate;
+		QString curr_hoursPerSession;
+		QString curr_numberOfSessions;
+		QString curr_numTrainees;
+		QString curr_totalHours;
+		
+		bool continueParsing;
+		try {
+			continueParsing = parser.read_row(curr_record.memberName,
                            curr_record.primaryDomain,
                            curr_startDate,
                            curr_endDate,
@@ -71,9 +77,17 @@ QList<TeachingRecord> TeachingParser::parse(QString file_name) {
 						   curr_record.initialLecture,
 						   curr_record.facultyDevelopment,
                            curr_record.comment,
-						   curr_totalHours)) {
+						   curr_totalHours);
+		} catch (const std::exception &e) {
+			qDebug() << e.what();
+			continue;
+		}
+		
+		if (!continueParsing) {
+			break;
+		}
+		
 		bool parseOK;
-        lineNum++;
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
