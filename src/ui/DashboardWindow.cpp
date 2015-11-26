@@ -8,6 +8,7 @@
 #include <QPrintDialog>
 #include <QFileDialog>
 #include <QtGlobal>
+#include <stdexcept>
 
 #include "FileInputDialog.h"
 #include "DashboardWindow.h"
@@ -42,7 +43,7 @@ DashboardWindow *DashboardWindow::makeDashboard() {
             return new PublicationDashboardWindow(inputDialog.getFilename());
         }
         else {
-			throw "Unimplemented subject area";
+			throw std::invalid_argument("Unknown subject area");
 		}
 	} else {
 		return nullptr;
@@ -131,7 +132,7 @@ void DashboardWindow::on_actionPrint_triggered() {
     QPrinter printer;
 
     QPrintDialog dialog(&printer, this);
-    dialog.setWindowTitle(tr("Print Document"));
+    dialog.setWindowTitle("Print Document");
 
     if (dialog.exec() != QDialog::Accepted)
         return;
@@ -141,7 +142,7 @@ void DashboardWindow::on_actionPrint_triggered() {
 
 void DashboardWindow::on_actionExport_triggered() {
     // set up the printer
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save Dashboard"), "", tr("PDF (.*pdf)"));
+	QString filename = QFileDialog::getSaveFileName(this, "Save Dashboard", "", "PDF (*.pdf)");
 	if (filename.isEmpty())
 		return;
 	
