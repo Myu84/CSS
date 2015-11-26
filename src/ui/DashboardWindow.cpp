@@ -6,7 +6,9 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintDialog>
+#include <QFileDialog>
 #include <QtGlobal>
+#include <stdexcept>
 
 #include "FileInputDialog.h"
 #include "DashboardWindow.h"
@@ -41,7 +43,7 @@ DashboardWindow *DashboardWindow::makeDashboard() {
             return new PublicationDashboardWindow(inputDialog.getFilename());
         }
         else {
-			throw "Unimplemented subject area";
+			throw std::invalid_argument("Unknown subject area");
 		}
 	} else {
 		return nullptr;
@@ -108,17 +110,8 @@ int treeWidgetToTextTable(QTreeWidgetItem *item, QTextTable *table, int rowNum) 
 	return rowNum;
 }
 
-void DashboardWindow::on_actionPrint_triggered() {
-    // set up the printer
-    QPrinter printer;
-
-    QPrintDialog dialog(&printer, this);
-    dialog.setWindowTitle(tr("Print Document"));
-
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    //build a table
+void DashboardWindow::printTreeWidget(QPrinter *printer) {
+	//build a table
     QTextDocument doc;
 	QTextCursor cursor(&doc);
 	QTextTable *table = cursor.insertTable(1, ui.treeWidget->columnCount());
@@ -131,5 +124,31 @@ void DashboardWindow::on_actionPrint_triggered() {
 	//table content
 	treeWidgetToTextTable(ui.treeWidget->invisibleRootItem(), table, 1);
 	
-	doc.print(&printer);
+	doc.print(printer);
+}
+
+void DashboardWindow::on_actionPrint_triggered() {
+    // set up the printer
+    QPrinter printer;
+
+    QPrintDialog dialog(&printer, this);
+    dialog.setWindowTitle("Print Document");
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    printTreeWidget(&printer);
+}
+
+void DashboardWindow::on_actionExport_triggered() {
+    // set up the printer
+	QString filename = QFileDialog::getSaveFileName(this, "Save Dashboard", "", "PDF (*.pdf)");
+	if (filename.isEmpty())
+		return;
+	
+    QPrinter printer(QPrinter::HighResolution);
+	printer.setOutputFormat(QPrinter::PdfFormat);
+	printer.setOutputFileName(filename);
+
+    printTreeWidget(&printer);
 }
