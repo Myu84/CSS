@@ -6,6 +6,9 @@ CONFIG += c++11
 win32 {
 	CONFIG += windows
 }
+win32-msvc* {
+    QMAKE_CXXFLAGS += /wd4068
+}
 CONFIG(release, debug|release) {
 	DEFINES += "QT_NO_DEBUG_OUTPUT"
 }
