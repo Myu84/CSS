@@ -243,7 +243,7 @@ void VisualizationWindow::on_actionExport_triggered() {
     if (graphs->isVisible()) {
 		graphs->savePdf(filename);
     } else {
-        QPrinter printer(QPrinter::HighResolution);
+        QPrinter printer;
 
         printer.setOutputFileName(filename);
         printer.setOutputFormat(QPrinter::PdfFormat);
