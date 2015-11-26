@@ -8,6 +8,8 @@
 #include <QPainter>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QPageLayout>
+#include <QMarginsF>
 #include <QSizePolicy>
 
 #include <math.h>
