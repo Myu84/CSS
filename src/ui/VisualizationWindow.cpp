@@ -222,9 +222,9 @@ void VisualizationWindow::on_actionPrint_triggered() {
 
     // actual printing starts here
     QPainter painter;
-    painter.setRenderHints(QPainter::Antialiasing);
 
     painter.begin(&printer);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     if (graphs->isVisible()) {
         graphs->render(&painter);
@@ -236,13 +236,34 @@ void VisualizationWindow::on_actionPrint_triggered() {
 void VisualizationWindow::on_actionExport_triggered() {
     QString ext;
     //QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (.*pdf)"), &ext);
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF files (*.pdf)"), &ext);
 
     std::string stdext = ext.toStdString();
 
-    if (stdext == "PDF (*.pdf)") {
-        graphs->savePdf(filename);
+    if (graphs->isVisible()) {
+        if (stdext == "PDF (*.pdf)") {
+            graphs->savePdf(filename);
+        }
+    } else {
+        QPrinter printer;
+
+        printer.setOutputFileName(filename);
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        printer.setPaperSize(ui.visWidget->size(), QPrinter::DevicePixel);
+
+        QPageLayout pageLayout;
+        pageLayout.setMode(QPageLayout::FullPageMode);
+        pageLayout.setOrientation(QPageLayout::Portrait);
+        pageLayout.setMargins(QMarginsF(0, 0, 0, 0));
+        printer.setPageLayout(pageLayout);
+
+        QPainter painter;
+        painter.begin(&printer);
+        painter.setRenderHints(QPainter::Antialiasing);
+
+        pieChart->render(&painter);
     }
+
     /*
     else if (stdext == "PNG (*.png)") {
         graphs->savePng(filename);
