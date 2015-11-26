@@ -102,15 +102,16 @@ void VisualizationWindow::on_plotButton_clicked() {
 	if (plotType == "Bar Graph") {
         drawBarGraph(allPlotData[plotDataIndex]);
         graphs->setVisible(true);
+        graphs->replot();
 	} else if (plotType == "Scatter Plot") {
         drawScatterPlot(allPlotData[plotDataIndex]);
         graphs->setVisible(true);
+        graphs->replot();
     } else if (plotType == "Pie Graph") {
         graphs->setVisible(false);
         drawPieGraph(allPlotData[plotDataIndex]);
+        pieChart->repaint();
     }
-
-    graphs->replot();
 }
 
 void VisualizationWindow::drawScatterPlot(const QMap<QString, double> &plotData) {

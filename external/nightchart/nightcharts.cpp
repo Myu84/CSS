@@ -347,8 +347,21 @@ int Nightcharts::drawLegend(QPainter *painter)
             float y = lY+dist+i*(painter->fontMetrics().height()+2*dist);
             painter->drawRect(x,y,painter->fontMetrics().height(),painter->fontMetrics().height());
 
-            int percint = floor(pieces[i].pPerc + 0.5);
-            painter->drawText(x+painter->fontMetrics().height()+dist,y+painter->fontMetrics().height()/2+dist,pieces[i].pname + " - " +QString::number(percint)+"%");
+            float pieceval = pieces[i].pPerc;
+            int percint = floor(pieceval + 0.5);
+            QString percent;
+
+            if (pieceval < 1) {
+                percent = "< 1%";
+            }
+            else if (pieceval > 99 && pieceval < 100) {
+                percent = "> 99%";
+            }
+            else {
+                int percint = floor(pieces[i].pPerc + 0.5);
+                percent = QString::number(percint) + "%";
+            }
+            painter->drawText(x+painter->fontMetrics().height()+dist,y+painter->fontMetrics().height()/2+dist,pieces[i].pname + " - " + percent);
         }
         break;
     }
