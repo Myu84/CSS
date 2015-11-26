@@ -21,6 +21,7 @@ public:
 						const QString &memberName, const QDate &startDate, const QDate &endDate);
 
     ~VisualizationWindow() {
+        graphs->clearItems();
         delete graphs;
         delete pieChart;
     }

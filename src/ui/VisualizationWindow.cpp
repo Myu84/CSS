@@ -82,8 +82,8 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->yAxis->setAutoSubTicks(false);
     graphs->yAxis->setSubTickCount(0);
 
-    colorList << QColor("#8dd3c7") << QColor("#ffffb3") << QColor("#bebada") << QColor("#fb8072") << QColor("#80b1d3") << QColor("#fbd462");
-    colorList << QColor("#b3de69") << QColor("#fccde5") << QColor("#d9d9d9") << QColor("#bc80bd") << QColor("#ccebc5") << QColor("#ffed6f");
+    colorList << QColor("#8dd3c7") << QColor("#ffffb3") << QColor("#bebada") << QColor("#fb8072") << QColor("#fbd462") << QColor("#b3de69") ;
+    colorList << QColor("#fccde5") << QColor("#80b1d3") << QColor("#d9d9d9") << QColor("#bc80bd") << QColor("#ccebc5") << QColor("#ffed6f");
     colorList << QColor("#1f78b4") << QColor("#33a02c") << QColor("#e31a1c") << QColor("#ff7f00") << QColor("#6a3d9a") << QColor("#a6cee3");
 
     on_plotButton_clicked();
@@ -177,6 +177,7 @@ void VisualizationWindow::drawBarGraph(const QMap<QString, double> &plotData) {
 }
 
 void VisualizationWindow::clearVis() {
+    graphs->clearItems();
     graphs->clearPlottables();
     graphs->clearGraphs();
 }
@@ -194,6 +195,18 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
     double tickstep = ceil(yMax/10);
     graphs->yAxis->setTickStep(tickstep);
     graphs->yAxis->setRange(0, yMax+tickstep);
+
+    for (int i = 1; i <= values.size(); i++) {
+        QCPItemText *textLabel = new QCPItemText(graphs);
+
+        graphs->addItem(textLabel);
+
+        textLabel->setClipToAxisRect(false);
+        textLabel->position->setAxes(graphs->xAxis, graphs->yAxis);
+        textLabel->position->setType(QCPItemPosition::ptPlotCoords);
+        textLabel->position->setCoords(i, values.at(i-1) + tickstep*0.25);
+        textLabel->setText(QString::number(values.at(i-1)));
+    }
 }
 
 void VisualizationWindow::on_actionPrint_triggered() {
