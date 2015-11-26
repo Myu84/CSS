@@ -132,18 +132,21 @@ void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item
 	QList<GrantRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
 	
 	//count the records
-	QMap<QString, double> typeSummary;
+	QMap<QString, double> typeSummaryCount;
+	QMap<QString, double> typeSummaryAmount;
 	for (const GrantRecord &record : recordsInRange) {
 		if (record.memberName == memberName) {
-			++typeSummary[record.fundingType];
+			++typeSummaryCount[record.fundingType];
+			typeSummaryAmount[record.fundingType] += record.totalAmount;
 		}
 	}
 	
-    QList<QMap<QString,double>> plotList;
-    plotList.append(typeSummary);
+    QList<QMap<QString, double>> plotList;
+    plotList << typeSummaryCount << typeSummaryAmount;
 
     QList<QString> plotNames;
-    plotNames.append("Funding Types");
+    plotNames << "Funding Types (by #)" << "Funding Types (by $)";
+	
     //open a VisualizationWindow
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);

@@ -131,24 +131,28 @@ void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *i
 	QList<TeachingRecord> recordsInRange = filterByDateRangeStartEnd(records, startDate, endDate);
 	
 	//count the records
-	QMap<QString, double> programSummary;
-	QMap<QString, double> typeSummary;
+	QMap<QString, double> programSummaryStudents;
+	QMap<QString, double> programSummaryHours;
+	QMap<QString, double> typeSummaryStudents;
+	QMap<QString, double> typeSummaryHours;
 	for (const TeachingRecord &record : recordsInRange) {
 		if (record.memberName == memberName) {
 			QString programName = shortProgramName(record.program);
 			
-			programSummary[programName] += record.numTrainees;
-			typeSummary[record.activityType] += record.numTrainees;
+			programSummaryStudents[programName] += record.numTrainees;
+			programSummaryHours[programName] += record.totalHours;
+			
+			typeSummaryStudents[record.activityType] += record.numTrainees;
+			typeSummaryHours[record.activityType] += record.totalHours;
 		}
 	}
 
-    QList<QMap<QString,double>> plotList;
-    plotList.append(programSummary);
-    plotList.append(typeSummary);
+    QList<QMap<QString, double>> plotList;
+    plotList << programSummaryStudents << programSummaryHours << typeSummaryStudents << typeSummaryHours;
 
     QList<QString> plotNames;
-    plotNames.append("Program Level");
-    plotNames.append("Activity Type");
+    plotNames << "Program Level (by # students)" << "Program Level (by total hours)" 
+			  << "Activity Type (by # students)" << "Activity Type (by total hours)";
 	
     //open a VisualizationWindow
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
