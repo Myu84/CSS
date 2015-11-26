@@ -234,18 +234,15 @@ void VisualizationWindow::on_actionPrint_triggered() {
 }
 
 void VisualizationWindow::on_actionExport_triggered() {
-    QString ext;
-    //QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF (*.pdf);;JPG (*.jpg);;PNG (*.png)"), &ext);
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save Graph"), "", tr("PDF files (*.pdf)"), &ext);
-
-    std::string stdext = ext.toStdString();
+    // set up the printer
+	QString filename = QFileDialog::getSaveFileName(this, "Save Graph", "", "PDF (*.pdf)");
+	if (filename.isEmpty())
+		return;
 
     if (graphs->isVisible()) {
-        if (stdext == "PDF (*.pdf)") {
-            graphs->savePdf(filename);
-        }
+		graphs->savePdf(filename);
     } else {
-        QPrinter printer;
+        QPrinter printer(QPrinter::HighResolution);
 
         printer.setOutputFileName(filename);
         printer.setOutputFormat(QPrinter::PdfFormat);
@@ -263,12 +260,4 @@ void VisualizationWindow::on_actionExport_triggered() {
 
         pieChart->render(&painter);
     }
-
-    /*
-    else if (stdext == "PNG (*.png)") {
-        graphs->savePng(filename);
-    }
-    else if (stdext == "JPG (*.jpg)") {
-        graphs->saveJpg(filename);
-    }*/
 }
