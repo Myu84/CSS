@@ -204,7 +204,7 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
         textLabel->setClipToAxisRect(false);
         textLabel->position->setAxes(graphs->xAxis, graphs->yAxis);
         textLabel->position->setType(QCPItemPosition::ptPlotCoords);
-        textLabel->position->setCoords(i, values.at(i-1) + tickstep*0.25);
+        textLabel->position->setCoords(i, values.at(i-1) + tickstep*0.33);
         textLabel->setText(QString::number(values.at(i-1)));
     }
 }
