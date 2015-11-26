@@ -8,8 +8,6 @@
 #include <QPainter>
 #include <QPrinter>
 #include <QPrintDialog>
-#include <QPageLayout>
-#include <QMarginsF>
 #include <QSizePolicy>
 
 #include <math.h>
@@ -249,16 +247,11 @@ void VisualizationWindow::on_actionExport_triggered() {
         printer.setOutputFileName(filename);
         printer.setOutputFormat(QPrinter::PdfFormat);
         printer.setPaperSize(ui.visWidget->size(), QPrinter::DevicePixel);
-
-        QPageLayout pageLayout;
-        pageLayout.setMode(QPageLayout::FullPageMode);
-        pageLayout.setOrientation(QPageLayout::Portrait);
-        pageLayout.setMargins(QMarginsF(0, 0, 0, 0));
-        printer.setPageLayout(pageLayout);
+        printer.setFullPage(true);
 
         QPainter painter;
+		painter.setRenderHints(QPainter::Antialiasing);
         painter.begin(&printer);
-        painter.setRenderHints(QPainter::Antialiasing);
 
         pieChart->render(&painter);
     }
