@@ -1,119 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>VisualizationWindow</class>
- <widget class="QDialog" name="VisualizationWindow">
+ <widget class="QMainWindow" name="VisualizationWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
-    <height>501</height>
+    <width>559</width>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>[Title]</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="GraphTitleLabel">
-       <property name="text">
-        <string>[Graph Title (if not included in QCustomPlot)]</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="DateRangeLabel">
-       <property name="text">
-        <string>Date Range: [date1] to [date2]</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>30</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Print</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QCustomPlot" name="Visualization" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <zorder>horizontalLayoutWidget_2</zorder>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QPushButton" name="pieGraph_button">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Pie Chart</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="barGraph_button">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QComboBox" name="plotDataSelect"/>
+    </item>
+    <item row="0" column="2">
+     <widget class="QComboBox" name="plotTypeSelect">
+      <item>
        <property name="text">
         <string>Bar Graph</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="scatter_button">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
+      </item>
+      <item>
        <property name="text">
         <string>Scatter Plot</string>
        </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
+      </item>
+      <item>
+       <property name="text">
+        <string>Pie Graph</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="changeVisLabel">
+      <property name="text">
+       <string>Change Visualization:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="plotButton">
+      <property name="text">
+       <string>Plot</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <widget class="QWidget" name="visWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>559</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExport"/>
+    <addaction name="actionPrint"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <action name="actionPrint">
+    <property name="text">
+     <string>&amp;Print...</string>
+    </property>
+   </action>
+   <action name="actionClose">
+    <property name="text">
+     <string>Close</string>
+    </property>
+   </action>
+   <addaction name="fileMenu"/>
+  </widget>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export...</string>
+   </property>
+  </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>../external/qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

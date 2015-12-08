@@ -7,16 +7,17 @@
 #include "../../external/csv.h"
 
 class Parser {
- protected:
+ public:
 	template <unsigned column_count>
 	using CSVParser = io::CSVReader<column_count, 
 									io::trim_chars<' '>, 
 									io::double_quote_escape<',', '"'>, 
 									io::throw_on_overflow,
 									io::empty_line_comment>;
-	
+
 	static const io::ignore_column column_policy = io::ignore_extra_column;
-	
+
+ protected:
 	inline QDate parseDate(const QString &date_str) {
 		QDate output = QDate::fromString(date_str, "yyyy/M/d");
 		if (!output.isValid()) {
@@ -49,7 +50,7 @@ class Parser {
 		money_str.remove('$').remove(',');
 		double val = money_str.toDouble(ok);
 		
-		if (val < 0 && ok)
+		if (ok && val < 0)
 			*ok = false;
 		return val;
 	}

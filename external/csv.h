@@ -1,3 +1,6 @@
+#pragma GCC system_header
+#pragma warning(push, 0)
+
 #include "csv_vs2013_compat.h"
 #include "csv_qstring_support.h"
 
@@ -936,7 +939,7 @@ namespace io{
         public:
                 CSVReader() = delete;
                 CSVReader(const CSVReader&) = delete;
-                CSVReader&operator=(const CSVReader&);
+                CSVReader&operator=(const CSVReader&) = delete;
 
                 template<class ...Args>
                 explicit CSVReader(Args...args):in(std::forward<Args>(args)...){
@@ -1069,3 +1072,4 @@ namespace io{
 }
 #endif
 
+#pragma warning(pop)

@@ -9,7 +9,7 @@
 
 class GrantParser : public Parser {
  public:
-    QList<GrantRecord> parse(QString file_name);
+    QList<GrantRecord> parse(const QString &file_name);
 };
 
 #endif

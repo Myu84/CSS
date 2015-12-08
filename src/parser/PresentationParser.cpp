@@ -2,6 +2,7 @@
 #include <QDate>
 #include <QList>
 #include <QDebug>
+#include <exception>
 
 #include "../records/PresentationRecord.h"
 #include "Parser.h"
@@ -10,7 +11,7 @@
 using namespace std;
 
 // file_name should be path to file
-QList<PresentationRecord> PresentationParser::parse(QString file_name) {
+QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 	CSVParser<20> parser(file_name.toStdString());
 
 	parser.read_header(column_policy,
@@ -36,14 +37,19 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 		"Personal Remuneration");
 	
 	QList<PresentationRecord> records;
+	int lineNum = 1;
+    
+	while (true) {
+		lineNum++;
+		
+		PresentationRecord curr_record;
 	
-	PresentationRecord curr_record;
+		//strings to be converted
+		QString curr_date;
 	
-	//strings to be converted
-	QString curr_date;
-	
-    int lineNum = 1;
-	while (parser.read_row(curr_record.memberName, 
+		bool continueParsing;
+		try {
+			continueParsing = parser.read_row(curr_record.memberName, 
 						   curr_record.primaryDomain, 
 						   curr_date, 
 						   curr_record.type, 
@@ -62,8 +68,15 @@ QList<PresentationRecord> PresentationParser::parse(QString file_name) {
 						   curr_record.authorship, 
 						   curr_record.title, 
 						   curr_record.restOfCitation, 
-						   curr_record.personalRemuneration)) {
-		lineNum++;
+						   curr_record.personalRemuneration);
+		} catch (const std::exception &e) {
+			qDebug() << e.what();
+			continue;
+		}
+		
+		if (!continueParsing) {
+			break;
+		}
 		
 		//validate date
 		curr_record.date = parseDate(curr_date);

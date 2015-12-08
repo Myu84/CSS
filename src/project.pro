@@ -6,6 +6,12 @@ CONFIG += c++11
 win32 {
 	CONFIG += windows
 }
+win32-msvc* {
+    QMAKE_CXXFLAGS += /wd4068
+}
+CONFIG(release, debug|release) {
+	DEFINES += "QT_NO_DEBUG_OUTPUT"
+}
 
 SOURCES += main.cpp \
     parser/PresentationParser.cpp ui/PresentationDashboardWindow.cpp \
@@ -13,7 +19,8 @@ SOURCES += main.cpp \
     parser/GrantParser.cpp ui/GrantDashboardWindow.cpp \
     parser/PublicationParser.cpp ui/PublicationDashboardWindow.cpp \
     ui/DashboardWindow.cpp ui/VisualizationWindow.cpp ui/FileInputDialog.cpp \
-    ../external/qcustomplot.cpp
+    ../external/qcustomplot.cpp \
+    ../external/nightchart/nightcharts.cpp ../external/nightchart/nightchartswidget.cpp
 
 FORMS += ui/DashboardWindow.ui ui/VisualizationWindow.ui ui/FileInputDialog.ui
 
@@ -25,4 +32,5 @@ HEADERS += \
     parser/Parser.h \
     ui/DashboardWindow.h ui/VisualizationWindow.h ui/FileInputDialog.h \
 	ui/UIUtils.h \
-    ../external/qcustomplot.h ../external/csv.h
+    ../external/qcustomplot.h ../external/csv.h \
+    ../external/nightchart/nightcharts.h ../external/nightchart/nightchartswidget.h
