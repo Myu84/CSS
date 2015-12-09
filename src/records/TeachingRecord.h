@@ -12,7 +12,7 @@ struct TeachingRecord {
     QDate startDate;		//used
     QDate endDate;			//used
     QString program;		//used
-    QString activityType;	//used (use for next-level)
+    QString activityType;	//used
 	QString geographicalScope; //not used
 	double hoursPerSession; //not used
 	double numberOfSessions;//not used

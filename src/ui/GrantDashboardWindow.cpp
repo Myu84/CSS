@@ -95,7 +95,7 @@ void GrantDashboardWindow::updateTreeWidget() {
         ++nameSummary[record.fundingType][desc][record.memberName].first;
         nameSummary[record.fundingType][desc][record.memberName].second += record.totalAmount;
 		
-		titleSummary[record.fundingType][desc][record.memberName][record.title] = record.totalAmount;
+		titleSummary[record.fundingType][desc][record.memberName][record.title] += record.totalAmount;
 	}
 
     //build the view
