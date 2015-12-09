@@ -1,6 +1,6 @@
 QT += core gui widgets printsupport
 
-TARGET = cs3307-orange
+TARGET = cs3307-orange-dashboard
 TEMPLATE = app
 CONFIG += c++11
 win32 {
