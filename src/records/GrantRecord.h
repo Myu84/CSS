@@ -15,7 +15,7 @@ struct GrantRecord {
     bool peerReviewed;		//used
     bool industryGrant;		//used
     QString role;			//not used
-	QString title;			//not used (use for next-level)
+	QString title;			//used
 	QString principalInvestigator; //not used
     QString coInvestigators;//not used
 	double totalAmount;		//used
