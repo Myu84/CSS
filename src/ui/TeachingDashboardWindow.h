@@ -11,15 +11,18 @@ class TeachingDashboardWindow : public DashboardWindow {
 	Q_OBJECT
 
  public:
-	TeachingDashboardWindow(QString csv_filename);
+	TeachingDashboardWindow(const QString &csv_filename);
 	
  protected slots:
     virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item);
+	virtual void on_openVisualizationButton_clicked();
 	
  protected:
 	virtual void updateTreeWidget();
 
  private:
+	void openVisualizationWindow(const QString &memberName);
+	
 	QList<TeachingRecord> records;
 };
 

@@ -30,7 +30,7 @@ QString shortProgramName(QString program) {
 				  .replace("Continuing Medical Education", "CME", Qt::CaseInsensitive);
 }
 
-TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
+TeachingDashboardWindow::TeachingDashboardWindow(const QString &csv_filename) {
 	TeachingParser parser;
 	
 	try {
@@ -115,16 +115,14 @@ void TeachingDashboardWindow::updateTreeWidget() {
 		}
 	}
 
+	//set the dropdown values
+	ui.visualizationFacultyNameSelector->clear();
+	ui.visualizationFacultyNameSelector->addItems(listFacultyNames(recordsInRange));
+	
 	setColumnWidths();
 }
 
-
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (memberName.isEmpty())
-		return;
-
+void TeachingDashboardWindow::openVisualizationWindow(const QString &memberName) {
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	
@@ -158,4 +156,15 @@ void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *i
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
+}
+
+//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
+void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
+}
+
+void TeachingDashboardWindow::on_openVisualizationButton_clicked() {
+	openVisualizationWindow(ui.visualizationFacultyNameSelector->currentText());
 }

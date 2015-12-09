@@ -16,7 +16,7 @@
 
 static const int memberNameColumn = 2;
 
-PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
+PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filename) {
 	PublicationParser parser;
 
 	try {
@@ -82,15 +82,14 @@ void PublicationDashboardWindow::updateTreeWidget() {
 		}
 	}
 
+	//set the dropdown values
+	ui.visualizationFacultyNameSelector->clear();
+	ui.visualizationFacultyNameSelector->addItems(listFacultyNames(recordsInRange));
+	
     setColumnWidths();
 }
 
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (memberName.isEmpty())
-		return;
-
+void PublicationDashboardWindow::openVisualizationWindow(const QString &memberName) {
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	
@@ -114,4 +113,15 @@ void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
+}
+
+//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
+void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn);
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
+}
+
+void PublicationDashboardWindow::on_openVisualizationButton_clicked() {
+	openVisualizationWindow(ui.visualizationFacultyNameSelector->currentText());
 }

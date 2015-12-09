@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>503</height>
+    <width>636</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="5">
+    <item row="5" column="0" colspan="5">
      <widget class="QTreeWidget" name="treeWidget">
       <property name="columnCount">
        <number>0</number>
@@ -78,7 +78,7 @@
      </widget>
     </item>
     <item row="3" column="2">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="dateToLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -90,6 +90,23 @@
       </property>
      </widget>
     </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="visualizationLabel">
+      <property name="text">
+       <string>Open Visualization:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QComboBox" name="visualizationFacultyNameSelector"/>
+    </item>
+    <item row="4" column="4">
+     <widget class="QPushButton" name="openVisualizationButton">
+      <property name="text">
+       <string>Open</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -97,7 +114,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>472</width>
+     <width>636</width>
      <height>21</height>
     </rect>
    </property>
@@ -107,7 +124,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="separator"/>
-	<addaction name="actionExport"/>
+    <addaction name="actionExport"/>
     <addaction name="actionPrint"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
