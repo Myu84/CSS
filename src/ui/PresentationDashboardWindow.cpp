@@ -65,16 +65,19 @@ void PresentationDashboardWindow::updateTreeWidget() {
 	//build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
 									"Presentations" << "" << "" << QString::number(recordsInRange.size())));
+	root->setTextAlignment(3, Qt::AlignRight); //"Total #" column
 	ui.treeWidget->expandItem(root);
 	
 	for (auto presType = presTypeSummary.begin(); presType != presTypeSummary.end(); ++presType) {
         QTreeWidgetItem *presNode = new QTreeWidgetItem(root, (QStringList() << 
 											"" << presType.key() << "" << QString::number(presType.value())));
+		presNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
 		
 		QMap<QString, int> &currNameSummary = nameSummary[presType.key()];
 		for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-            new QTreeWidgetItem(presNode, (QStringList() << 
-					"" << "" << name.key() << QString::number(name.value())));
+            QTreeWidgetItem *nameNode = new QTreeWidgetItem(presNode, (QStringList() << 
+												"" << "" << name.key() << QString::number(name.value())));
+			nameNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
 		}
 	}
 

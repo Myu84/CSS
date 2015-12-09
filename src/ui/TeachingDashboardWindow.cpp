@@ -93,21 +93,29 @@ void TeachingDashboardWindow::updateTreeWidget() {
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
 									"Teaching" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+	root->setTextAlignment(4, Qt::AlignRight); //"Hours" column
+	root->setTextAlignment(5, Qt::AlignRight); //"Students" column
 	ui.treeWidget->expandItem(root);
 	
 	for (auto program = programSummary.begin(); program != programSummary.end(); ++program) {
         QTreeWidgetItem *programNode = new QTreeWidgetItem(root, (QStringList() << 
 											"" << program.key() << "" << "" << QString::number(program.value().first) << QString::number(program.value().second)));
+		programNode->setTextAlignment(4, Qt::AlignRight); //"Hours" column
+		programNode->setTextAlignment(5, Qt::AlignRight); //"Students" column
 		
 		QMap<QString, QPair<double, uint>> &currYearSummary = yearSummary[program.key()];
 		for (auto year = currYearSummary.begin(); year != currYearSummary.end(); ++year) {
             QTreeWidgetItem *yearNode = new QTreeWidgetItem(programNode, (QStringList() << 
 												"" << "" << year.key() << "" << QString::number(year.value().first) << QString::number(year.value().second)));
-		
+			yearNode->setTextAlignment(4, Qt::AlignRight); //"Hours" column
+			yearNode->setTextAlignment(5, Qt::AlignRight); //"Students" column
+			
 			QMap<QString, QPair<double, uint>> &currNameSummary = nameSummary[program.key()][year.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-				new QTreeWidgetItem(yearNode, (QStringList() << 
-						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+				QTreeWidgetItem *nameNode = new QTreeWidgetItem(yearNode, (QStringList() << 
+													"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+				nameNode->setTextAlignment(4, Qt::AlignRight); //"Hours" column
+				nameNode->setTextAlignment(5, Qt::AlignRight); //"Students" column
 			}
 		}
 	}

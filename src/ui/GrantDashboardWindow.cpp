@@ -95,21 +95,29 @@ void GrantDashboardWindow::updateTreeWidget() {
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
                                     "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << moneyToStr(allSummary.second)));
+	root->setTextAlignment(4, Qt::AlignRight); //"Total #" column
+	root->setTextAlignment(5, Qt::AlignRight); //"Total $" column
 	ui.treeWidget->expandItem(root);
 	
     for (auto type = typeSummary.begin(); type != typeSummary.end(); ++type) {
         QTreeWidgetItem *typeNode = new QTreeWidgetItem(root, (QStringList() <<
                                             "" << type.key() << "" << "" << QString::number(type.value().first) << moneyToStr(type.value().second)));
+		typeNode->setTextAlignment(4, Qt::AlignRight); //"Total #" column
+		typeNode->setTextAlignment(5, Qt::AlignRight); //"Total $" column
 		
         QMap<QString, QPair<int, double>> &currDescSummary = descSummary[type.key()];
         for (auto desc = currDescSummary.begin(); desc != currDescSummary.end(); ++desc) {
             QTreeWidgetItem *descNode = new QTreeWidgetItem(typeNode, (QStringList() <<
                                                 "" << "" << desc.key() << "" << QString::number(desc.value().first) << moneyToStr(desc.value().second)));
-		
+			descNode->setTextAlignment(4, Qt::AlignRight); //"Total #" column
+			descNode->setTextAlignment(5, Qt::AlignRight); //"Total $" column
+			
             QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][desc.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-                new QTreeWidgetItem(descNode, (QStringList() <<
-						"" << "" << "" << name.key() << QString::number(name.value().first) << moneyToStr(name.value().second)));
+                QTreeWidgetItem *nameNode = new QTreeWidgetItem(descNode, (QStringList() <<
+													"" << "" << "" << name.key() << QString::number(name.value().first) << moneyToStr(name.value().second)));
+				nameNode->setTextAlignment(4, Qt::AlignRight); //"Total #" column
+				nameNode->setTextAlignment(5, Qt::AlignRight); //"Total $" column
 			}
 		}
 	}

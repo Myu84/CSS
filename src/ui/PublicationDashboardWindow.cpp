@@ -31,7 +31,7 @@ PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filena
 	}
 
 	ui.treeWidget->setHeaderLabels(QStringList() <<
-						"" << "Publication Type" << "Faculty Name" << "Total");
+						"" << "Publication Type" << "Faculty Name" << "Total #");
 
 	ui.titleLabel->setText("Publication Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
@@ -66,16 +66,19 @@ void PublicationDashboardWindow::updateTreeWidget() {
 	//build the view
 	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() <<
 									"Publications" << "" << "" << QString::number(recordsInRange.size())));
+	root->setTextAlignment(3, Qt::AlignRight); //"Total #" column
 	ui.treeWidget->expandItem(root);
 
 	for (auto pubType = pubTypeSummary.begin(); pubType != pubTypeSummary.end(); ++pubType) {
 		QTreeWidgetItem *pubNode = new QTreeWidgetItem(root, (QStringList() <<
 											"" << pubType.key() << "" << QString::number(pubType.value())));
-
+		pubNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
+		
 		QMap<QString, int> &currNameSummary = nameSummary[pubType.key()];
 		for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-			new QTreeWidgetItem(pubNode, (QStringList() <<
-					"" << "" << name.key() << QString::number(name.value())));
+			QTreeWidgetItem *nameNode = new QTreeWidgetItem(pubNode, (QStringList() <<
+												"" << "" << name.key() << QString::number(name.value())));
+			nameNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
 		}
 	}
 
