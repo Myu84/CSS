@@ -30,7 +30,7 @@ PresentationDashboardWindow::PresentationDashboardWindow(const QString &csv_file
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Presentation Type" << "Faculty Name" << "Total #");
+						"" << "Presentation Type" << "Faculty Name" << "Total #" << "");
 	
 	ui.titleLabel->setText("Presentations Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);

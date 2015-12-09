@@ -45,7 +45,7 @@ TeachingDashboardWindow::TeachingDashboardWindow(const QString &csv_filename) {
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
+						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Hours" << "Students" << "");
 	
 	ui.titleLabel->setText("Teaching Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
