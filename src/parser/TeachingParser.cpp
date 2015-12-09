@@ -1,7 +1,7 @@
 #include <QString>
 #include <QDate>
 #include <QList>
-#include <QDebug>
+#include <QTextStream>
 #include <exception>
 
 #include "../records/TeachingRecord.h"
@@ -41,6 +41,12 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 	QList<TeachingRecord> records;
 	int lineNum = 1;
 	
+	QString errorLog;
+	QTextStream errorStream(&errorLog);
+	
+	int numErrors = 0;
+	int numWarnings = 0;
+	
     while (true) {
 		lineNum++;
 		
@@ -79,7 +85,8 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
                            curr_record.comment,
 						   curr_totalHours);
 		} catch (const std::exception &e) {
-			qDebug() << e.what();
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
@@ -91,94 +98,89 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum;
+			numErrors++;
             continue;
         }
-        
+
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum;
+			numErrors++;
             continue;
         }
         
         //validate startDate
 		curr_record.startDate = parseDate(curr_startDate);
 		if (!curr_record.startDate.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid start date: " << curr_startDate << " on line " << lineNum;
+			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
 		//validate endDate
 		curr_record.endDate = parseDate(curr_endDate);
 		if (!curr_record.endDate.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid end date: " << curr_endDate << " on line " << lineNum;
+			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
 		//validate date range
 		if (curr_record.startDate > curr_record.endDate) {
-			//TODO: handle error
-			qDebug() << "Start date after end date on line " << lineNum;
+			errorStream << "Error: Start date is later than end date on line " << lineNum;
+			numErrors++;
 			continue;
 		}
         
 		//validate program
         if (curr_record.program.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing program on line " << lineNum;
+            errorStream << "Error: Missing program on line " << lineNum;
+			numErrors++;
             continue;
         }
 		
 		//validate activityType
         if (curr_record.activityType.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing activity type on line " << lineNum;
+            errorStream << "Error: Missing activity type on line " << lineNum;
+			numErrors++;
             continue;
         }
         
-		//geographicalScope is missing too often to check
-		/*
         //validate geographicalScope
         if (curr_record.geographicalScope.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing geographical scope on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing grographical scope on line " << lineNum;
+            numWarnings++;
         }
-		*/
         
         //validate hoursPerSession
 		curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
         if (!parseOK || curr_record.hoursPerSession < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid hours per session: " << curr_hoursPerSession << " on line " << lineNum;
-            continue;
+            errorStream << "Warning: Invalid hours per session '" << curr_hoursPerSession << "' on line " << lineNum;
+            numWarnings++;
         }
 
         //validate numberOfSessions
 		curr_record.numberOfSessions = curr_numberOfSessions.toDouble(&parseOK);
         if (!parseOK || curr_record.numberOfSessions < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid number of sessions: " << curr_numberOfSessions << " on line " << lineNum;
-            continue;
+            errorStream << "Warning: Invalid number of sessions '" << curr_numberOfSessions << "' on line " << lineNum;
+            numWarnings++;
         }
 		
 		//validate totalHours
 		curr_record.totalHours = curr_totalHours.toDouble(&parseOK);
         if (!parseOK || curr_record.totalHours < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid total hours: " << curr_totalHours << " on line " << lineNum;
-            continue;
+            errorStream << "Warning: Invalid total hours '" << curr_totalHours << "' on line " << lineNum;
+            numErrors++;
+			continue;
         }
 		
 		//validate numTrainees
 		curr_record.numTrainees = curr_numTrainees.toUInt(&parseOK);
         if (!parseOK) {
-            //TODO: handle warning
-            qDebug() << "Invalid number of trainees: " << curr_numTrainees << " on line " << lineNum;
+			curr_record.numTrainees = 0;
+            errorStream << "Warning: Invalid number of trainees '" << curr_numTrainees << "' on line " << lineNum;
+            numWarnings++;
         }
 		
 		records.append(curr_record);
