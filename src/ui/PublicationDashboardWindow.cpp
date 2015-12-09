@@ -33,8 +33,7 @@ PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filena
 	ui.treeWidget->setHeaderLabels(QStringList() <<
 						"" << "Publication Type" << "Faculty Name" << "Total");
 
-	ui.subjectAreaLabel->setText("Publication Summary");
-	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
+	ui.titleLabel->setText("Publication Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Publication - " + records[0].primaryDomain + " - " + csv_filename);
 

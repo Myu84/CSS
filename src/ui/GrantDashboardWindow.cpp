@@ -50,8 +50,7 @@ GrantDashboardWindow::GrantDashboardWindow(const QString &csv_filename) {
 	ui.treeWidget->setHeaderLabels(QStringList() << 
 						"" << "Funding Type" << "Funding Description" << "Faculty Name" << "Total #" << "Total $");
 	
-	ui.subjectAreaLabel->setText("Grant/Funding Summary");
-	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
+	ui.titleLabel->setText("Grant/Funding Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
     setWindowTitle("Grant - " + records[0].primaryDomain + " - " + csv_filename);
 	
