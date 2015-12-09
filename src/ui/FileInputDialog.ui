@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
-    <height>153</height>
+    <width>553</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,7 +37,7 @@
    <item row="1" column="2">
     <widget class="QPushButton" name="browseButton">
      <property name="text">
-      <string>Browse</string>
+      <string>&amp;Browse</string>
      </property>
     </widget>
    </item>
@@ -70,12 +70,12 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>101</width>
+        <width>121</width>
         <height>28</height>
        </rect>
       </property>
       <property name="text">
-       <string>Publications</string>
+       <string>&amp;Publications</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -99,14 +99,14 @@
      <widget class="QPushButton" name="presentationButton">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>140</x>
         <y>20</y>
-        <width>101</width>
+        <width>121</width>
         <height>28</height>
        </rect>
       </property>
       <property name="text">
-       <string>Presentations</string>
+       <string>P&amp;resentations</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -121,14 +121,14 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>270</x>
         <y>20</y>
-        <width>101</width>
+        <width>121</width>
         <height>28</height>
        </rect>
       </property>
       <property name="text">
-       <string>Grants/Funding</string>
+       <string>&amp;Grants/Funding</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -143,14 +143,14 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>340</x>
+        <x>400</x>
         <y>20</y>
-        <width>101</width>
+        <width>121</width>
         <height>28</height>
        </rect>
       </property>
       <property name="text">
-       <string>Teaching</string>
+       <string>&amp;Teaching</string>
       </property>
       <property name="checkable">
        <bool>true</bool>

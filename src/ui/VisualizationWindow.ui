@@ -47,7 +47,7 @@
     <item row="0" column="3">
      <widget class="QPushButton" name="plotButton">
       <property name="text">
-       <string>Plot</string>
+       <string>&amp;Plot</string>
       </property>
      </widget>
     </item>
@@ -74,7 +74,7 @@
    </property>
    <widget class="QMenu" name="fileMenu">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionExport"/>
     <addaction name="actionPrint"/>
@@ -85,17 +85,26 @@
     <property name="text">
      <string>&amp;Print...</string>
     </property>
+    <property name="shortcut">
+     <string>Ctrl+P</string>
+    </property>
    </action>
    <action name="actionClose">
     <property name="text">
-     <string>Close</string>
+     <string>&amp;Close</string>
+    </property>
+    <property name="shortcut">
+     <string>Ctrl+W</string>
     </property>
    </action>
    <addaction name="fileMenu"/>
   </widget>
   <action name="actionExport">
    <property name="text">
-    <string>Export...</string>
+    <string>&amp;Export...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>

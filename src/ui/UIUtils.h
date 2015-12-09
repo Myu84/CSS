@@ -65,4 +65,17 @@ QList<typename T::value_type> filterByDateRangeStartEnd(const T &records, QDate 
 	return output;
 }
 
+template <typename T>
+QStringList listFacultyNames(const T &records) {
+	QSet<QString> names;
+	for (const auto &record : records) {
+		names.insert(record.memberName);
+	}
+	
+	QStringList namesList = names.toList();
+	namesList.sort();
+	
+	return namesList;
+}
+
 #endif

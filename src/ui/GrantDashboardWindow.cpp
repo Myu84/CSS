@@ -15,8 +15,6 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 3;
-
 QString grantDescription(bool peerReviewed, bool industryGrant) {
 	if (peerReviewed && industryGrant) {
 		return "Peer Reviewed Industry Grant";
@@ -33,7 +31,7 @@ QString moneyToStr(double amount) {
 	return QLocale("en").toCurrencyString(amount);
 }
 
-GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
+GrantDashboardWindow::GrantDashboardWindow(const QString &csv_filename) {
 	GrantParser parser;
 	
 	try {
@@ -52,8 +50,7 @@ GrantDashboardWindow::GrantDashboardWindow(QString csv_filename) {
 	ui.treeWidget->setHeaderLabels(QStringList() << 
 						"" << "Funding Type" << "Funding Description" << "Faculty Name" << "Total #" << "Total $");
 	
-	ui.subjectAreaLabel->setText("Grant/Funding Summary");
-	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
+	ui.titleLabel->setText("Grant/Funding Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
     setWindowTitle("Grant - " + records[0].primaryDomain + " - " + csv_filename);
 	
@@ -117,15 +114,14 @@ void GrantDashboardWindow::updateTreeWidget() {
 		}
 	}
 
+	//set the dropdown values
+	ui.visualizationFacultyNameSelector->clear();
+	ui.visualizationFacultyNameSelector->addItems(listFacultyNames(recordsInRange));
+	
 	setColumnWidths();
 }
 
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (memberName.isEmpty())
-		return;
-
+void GrantDashboardWindow::openVisualizationWindow(const QString &memberName) {
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	

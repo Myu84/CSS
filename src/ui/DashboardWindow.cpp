@@ -56,8 +56,6 @@ void DashboardWindow::on_dateFilterButton_clicked() {
 }
 
 void DashboardWindow::on_actionOpen_triggered() {
-    close();
-	
     DashboardWindow *dashboard = DashboardWindow::makeDashboard();
     if (dashboard != nullptr)
         dashboard->show();
@@ -71,7 +69,7 @@ void DashboardWindow::updateDateLabel() {
 							   ui.endDateSelector->date().toString("MMM d yyyy"));
 }
 
-void DashboardWindow::on_actionExit_triggered() {
+void DashboardWindow::on_actionClose_triggered() {
 	close();
 }
 
@@ -151,4 +149,16 @@ void DashboardWindow::on_actionExport_triggered() {
 	printer.setOutputFileName(filename);
 
     printTreeWidget(&printer);
+}
+
+void DashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn());
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
+}
+
+void DashboardWindow::on_openVisualizationButton_clicked() {
+	QString memberName = ui.visualizationFacultyNameSelector->currentText();
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
 }

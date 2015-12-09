@@ -14,8 +14,6 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 3;
-
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
 		return QString::number(date.year() - 1) + "-" + QString::number(date.year());
@@ -30,7 +28,7 @@ QString shortProgramName(QString program) {
 				  .replace("Continuing Medical Education", "CME", Qt::CaseInsensitive);
 }
 
-TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
+TeachingDashboardWindow::TeachingDashboardWindow(const QString &csv_filename) {
 	TeachingParser parser;
 	
 	try {
@@ -49,8 +47,7 @@ TeachingDashboardWindow::TeachingDashboardWindow(QString csv_filename) {
 	ui.treeWidget->setHeaderLabels(QStringList() << 
 						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
 	
-	ui.subjectAreaLabel->setText("Teaching Summary");
-	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
+	ui.titleLabel->setText("Teaching Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Teaching - " + records[0].primaryDomain + " - " + csv_filename);
 	
@@ -115,16 +112,14 @@ void TeachingDashboardWindow::updateTreeWidget() {
 		}
 	}
 
+	//set the dropdown values
+	ui.visualizationFacultyNameSelector->clear();
+	ui.visualizationFacultyNameSelector->addItems(listFacultyNames(recordsInRange));
+	
 	setColumnWidths();
 }
 
-
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (memberName.isEmpty())
-		return;
-
+void TeachingDashboardWindow::openVisualizationWindow(const QString &memberName) {
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	

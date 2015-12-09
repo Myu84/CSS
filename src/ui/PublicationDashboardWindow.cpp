@@ -14,9 +14,7 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 2;
-
-PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
+PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filename) {
 	PublicationParser parser;
 
 	try {
@@ -35,8 +33,7 @@ PublicationDashboardWindow::PublicationDashboardWindow(QString csv_filename) {
 	ui.treeWidget->setHeaderLabels(QStringList() <<
 						"" << "Publication Type" << "Faculty Name" << "Total");
 
-	ui.subjectAreaLabel->setText("Publication Summary");
-	ui.departmentLabel->setText("Department of " + records[0].primaryDomain);
+	ui.titleLabel->setText("Publication Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
 	setWindowTitle("Publication - " + records[0].primaryDomain + " - " + csv_filename);
 
@@ -82,15 +79,14 @@ void PublicationDashboardWindow::updateTreeWidget() {
 		}
 	}
 
+	//set the dropdown values
+	ui.visualizationFacultyNameSelector->clear();
+	ui.visualizationFacultyNameSelector->addItems(listFacultyNames(recordsInRange));
+	
     setColumnWidths();
 }
 
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void PublicationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (memberName.isEmpty())
-		return;
-
+void PublicationDashboardWindow::openVisualizationWindow(const QString &memberName) {
 	QDate startDate = ui.startDateSelector->date();
 	QDate endDate = ui.endDateSelector->date();
 	
