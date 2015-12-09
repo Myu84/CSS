@@ -1,7 +1,7 @@
 #include <QString>
 #include <QDate>
 #include <QList>
-#include <QDebug>
+#include <QTextStream>
 #include <exception>
 
 #include "../records/PresentationRecord.h"
