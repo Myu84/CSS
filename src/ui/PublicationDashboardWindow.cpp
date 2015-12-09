@@ -14,6 +14,8 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
+static const int totalNumColumn = 4;
+
 PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filename) {
 	PublicationParser parser;
 
@@ -31,7 +33,7 @@ PublicationDashboardWindow::PublicationDashboardWindow(const QString &csv_filena
 	}
 
 	ui.treeWidget->setHeaderLabels(QStringList() <<
-						"" << "Publication Type" << "Faculty Name" << "Total #" << "");
+						"" << "Publication Type" << "Faculty Name" << "Title" << "Total #" << "");
 
 	ui.titleLabel->setText("Publication Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
@@ -56,29 +58,39 @@ void PublicationDashboardWindow::updateTreeWidget() {
 	//count the records
 	QMap<QString, int> pubTypeSummary;
 	QMap<QString, QMap<QString, int>> nameSummary;
+	QMap<QString, QMap<QString, QSet<QString>>> titleSummary;
 
 	for (const PublicationRecord &record : recordsInRange) {
 		++pubTypeSummary[record.type];
 
 		++nameSummary[record.type][record.memberName];
+		
+		titleSummary[record.type][record.memberName].insert(record.title);
 	}
 
 	//build the view
 	QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() <<
-									"Publications" << "" << "" << QString::number(recordsInRange.size())));
-	root->setTextAlignment(3, Qt::AlignRight); //"Total #" column
+									"Publications" << "" << "" << "" << QString::number(recordsInRange.size())));
+	root->setTextAlignment(totalNumColumn, Qt::AlignRight);
 	ui.treeWidget->expandItem(root);
 
 	for (auto pubType = pubTypeSummary.begin(); pubType != pubTypeSummary.end(); ++pubType) {
 		QTreeWidgetItem *pubNode = new QTreeWidgetItem(root, (QStringList() <<
-											"" << pubType.key() << "" << QString::number(pubType.value())));
-		pubNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
+											"" << pubType.key() << "" << "" << QString::number(pubType.value())));
+		pubNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
 		
 		QMap<QString, int> &currNameSummary = nameSummary[pubType.key()];
 		for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
 			QTreeWidgetItem *nameNode = new QTreeWidgetItem(pubNode, (QStringList() <<
-												"" << "" << name.key() << QString::number(name.value())));
-			nameNode->setTextAlignment(3, Qt::AlignRight); //"Total #" column
+												"" << "" << name.key() << "" << QString::number(name.value())));
+			nameNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+			
+			QSet<QString> &currTitleSummary = titleSummary[pubType.key()][name.key()];
+			for (QString &title : sortSet(currTitleSummary)) {
+				QTreeWidgetItem *titleNode = new QTreeWidgetItem(nameNode, (QStringList() <<
+												"" << "" << "" << title << ""));
+				titleNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+			}
 		}
 	}
 
