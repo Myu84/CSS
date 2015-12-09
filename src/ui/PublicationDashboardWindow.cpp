@@ -97,17 +97,23 @@ void PublicationDashboardWindow::openVisualizationWindow(const QString &memberNa
 	
 	//count the records
 	QMap<QString, double> pubTypeSummary;
+	QMap<QString, double> statusSummary;
+	QMap<QString, double> roleSummary;
+	QMap<QString, double> publishedInSummary;
 	for (const PublicationRecord &record : recordsInRange) {
 		if (record.memberName == memberName) {
 			++pubTypeSummary[record.type];
+			++statusSummary[record.publicationStatus];
+			++roleSummary[record.role];
+			++publishedInSummary[record.publishedIn];
 		}
 	}
 
     QList<QMap<QString, double>> plotList;
-    plotList << pubTypeSummary;
+    plotList << pubTypeSummary << statusSummary << roleSummary << publishedInSummary;
 	
     QList<QString> plotNames;
-    plotNames << "Publication Types";
+    plotNames << "Publication Types" << "Publication Status" << "Roles" << "Published In";
 
     //open a VisualizationWindow
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,

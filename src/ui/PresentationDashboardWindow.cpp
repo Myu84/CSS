@@ -96,17 +96,19 @@ void PresentationDashboardWindow::openVisualizationWindow(const QString &memberN
 	
 	//count the records
 	QMap<QString, double> presTypeSummary;
+	QMap<QString, double> roleSummary;
 	for (const PresentationRecord &record : recordsInRange) {
 		if (record.memberName == memberName) {
 			++presTypeSummary[record.type];
+			++roleSummary[record.role];
 		}
 	}
 	
     QList<QMap<QString, double>> plotList;
-    plotList << presTypeSummary;
+    plotList << presTypeSummary << roleSummary;
 
     QList<QString> plotNames;
-    plotNames << "Presentation Types";
+    plotNames << "Presentation Types" << "Roles";
 	
     //open a VisualizationWindow
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
