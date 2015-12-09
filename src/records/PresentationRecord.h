@@ -11,7 +11,7 @@ struct PresentationRecord {
 	QDate date;				//used
 	QString type;			//used
 	QString role;			//used
-	QString title;			//not used (use for next-level)
+	QString title;			//used
 	
 	//optional fields
 	QString activityType;
