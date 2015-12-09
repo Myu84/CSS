@@ -37,7 +37,7 @@
    <item row="1" column="2">
     <widget class="QPushButton" name="browseButton">
      <property name="text">
-      <string>Browse</string>
+      <string>&amp;Browse</string>
      </property>
     </widget>
    </item>
@@ -75,7 +75,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Publications</string>
+       <string>&amp;Publications</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -106,7 +106,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Presentations</string>
+       <string>P&amp;resentations</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -128,7 +128,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Grants/Funding</string>
+       <string>&amp;Grants/Funding</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -150,7 +150,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Teaching</string>
+       <string>&amp;Teaching</string>
       </property>
       <property name="checkable">
        <bool>true</bool>

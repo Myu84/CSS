@@ -66,7 +66,7 @@
     <item row="2" column="4">
      <widget class="QPushButton" name="dateFilterButton">
       <property name="text">
-       <string>Filter</string>
+       <string>&amp;Filter</string>
       </property>
      </widget>
     </item>
@@ -103,7 +103,7 @@
     <item row="3" column="4">
      <widget class="QPushButton" name="openVisualizationButton">
       <property name="text">
-       <string>Open</string>
+       <string>&amp;Open</string>
       </property>
      </widget>
     </item>
@@ -120,36 +120,48 @@
    </property>
    <widget class="QMenu" name="fileMenu">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionOpen"/>
     <addaction name="separator"/>
     <addaction name="actionExport"/>
     <addaction name="actionPrint"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionClose"/>
    </widget>
    <addaction name="fileMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="text">
-    <string>Open...</string>
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionPrint">
    <property name="text">
     <string>&amp;Print...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </action>
   <action name="actionExport">
    <property name="text">
-    <string>Export...</string>
+    <string>&amp;Export...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionClose">
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
   <action name="actionOk">
