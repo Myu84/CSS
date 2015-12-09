@@ -39,6 +39,12 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 	QList<PresentationRecord> records;
 	int lineNum = 1;
     
+	QString errorLog;
+	QTextStream errorStream(&errorLog);
+	
+	int numErrors = 0;
+	int numWarnings = 0;
+	
 	while (true) {
 		lineNum++;
 		
@@ -70,7 +76,8 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 						   curr_record.restOfCitation, 
 						   curr_record.personalRemuneration);
 		} catch (const std::exception &e) {
-			qDebug() << e.what();
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
@@ -78,41 +85,48 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 			break;
 		}
 		
+		//validate memberName
+        if (curr_record.memberName.isEmpty()) {
+            errorStream << "Error: Missing member name on line " << lineNum;
+			numErrors++;
+            continue;
+        }
+        
+        //validate primaryDomain
+        if (curr_record.primaryDomain.isEmpty()) {
+            errorStream << "Error: Missing primary domain on line " << lineNum;
+			numErrors++;
+            continue;
+        }
+		
 		//validate date
 		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
-			continue;
-		}
-		
-		//validate memberName
-		if (curr_record.memberName.isEmpty()) {
-			//TODO: handle error
-			qDebug() << "Missing member name on line " << lineNum;
+			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
 		//validate type
 		if (curr_record.type.isEmpty()) {
-			//TODO: handle error
-			qDebug() << "Missing type on line " << lineNum;
+			errorStream << "Error: Missing type on line " << lineNum;
+            numErrors++;
 			continue;
 		}
 		
 		//validate role
-		if (curr_record.role.isEmpty()) {
-			//TODO: handle error
-			qDebug() << "Missing role on line " << lineNum;
+        if (curr_record.role.isEmpty()) {
+            errorStream << "Error: Missing role on line " << lineNum;
+            numErrors++;
 			continue;
-		}
-		
-		//validate title
-		if (curr_record.title.isEmpty()) {
-			//TODO: handle error
-			qDebug() << "Missing title on line " << lineNum;
+        }
+        
+        //validate title
+        if (curr_record.title.isEmpty()) {
+            errorStream << "Error: Missing title on line " << lineNum;
+            numErrors++;
 			continue;
-		}
+        }
 		
 		records.append(curr_record);
 	}
