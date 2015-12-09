@@ -14,21 +14,35 @@ class FileInputDialog : public QDialog {
 	Q_OBJECT
 
  public:
-	explicit FileInputDialog(QWidget *parent = nullptr);
+	FileInputDialog();
 	
-	QString getFilename();
-	SubjectArea getSubjectArea();
+	inline QString getFilename() {
+		return filename;
+	}
+	inline SubjectArea getSubjectArea() {
+		return subjectArea;
+	}
 	
  private slots:
-	void on_okCancelButtons_accepted();
-	void on_okCancelButtons_rejected();
-	
-	void on_publicationsButton_clicked();
-	void on_presentationButton_clicked();
-	void on_grantsButton_clicked();
-	void on_teachingButton_clicked();
-	
 	void on_browseButton_clicked();
+	
+	void on_okCancelButtons_accepted();
+	inline void on_okCancelButtons_rejected() {
+		reject();
+	}
+	
+	inline void on_publicationsButton_clicked() {
+		subjectArea = Publications;
+	}
+	void on_presentationButton_clicked() {
+		subjectArea = Presentation;
+	}
+	void on_grantsButton_clicked() {
+		subjectArea = Grants;
+	}
+	void on_teachingButton_clicked() {
+		subjectArea = Teaching;
+	}
 
  private:
 	Ui::FileInputDialog ui;
