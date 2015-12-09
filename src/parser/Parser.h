@@ -50,7 +50,7 @@ class Parser {
 		money_str.remove('$').remove(',');
 		double val = money_str.toDouble(ok);
 		
-		if (ok && val < 0)
+		if (ok && *ok && val < 0)
 			*ok = false;
 		return val;
 	}

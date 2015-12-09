@@ -1,7 +1,7 @@
 #include <QString>
 #include <QDate>
 #include <QList>
-#include <QDebug>
+#include <QTextStream>
 #include <exception>
 
 #include "../records/GrantRecord.h"
@@ -50,6 +50,12 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
 	QList<GrantRecord> records;
     int lineNum = 1;
 	
+	QString errorLog;
+	QTextStream errorStream(&errorLog);
+	
+	int numErrors = 0;
+	int numWarnings = 0;
+	
     while (true) {
 		lineNum++;
 		
@@ -96,7 +102,8 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
                            curr_record.educationGrant,
                            curr_record.duplicateReported);
 		} catch (const std::exception &e) {
-			qDebug() << e.what();
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
@@ -108,107 +115,100 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum;
+			numErrors++;
             continue;
         }
         
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum;
+			numErrors++;
             continue;
         }
         
         //validate startDate
 		curr_record.startDate = parseDate(curr_startDate);
 		if (!curr_record.startDate.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid start date: " << curr_startDate << " on line " << lineNum;
+			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
 		//validate endDate
 		curr_record.endDate = parseDate(curr_endDate);
 		if (!curr_record.endDate.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid end date: " << curr_endDate << " on line " << lineNum;
+			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 		
 		//validate date range
 		if (curr_record.startDate > curr_record.endDate) {
-			//TODO: handle error
-			qDebug() << "Start date after end date on line " << lineNum;
+			errorStream << "Error: Start date is later than end date on line " << lineNum;
+			numErrors++;
 			continue;
 		}
         
 		//validate fundingType
         if (curr_record.fundingType.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing funding type on line " << lineNum;
-            continue;
+            errorStream << "Error: Missing funding type on line " << lineNum;
+            numErrors++;
+			continue;
         }
 		
 		//validate status
         if (curr_record.status.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing status on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing status on line " << lineNum;
+            numWarnings++;
         }
         
         //validate peerReviewed
         curr_record.peerReviewed = parseBool(curr_peerReviewed, &parseOK);
 		if (!parseOK) {
-			//TODO: handle error
-			qDebug() << "Invalid peer reviwed: " << curr_peerReviewed << " on line " << lineNum;
+			errorStream << "Error: Invalid value '" << curr_peerReviewed << "' for 'Peer Reviewed?' column on line " << lineNum;
+			numErrors++;
 			continue;
 		}
 
         //validate industryGrant
         curr_record.industryGrant = parseBool(curr_industryGrant, &parseOK);
 		if (!parseOK) {
-			//TODO: handle error
-			qDebug() << "Invalid industry grant: " << curr_industryGrant << " on line " << lineNum;
+			errorStream << "Error: Invalid value '" << curr_industryGrant << "' for 'Industry Grant?' column on line " << lineNum;
+			numErrors++;
 			continue;
 		}
         
         //validate role
         if (curr_record.role.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing role on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing role on line " << lineNum;
+            numWarnings++;
         }
         
         //validate title
         if (curr_record.title.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing title on line " << lineNum;
-            continue;
+            errorStream << "Error: Missing title on line " << lineNum;
+            numErrors++;
+			continue;
         }
         
         //validate principalInvestigator
         if (curr_record.principalInvestigator.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing principalInvestigator on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing principal investigator on line " << lineNum;
+            numWarnings++;
         }
         
-		//coInvestigators is missing too often to check
-		/*
         //validate coInvestigators
         if (curr_record.coInvestigators.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing coInvestigators on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing co-investigators on line " << lineNum;
+            numWarnings++;
         }
-		*/
         
         //validate totalAmount
 		curr_record.totalAmount = parseMoney(curr_totalAmount, &parseOK);
-        if (!parseOK || curr_record.totalAmount < 0) {
-            //TODO: handle error
-            qDebug() << "Invalid total amount: " << curr_totalAmount << " on line " << lineNum;
+        if (!parseOK) {
+            errorStream << "Error: Invalid total amount '" << curr_totalAmount << "' on line " << lineNum;
+			numErrors++;
             continue;
         }
         
