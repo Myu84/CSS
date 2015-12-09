@@ -6,12 +6,12 @@
 
 struct PresentationRecord {
 	//required fields
-	QString memberName;
-	QString primaryDomain;
-	QDate date;
-	QString type;
-	QString role;
-	QString title;
+	QString memberName;		//used
+	QString primaryDomain;	//used
+	QDate date;				//used
+	QString type;			//used
+	QString role;			//used
+	QString title;			//used
 	
 	//optional fields
 	QString activityType;

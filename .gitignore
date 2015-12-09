@@ -54,3 +54,6 @@ build*
 # QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+# Mac files
+.DS_Store

@@ -14,6 +14,9 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
+static const int totalHoursColumn = 5;
+static const int totalStudentsColumn = 6;
+
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
 		return QString::number(date.year() - 1) + "-" + QString::number(date.year());
@@ -45,7 +48,7 @@ TeachingDashboardWindow::TeachingDashboardWindow(const QString &csv_filename) {
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Hours" << "Students");
+						"" << "Program Level" << "Academic Year" << "Faculty Name" << "Activity Type" << "Hours" << "Students" << "");
 	
 	ui.titleLabel->setText("Teaching Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
@@ -72,6 +75,7 @@ void TeachingDashboardWindow::updateTreeWidget() {
     QMap<QString, QPair<double, uint>> programSummary;
     QMap<QString, QMap<QString, QPair<double, uint>>> yearSummary;
     QMap<QString, QMap<QString, QMap<QString, QPair<double, uint>>>> nameSummary;
+	QMap<QString, QMap<QString, QMap<QString, QMap<QString, QPair<double, uint>>>>> activitySummary;
 
 	for (const TeachingRecord &record : recordsInRange) {
 		QString programName = shortProgramName(record.program);
@@ -88,26 +92,45 @@ void TeachingDashboardWindow::updateTreeWidget() {
 		
         nameSummary[programName][academicYear][record.memberName].first += record.totalHours;
         nameSummary[programName][academicYear][record.memberName].second += record.numTrainees;
+		
+		activitySummary[programName][academicYear][record.memberName][record.activityType].first += record.totalHours;
+		activitySummary[programName][academicYear][record.memberName][record.activityType].second += record.numTrainees;
 	}
 
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
-									"Teaching" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+									"Teaching" << "" << "" << "" << "" << QString::number(allSummary.first) << QString::number(allSummary.second)));
+	root->setTextAlignment(totalHoursColumn, Qt::AlignRight);
+	root->setTextAlignment(totalStudentsColumn, Qt::AlignRight);
 	ui.treeWidget->expandItem(root);
 	
 	for (auto program = programSummary.begin(); program != programSummary.end(); ++program) {
         QTreeWidgetItem *programNode = new QTreeWidgetItem(root, (QStringList() << 
-											"" << program.key() << "" << "" << QString::number(program.value().first) << QString::number(program.value().second)));
+											"" << program.key() << "" << "" << "" << QString::number(program.value().first) << QString::number(program.value().second)));
+		programNode->setTextAlignment(totalHoursColumn, Qt::AlignRight);
+		programNode->setTextAlignment(totalStudentsColumn, Qt::AlignRight);
 		
 		QMap<QString, QPair<double, uint>> &currYearSummary = yearSummary[program.key()];
 		for (auto year = currYearSummary.begin(); year != currYearSummary.end(); ++year) {
             QTreeWidgetItem *yearNode = new QTreeWidgetItem(programNode, (QStringList() << 
-												"" << "" << year.key() << "" << QString::number(year.value().first) << QString::number(year.value().second)));
-		
+												"" << "" << year.key() << "" << "" << QString::number(year.value().first) << QString::number(year.value().second)));
+			yearNode->setTextAlignment(totalHoursColumn, Qt::AlignRight);
+			yearNode->setTextAlignment(totalStudentsColumn, Qt::AlignRight);
+			
 			QMap<QString, QPair<double, uint>> &currNameSummary = nameSummary[program.key()][year.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-				new QTreeWidgetItem(yearNode, (QStringList() << 
-						"" << "" << "" << name.key() << QString::number(name.value().first) << QString::number(name.value().second)));
+				QTreeWidgetItem *nameNode = new QTreeWidgetItem(yearNode, (QStringList() << 
+													"" << "" << "" << name.key() << "" << QString::number(name.value().first) << QString::number(name.value().second)));
+				nameNode->setTextAlignment(totalHoursColumn, Qt::AlignRight);
+				nameNode->setTextAlignment(totalStudentsColumn, Qt::AlignRight);
+				
+				QMap<QString, QPair<double, uint>> &currActivitySummary = activitySummary[program.key()][year.key()][name.key()];
+				for (auto activity = currActivitySummary.begin(); activity != currActivitySummary.end(); ++activity) {
+					QTreeWidgetItem *titleNode = new QTreeWidgetItem(nameNode, (QStringList() <<
+														"" << "" << "" << "" << activity.key() << QString::number(activity.value().first) << QString::number(activity.value().second)));
+					titleNode->setTextAlignment(totalHoursColumn, Qt::AlignRight);
+					titleNode->setTextAlignment(totalStudentsColumn, Qt::AlignRight);
+				}
 			}
 		}
 	}

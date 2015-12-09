@@ -1,12 +1,13 @@
 #include <QString>
 #include <QDate>
 #include <QList>
-#include <QDebug>
+#include <QTextStream>
 #include <exception>
 
 #include "../records/PublicationRecord.h"
 #include "Parser.h"
 #include "PublicationParser.h"
+#include "../ui/ErrorListDialog.h"
 
 using namespace std;
 
@@ -59,8 +60,8 @@ Parser::CSVParser<27> *makePublicationParser(const QString &file_name) {
 		   "Publication Status",
 		   "Pubmed Article ID",
 		   "Type",
-		   "Status Date *", //strange column
-		   "Role *", //strange column
+		   "Status Date *", //strange column header
+		   "Role *",		//strange column header
 		   "Peer Reviewed?",
 		   "Author #",
 		   "Journal Name | Published In | Book Title | etc.",
@@ -92,6 +93,12 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
 
 	QList<PublicationRecord> records;
     int lineNum = 1;
+	
+	QString errorLog;
+	QTextStream errorStream(&errorLog);
+	
+	int numErrors = 0;
+	int numWarnings = 0;
 	
     while (true) {
 		lineNum++;
@@ -131,7 +138,8 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
                            curr_record.title,
                            curr_record.isbn);
         } catch (const std::exception &e) {
-			qDebug() << e.what();
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum << "\n";
+			numErrors++;
 			continue;
 		}
 		
@@ -141,69 +149,74 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 
         //validate publicationStatus
         if (curr_record.publicationStatus.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing publication Status  on line " << lineNum;
+            errorStream << "Error: Missing publication status on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
-        //validate publication type
+        //validate type
         if (curr_record.type.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing publication type  on line " << lineNum;
+            errorStream << "Error: Missing type on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 
         //validate date
 		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-			//TODO: handle error
-			qDebug() << "Invalid date: " << curr_date << " on line " << lineNum;
+			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum << "\n";
+			numErrors++;
 			continue;
 		}
 
         //validate role
         if (curr_record.role.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing role on line " << lineNum;
+            errorStream << "Error: Missing role on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 
         //validate publishedIn
         if (curr_record.publishedIn.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing published Infomation on line " << lineNum;
+            errorStream << "Error: Missing publication info on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 		
-        //validate author
+        //validate authors
         if (curr_record.authors.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing authors on line " << lineNum;
-            continue;
+            errorStream << "Warning: Missing authors on line " << lineNum << "\n";
+            numWarnings++;
         }
 
         //validate title
         if (curr_record.title.isEmpty()) {
-            //TODO: handle error
-            qDebug() << "Missing title on line " << lineNum;
+            errorStream << "Error: Missing title on line " << lineNum << "\n";
+			numErrors++;
             continue;
         }
 
         records.append(curr_record);
 	}
 
+	//show error dialog
+	if (numErrors != 0 || numWarnings != 0) {
+		ErrorListDialog errorDialog(errorLog, numErrors, numWarnings);
+		errorDialog.exec();
+	}
+	
 	return records;
 }

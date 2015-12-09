@@ -81,6 +81,8 @@ VisualizationWindow::VisualizationWindow(const QList<QMap<QString, double>> &plo
     graphs->yAxis->setAutoTickStep(false);
     graphs->yAxis->setAutoSubTicks(false);
     graphs->yAxis->setSubTickCount(0);
+    graphs->yAxis->setNumberFormat("f");
+    graphs->yAxis->setNumberPrecision(0);
 
     colorList << QColor("#8dd3c7") << QColor("#ffffb3") << QColor("#bebada") << QColor("#fb8072") << QColor("#fbd462") << QColor("#b3de69") ;
     colorList << QColor("#fccde5") << QColor("#80b1d3") << QColor("#d9d9d9") << QColor("#bc80bd") << QColor("#ccebc5") << QColor("#ffed6f");
@@ -95,7 +97,7 @@ void VisualizationWindow::on_actionClose_triggered() {
 
 void VisualizationWindow::on_plotButton_clicked() {
 	int plotDataIndex = ui.plotDataSelect->currentIndex();
-	QString plotType = ui.plotTypeSelect->currentText();
+    QString plotType = ui.plotTypeSelect->currentText();
 
     clearVis();
 
@@ -206,7 +208,7 @@ void VisualizationWindow::styleGraph(QVector<double> &values, QVector<double> &t
         textLabel->position->setAxes(graphs->xAxis, graphs->yAxis);
         textLabel->position->setType(QCPItemPosition::ptPlotCoords);
         textLabel->position->setCoords(i, values.at(i-1) + tickstep*0.33);
-        textLabel->setText(QString::number(values.at(i-1)));
+        textLabel->setText(QString::number(values.at(i-1),'f',0));
     }
 }
 

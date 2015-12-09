@@ -5,17 +5,9 @@
 #include "FileInputDialog.h"
 #include "ui_FileInputDialog.h"
 
-FileInputDialog::FileInputDialog(QWidget *parent) : QDialog(parent) {
+FileInputDialog::FileInputDialog() {
     ui.setupUi(this);
 	setFixedSize(size());
-}
-
-QString FileInputDialog::getFilename() {
-	return filename;
-}
-
-SubjectArea FileInputDialog::getSubjectArea() {
-	return subjectArea;
 }
 
 void FileInputDialog::on_okCancelButtons_accepted() {
@@ -26,26 +18,6 @@ void FileInputDialog::on_okCancelButtons_accepted() {
 	} else {
 		accept();
 	}
-}
-
-void FileInputDialog::on_okCancelButtons_rejected() {
-	reject();
-}
-
-void FileInputDialog::on_publicationsButton_clicked() {
-	subjectArea = Publications;
-}
-
-void FileInputDialog::on_presentationButton_clicked() {
-	subjectArea = Presentation;
-}
-
-void FileInputDialog::on_grantsButton_clicked() {
-	subjectArea = Grants;
-}
-
-void FileInputDialog::on_teachingButton_clicked() {
-	subjectArea = Teaching;
 }
 
 void FileInputDialog::on_browseButton_clicked() {

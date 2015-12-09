@@ -7,19 +7,19 @@
 
 struct TeachingRecord {
 	//required fields
-    QString memberName;
-    QString primaryDomain;
-    QDate startDate;
-    QDate endDate;
-    QString program;
-    QString activityType;
-	QString geographicalScope;
-	double hoursPerSession;
-	double numberOfSessions;
-	double totalHours;
+    QString memberName;		//used
+    QString primaryDomain;	//used
+    QDate startDate;		//used
+    QDate endDate;			//used
+    QString program;		//used
+    QString activityType;	//used
+	QString geographicalScope; //not used
+	double hoursPerSession; //not used
+	double numberOfSessions;//not used
+	double totalHours;		//used
 	
 	//optional fields
-	uint numTrainees;
+	uint numTrainees;		//used
 	QString activity;
     QString institution;
     QString faculty;

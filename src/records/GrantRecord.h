@@ -6,19 +6,19 @@
 
 struct GrantRecord {
 	//required fields
-    QString memberName;
-    QString primaryDomain;
-    QDate startDate;
-    QDate endDate;
-    QString fundingType;
-    QString status;
-    bool peerReviewed;
-    bool industryGrant;
-    QString role;
-	QString title;
-	QString principalInvestigator;
-    QString coInvestigators;
-	double totalAmount;
+    QString memberName;		//used
+    QString primaryDomain;	//used
+    QDate startDate;		//used
+    QDate endDate;			//used
+    QString fundingType;	//used
+    QString status;			//not used
+    bool peerReviewed;		//used
+    bool industryGrant;		//used
+    QString role;			//not used
+	QString title;			//used
+	QString principalInvestigator; //not used
+    QString coInvestigators;//not used
+	double totalAmount;		//used
 	
 	//optional fields
     QString shortTitle;

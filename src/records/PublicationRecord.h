@@ -6,15 +6,15 @@
 
 struct PublicationRecord {
     //required fields
-    QString memberName;
-    QString primaryDomain;
-    QString publicationStatus;
-    QString type;
-    QDate date;
-    QString role;
-    QString publishedIn;
-    QString authors;
-    QString title;
+    QString memberName;			//used
+    QString primaryDomain;		//used
+    QString publicationStatus;	//used
+    QString type;				//used
+    QDate date;					//used
+    QString role;				//used
+    QString publishedIn;		//used
+    QString authors;			//not used
+    QString title;				//used
     
     //optional fields
     QString pubmedID;

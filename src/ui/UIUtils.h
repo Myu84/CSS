@@ -4,6 +4,9 @@
 #include <QPair>
 #include <QDate>
 #include <QList>
+#include <QStringList>
+#include <QSet>
+#include <QtAlgorithms>
 
 template <typename T>
 QPair<QDate, QDate> findDateRange(const T &records) {
@@ -66,16 +69,21 @@ QList<typename T::value_type> filterByDateRangeStartEnd(const T &records, QDate 
 }
 
 template <typename T>
+QList<T> sortSet(const QSet<T> set) {
+	QList<T> list = set.toList();
+	qSort(list);
+	
+	return list;
+}
+
+template <typename T>
 QStringList listFacultyNames(const T &records) {
 	QSet<QString> names;
 	for (const auto &record : records) {
 		names.insert(record.memberName);
 	}
 	
-	QStringList namesList = names.toList();
-	namesList.sort();
-	
-	return namesList;
+	return sortSet(names);
 }
 
 #endif

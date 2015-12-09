@@ -48,10 +48,16 @@ class Parser {
 	
 	inline double parseMoney(QString money_str, bool *ok = nullptr) {
 		money_str.remove('$').remove(',');
-		double val = money_str.toDouble(ok);
 		
-		if (ok && val < 0)
-			*ok = false;
+		bool convertOK;
+		double val = money_str.toDouble(&convertOK);
+		if (convertOK && val < 0) {
+			val = 0;
+			convertOK = false;
+		}
+		
+		if (ok)
+			*ok = convertOK;
 		return val;
 	}
 };

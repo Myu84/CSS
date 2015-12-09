@@ -15,6 +15,9 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
+static const int totalNumColumn = 5;
+static const int totalAmountColumn = 6;
+
 QString grantDescription(bool peerReviewed, bool industryGrant) {
 	if (peerReviewed && industryGrant) {
 		return "Peer Reviewed Industry Grant";
@@ -48,7 +51,7 @@ GrantDashboardWindow::GrantDashboardWindow(const QString &csv_filename) {
 	}
 	
 	ui.treeWidget->setHeaderLabels(QStringList() << 
-						"" << "Funding Type" << "Funding Description" << "Faculty Name" << "Total #" << "Total $");
+						"" << "Funding Type" << "Funding Description" << "Faculty Name" << "Title" << "Total #" << "Total $" << "");
 	
 	ui.titleLabel->setText("Grant/Funding Summary, Department of " + records[0].primaryDomain);
 	ui.statusbar->showMessage("Read " + QString::number(records.size()) + " records from " + csv_filename);
@@ -75,6 +78,7 @@ void GrantDashboardWindow::updateTreeWidget() {
     QMap<QString, QPair<int, double>> typeSummary;
     QMap<QString, QMap<QString, QPair<int, double>>> descSummary;
     QMap<QString, QMap<QString, QMap<QString, QPair<int, double>>>> nameSummary;
+    QMap<QString, QMap<QString, QMap<QString, QMap<QString, double>>>> titleSummary;
 
 	for (const GrantRecord &record : recordsInRange) {
 		QString desc = grantDescription(record.peerReviewed, record.industryGrant);
@@ -90,26 +94,44 @@ void GrantDashboardWindow::updateTreeWidget() {
 		
         ++nameSummary[record.fundingType][desc][record.memberName].first;
         nameSummary[record.fundingType][desc][record.memberName].second += record.totalAmount;
+		
+		titleSummary[record.fundingType][desc][record.memberName][record.title] += record.totalAmount;
 	}
 
     //build the view
     QTreeWidgetItem *root = new QTreeWidgetItem(ui.treeWidget, (QStringList() << 
-                                    "Grants and Clinical Funding" << "" << "" << "" << QString::number(allSummary.first) << moneyToStr(allSummary.second)));
+                                    "Grants and Clinical Funding" << "" << "" << "" << "" << QString::number(allSummary.first) << moneyToStr(allSummary.second)));
+	root->setTextAlignment(totalNumColumn, Qt::AlignRight);
+	root->setTextAlignment(totalAmountColumn, Qt::AlignRight);
 	ui.treeWidget->expandItem(root);
 	
     for (auto type = typeSummary.begin(); type != typeSummary.end(); ++type) {
         QTreeWidgetItem *typeNode = new QTreeWidgetItem(root, (QStringList() <<
-                                            "" << type.key() << "" << "" << QString::number(type.value().first) << moneyToStr(type.value().second)));
+                                            "" << type.key() << "" << "" << "" << QString::number(type.value().first) << moneyToStr(type.value().second)));
+		typeNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+		typeNode->setTextAlignment(totalAmountColumn, Qt::AlignRight);
 		
         QMap<QString, QPair<int, double>> &currDescSummary = descSummary[type.key()];
         for (auto desc = currDescSummary.begin(); desc != currDescSummary.end(); ++desc) {
             QTreeWidgetItem *descNode = new QTreeWidgetItem(typeNode, (QStringList() <<
-                                                "" << "" << desc.key() << "" << QString::number(desc.value().first) << moneyToStr(desc.value().second)));
-		
+                                                "" << "" << desc.key() << "" << "" << QString::number(desc.value().first) << moneyToStr(desc.value().second)));
+			descNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+			descNode->setTextAlignment(totalAmountColumn, Qt::AlignRight);
+			
             QMap<QString, QPair<int, double>> &currNameSummary = nameSummary[type.key()][desc.key()];
 			for (auto name = currNameSummary.begin(); name != currNameSummary.end(); ++name) {
-                new QTreeWidgetItem(descNode, (QStringList() <<
-						"" << "" << "" << name.key() << QString::number(name.value().first) << moneyToStr(name.value().second)));
+                QTreeWidgetItem *nameNode = new QTreeWidgetItem(descNode, (QStringList() <<
+													"" << "" << "" << name.key() << "" << QString::number(name.value().first) << moneyToStr(name.value().second)));
+				nameNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+				nameNode->setTextAlignment(totalAmountColumn, Qt::AlignRight);
+				
+				QMap<QString, double> &currTitleSummary = titleSummary[type.key()][desc.key()][name.key()];
+				for (auto title = currTitleSummary.begin(); title != currTitleSummary.end(); ++title) {
+					QTreeWidgetItem *titleNode = new QTreeWidgetItem(nameNode, (QStringList() <<
+														"" << "" << "" << "" << title.key() << "" << moneyToStr(title.value())));
+					titleNode->setTextAlignment(totalNumColumn, Qt::AlignRight);
+					titleNode->setTextAlignment(totalAmountColumn, Qt::AlignRight);
+				}
 			}
 		}
 	}
