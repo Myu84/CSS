@@ -7,6 +7,7 @@
 #include "../records/PresentationRecord.h"
 #include "Parser.h"
 #include "PresentationParser.h"
+#include "../ui/ErrorListDialog.h"
 
 using namespace std;
 
@@ -129,6 +130,12 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
         }
 		
 		records.append(curr_record);
+	}
+	
+	//show error dialog
+	if (numErrors != 0 || numWarnings != 0) {
+		ErrorListDialog errorDialog(errorLog, numErrors, numWarnings);
+		errorDialog.exec();
 	}
 	
 	return records;

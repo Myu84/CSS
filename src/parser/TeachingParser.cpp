@@ -7,6 +7,7 @@
 #include "../records/TeachingRecord.h"
 #include "Parser.h"
 #include "TeachingParser.h"
+#include "../ui/ErrorListDialog.h"
 
 using namespace std;
 
@@ -184,6 +185,12 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
         }
 		
 		records.append(curr_record);
+	}
+	
+	//show error dialog
+	if (numErrors != 0 || numWarnings != 0) {
+		ErrorListDialog errorDialog(errorLog, numErrors, numWarnings);
+		errorDialog.exec();
 	}
 	
 	return records;

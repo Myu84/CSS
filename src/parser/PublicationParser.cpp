@@ -7,6 +7,7 @@
 #include "../records/PublicationRecord.h"
 #include "Parser.h"
 #include "PublicationParser.h"
+#include "../ui/ErrorListDialog.h"
 
 using namespace std;
 
@@ -211,5 +212,11 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
         records.append(curr_record);
 	}
 
+	//show error dialog
+	if (numErrors != 0 || numWarnings != 0) {
+		ErrorListDialog errorDialog(errorLog, numErrors, numWarnings);
+		errorDialog.exec();
+	}
+	
 	return records;
 }

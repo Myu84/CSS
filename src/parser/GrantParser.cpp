@@ -7,6 +7,7 @@
 #include "../records/GrantRecord.h"
 #include "Parser.h"
 #include "GrantParser.h"
+#include "../ui/ErrorListDialog.h"
 
 using namespace std;
 
@@ -213,6 +214,12 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
         }
         
 		records.append(curr_record);
+	}
+	
+	//show error dialog
+	if (numErrors != 0 || numWarnings != 0) {
+		ErrorListDialog errorDialog(errorLog, numErrors, numWarnings);
+		errorDialog.exec();
 	}
 	
 	return records;
