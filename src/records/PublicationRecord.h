@@ -14,7 +14,7 @@ struct PublicationRecord {
     QString role;				//used
     QString publishedIn;		//used
     QString authors;			//not used
-    QString title;				//not used (use for next-level)
+    QString title;				//used
     
     //optional fields
     QString pubmedID;

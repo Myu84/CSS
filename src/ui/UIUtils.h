@@ -69,6 +69,14 @@ QList<typename T::value_type> filterByDateRangeStartEnd(const T &records, QDate 
 }
 
 template <typename T>
+QList<T> sortSet(const QSet<T> set) {
+	QList<T> list = set.toList();
+	qSort(list);
+	
+	return list;
+}
+
+template <typename T>
 QStringList listFacultyNames(const T &records) {
 	QSet<QString> names;
 	for (const auto &record : records) {
@@ -76,14 +84,6 @@ QStringList listFacultyNames(const T &records) {
 	}
 	
 	return sortSet(names);
-}
-
-template <typename T>
-QList<T> sortSet(const QSet<T> set) {
-	QList<T> list = set.toList();
-	qSort(list);
-	
-	return list;
 }
 
 #endif
