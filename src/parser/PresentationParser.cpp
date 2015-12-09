@@ -76,7 +76,7 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 						   curr_record.restOfCitation, 
 						   curr_record.personalRemuneration);
 		} catch (const std::exception &e) {
-			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -87,14 +87,14 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 		
 		//validate memberName
         if (curr_record.memberName.isEmpty()) {
-            errorStream << "Error: Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
         
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            errorStream << "Error: Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
@@ -102,28 +102,28 @@ QList<PresentationRecord> PresentationParser::parse(const QString &file_name) {
 		//validate date
 		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum;
+			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
 		
 		//validate type
 		if (curr_record.type.isEmpty()) {
-			errorStream << "Error: Missing type on line " << lineNum;
+			errorStream << "Error: Missing type on line " << lineNum << "\n";
             numErrors++;
 			continue;
 		}
 		
 		//validate role
         if (curr_record.role.isEmpty()) {
-            errorStream << "Error: Missing role on line " << lineNum;
+            errorStream << "Error: Missing role on line " << lineNum << "\n";
             numErrors++;
 			continue;
         }
         
         //validate title
         if (curr_record.title.isEmpty()) {
-            errorStream << "Error: Missing title on line " << lineNum;
+            errorStream << "Error: Missing title on line " << lineNum << "\n";
             numErrors++;
 			continue;
         }

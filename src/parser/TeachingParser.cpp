@@ -85,7 +85,7 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
                            curr_record.comment,
 						   curr_totalHours);
 		} catch (const std::exception &e) {
-			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -98,14 +98,14 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            errorStream << "Error: Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            errorStream << "Error: Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
@@ -113,7 +113,7 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
         //validate startDate
 		curr_record.startDate = parseDate(curr_startDate);
 		if (!curr_record.startDate.isValid()) {
-			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum;
+			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -121,56 +121,56 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 		//validate endDate
 		curr_record.endDate = parseDate(curr_endDate);
 		if (!curr_record.endDate.isValid()) {
-			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum;
+			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
 		
 		//validate date range
 		if (curr_record.startDate > curr_record.endDate) {
-			errorStream << "Error: Start date is later than end date on line " << lineNum;
+			errorStream << "Error: Start date is later than end date on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
         
 		//validate program
         if (curr_record.program.isEmpty()) {
-            errorStream << "Error: Missing program on line " << lineNum;
+            errorStream << "Error: Missing program on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 		
 		//validate activityType
         if (curr_record.activityType.isEmpty()) {
-            errorStream << "Error: Missing activity type on line " << lineNum;
+            errorStream << "Error: Missing activity type on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
         
         //validate geographicalScope
         if (curr_record.geographicalScope.isEmpty()) {
-            errorStream << "Warning: Missing grographical scope on line " << lineNum;
+            errorStream << "Warning: Missing grographical scope on line " << lineNum << "\n";
             numWarnings++;
         }
         
         //validate hoursPerSession
 		curr_record.hoursPerSession = curr_hoursPerSession.toDouble(&parseOK);
         if (!parseOK || curr_record.hoursPerSession < 0) {
-            errorStream << "Warning: Invalid hours per session '" << curr_hoursPerSession << "' on line " << lineNum;
+            errorStream << "Warning: Invalid hours per session '" << curr_hoursPerSession << "' on line " << lineNum << "\n";
             numWarnings++;
         }
 
         //validate numberOfSessions
 		curr_record.numberOfSessions = curr_numberOfSessions.toDouble(&parseOK);
         if (!parseOK || curr_record.numberOfSessions < 0) {
-            errorStream << "Warning: Invalid number of sessions '" << curr_numberOfSessions << "' on line " << lineNum;
+            errorStream << "Warning: Invalid number of sessions '" << curr_numberOfSessions << "' on line " << lineNum << "\n";
             numWarnings++;
         }
 		
 		//validate totalHours
 		curr_record.totalHours = curr_totalHours.toDouble(&parseOK);
         if (!parseOK || curr_record.totalHours < 0) {
-            errorStream << "Warning: Invalid total hours '" << curr_totalHours << "' on line " << lineNum;
+            errorStream << "Warning: Invalid total hours '" << curr_totalHours << "' on line " << lineNum << "\n";
             numErrors++;
 			continue;
         }
@@ -179,7 +179,7 @@ QList<TeachingRecord> TeachingParser::parse(const QString &file_name) {
 		curr_record.numTrainees = curr_numTrainees.toUInt(&parseOK);
         if (!parseOK) {
 			curr_record.numTrainees = 0;
-            errorStream << "Warning: Invalid number of trainees '" << curr_numTrainees << "' on line " << lineNum;
+            errorStream << "Warning: Invalid number of trainees '" << curr_numTrainees << "' on line " << lineNum << "\n";
             numWarnings++;
         }
 		

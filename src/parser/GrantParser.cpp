@@ -102,7 +102,7 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
                            curr_record.educationGrant,
                            curr_record.duplicateReported);
 		} catch (const std::exception &e) {
-			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -115,14 +115,14 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            errorStream << "Error: Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
         
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            errorStream << "Error: Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
@@ -130,7 +130,7 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
         //validate startDate
 		curr_record.startDate = parseDate(curr_startDate);
 		if (!curr_record.startDate.isValid()) {
-			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum;
+			errorStream << "Error: Invalid start date '" << curr_startDate << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -138,35 +138,35 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
 		//validate endDate
 		curr_record.endDate = parseDate(curr_endDate);
 		if (!curr_record.endDate.isValid()) {
-			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum;
+			errorStream << "Error: Invalid end date '" << curr_endDate << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
 		
 		//validate date range
 		if (curr_record.startDate > curr_record.endDate) {
-			errorStream << "Error: Start date is later than end date on line " << lineNum;
+			errorStream << "Error: Start date is later than end date on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
         
 		//validate fundingType
         if (curr_record.fundingType.isEmpty()) {
-            errorStream << "Error: Missing funding type on line " << lineNum;
+            errorStream << "Error: Missing funding type on line " << lineNum << "\n";
             numErrors++;
 			continue;
         }
 		
 		//validate status
         if (curr_record.status.isEmpty()) {
-            errorStream << "Warning: Missing status on line " << lineNum;
+            errorStream << "Warning: Missing status on line " << lineNum << "\n";
             numWarnings++;
         }
         
         //validate peerReviewed
         curr_record.peerReviewed = parseBool(curr_peerReviewed, &parseOK);
 		if (!parseOK) {
-			errorStream << "Error: Invalid value '" << curr_peerReviewed << "' for 'Peer Reviewed?' column on line " << lineNum;
+			errorStream << "Error: Invalid value '" << curr_peerReviewed << "' for 'Peer Reviewed?' column on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -174,40 +174,40 @@ QList<GrantRecord> GrantParser::parse(const QString &file_name) {
         //validate industryGrant
         curr_record.industryGrant = parseBool(curr_industryGrant, &parseOK);
 		if (!parseOK) {
-			errorStream << "Error: Invalid value '" << curr_industryGrant << "' for 'Industry Grant?' column on line " << lineNum;
+			errorStream << "Error: Invalid value '" << curr_industryGrant << "' for 'Industry Grant?' column on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
         
         //validate role
         if (curr_record.role.isEmpty()) {
-            errorStream << "Warning: Missing role on line " << lineNum;
+            errorStream << "Warning: Missing role on line " << lineNum << "\n";
             numWarnings++;
         }
         
         //validate title
         if (curr_record.title.isEmpty()) {
-            errorStream << "Error: Missing title on line " << lineNum;
+            errorStream << "Error: Missing title on line " << lineNum << "\n";
             numErrors++;
 			continue;
         }
         
         //validate principalInvestigator
         if (curr_record.principalInvestigator.isEmpty()) {
-            errorStream << "Warning: Missing principal investigator on line " << lineNum;
+            errorStream << "Warning: Missing principal investigator on line " << lineNum << "\n";
             numWarnings++;
         }
         
         //validate coInvestigators
         if (curr_record.coInvestigators.isEmpty()) {
-            errorStream << "Warning: Missing co-investigators on line " << lineNum;
+            errorStream << "Warning: Missing co-investigators on line " << lineNum << "\n";
             numWarnings++;
         }
         
         //validate totalAmount
 		curr_record.totalAmount = parseMoney(curr_totalAmount, &parseOK);
         if (!parseOK) {
-            errorStream << "Error: Invalid total amount '" << curr_totalAmount << "' on line " << lineNum;
+            errorStream << "Error: Invalid total amount '" << curr_totalAmount << "' on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }

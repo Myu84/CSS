@@ -137,7 +137,7 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
                            curr_record.title,
                            curr_record.isbn);
         } catch (const std::exception &e) {
-			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum;
+			errorStream << "Error: Parser error: " << e.what() << " on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
@@ -148,27 +148,27 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
 		
         //validate memberName
         if (curr_record.memberName.isEmpty()) {
-            errorStream << "Error: Missing member name on line " << lineNum;
+            errorStream << "Error: Missing member name on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 
         //validate primaryDomain
         if (curr_record.primaryDomain.isEmpty()) {
-            errorStream << "Error: Missing primary domain on line " << lineNum;
+            errorStream << "Error: Missing primary domain on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 
         //validate publicationStatus
         if (curr_record.publicationStatus.isEmpty()) {
-            errorStream << "Error: Missing publication status on line " << lineNum;
+            errorStream << "Error: Missing publication status on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
         //validate type
         if (curr_record.type.isEmpty()) {
-            errorStream << "Error: Missing type on line " << lineNum;
+            errorStream << "Error: Missing type on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
@@ -176,34 +176,34 @@ QList<PublicationRecord> PublicationParser::parse(const QString &file_name) {
         //validate date
 		curr_record.date = parseDate(curr_date);
 		if (!curr_record.date.isValid()) {
-			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum;
+			errorStream << "Error: Invalid date '" << curr_date << "' on line " << lineNum << "\n";
 			numErrors++;
 			continue;
 		}
 
         //validate role
         if (curr_record.role.isEmpty()) {
-            errorStream << "Error: Missing role on line " << lineNum;
+            errorStream << "Error: Missing role on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 
         //validate publishedIn
         if (curr_record.publishedIn.isEmpty()) {
-            errorStream << "Error: Missing publication info on line " << lineNum;
+            errorStream << "Error: Missing publication info on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
 		
         //validate authors
         if (curr_record.authors.isEmpty()) {
-            errorStream << "Warning: Missing authors on line " << lineNum;
+            errorStream << "Warning: Missing authors on line " << lineNum << "\n";
             numWarnings++;
         }
 
         //validate title
         if (curr_record.title.isEmpty()) {
-            errorStream << "Error: Missing title on line " << lineNum;
+            errorStream << "Error: Missing title on line " << lineNum << "\n";
 			numErrors++;
             continue;
         }
