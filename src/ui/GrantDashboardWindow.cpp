@@ -15,8 +15,6 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 3;
-
 QString grantDescription(bool peerReviewed, bool industryGrant) {
 	if (peerReviewed && industryGrant) {
 		return "Peer Reviewed Industry Grant";
@@ -150,15 +148,4 @@ void GrantDashboardWindow::openVisualizationWindow(const QString &memberName) {
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
-}
-
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void GrantDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (!memberName.isEmpty())
-		openVisualizationWindow(memberName);
-}
-
-void GrantDashboardWindow::on_openVisualizationButton_clicked() {
-	openVisualizationWindow(ui.visualizationFacultyNameSelector->currentText());
 }

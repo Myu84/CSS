@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTreeWidgetItem>
 #include <QPrinter>
+#include <QString>
 
 #include "ui_DashboardWindow.h"
 
@@ -22,8 +23,8 @@ class DashboardWindow : public QMainWindow {
     void on_treeWidget_collapsed();
     void on_treeWidget_expanded();
 
-protected slots:
-    virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) = 0;
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item);
+	void on_openVisualizationButton_clicked();
 
  protected:
     DashboardWindow();
@@ -32,6 +33,8 @@ protected slots:
 	void printTreeWidget(QPrinter *printer);
 	
 	virtual void updateTreeWidget() = 0;
+	virtual void openVisualizationWindow(const QString &memberName) = 0;
+	virtual int memberNameColumn() = 0;
 	
     Ui::DashboardWindow ui;
 };

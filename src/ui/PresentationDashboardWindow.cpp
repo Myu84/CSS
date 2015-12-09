@@ -13,8 +13,6 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 2;
-
 PresentationDashboardWindow::PresentationDashboardWindow(const QString &csv_filename) {
 	PresentationParser parser;
 	
@@ -112,15 +110,4 @@ void PresentationDashboardWindow::openVisualizationWindow(const QString &memberN
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
-}
-
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void PresentationDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (!memberName.isEmpty())
-		openVisualizationWindow(memberName);
-}
-
-void PresentationDashboardWindow::on_openVisualizationButton_clicked() {
-	openVisualizationWindow(ui.visualizationFacultyNameSelector->currentText());
 }

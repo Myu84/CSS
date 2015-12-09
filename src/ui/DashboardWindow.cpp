@@ -152,3 +152,15 @@ void DashboardWindow::on_actionExport_triggered() {
 
     printTreeWidget(&printer);
 }
+
+void DashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
+    QString memberName = item->text(memberNameColumn());
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
+}
+
+void DashboardWindow::on_openVisualizationButton_clicked() {
+	QString memberName = ui.visualizationFacultyNameSelector->currentText();
+	if (!memberName.isEmpty())
+		openVisualizationWindow(memberName);
+}

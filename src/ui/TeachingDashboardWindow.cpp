@@ -14,8 +14,6 @@
 #include "UIUtils.h"
 #include "VisualizationWindow.h"
 
-static const int memberNameColumn = 3;
-
 QString toAcademicYear(const QDate &date) {
 	if (date.month() < 9) { //before September 1
 		return QString::number(date.year() - 1) + "-" + QString::number(date.year());
@@ -156,15 +154,4 @@ void TeachingDashboardWindow::openVisualizationWindow(const QString &memberName)
     VisualizationWindow *vw = new VisualizationWindow(plotList, plotNames,
 													  memberName, startDate, endDate);
 	vw->show();
-}
-
-//Opens a VisualizationWindow if the row that was doubleclicked contains a faculty member
-void TeachingDashboardWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item) {
-    QString memberName = item->text(memberNameColumn);
-	if (!memberName.isEmpty())
-		openVisualizationWindow(memberName);
-}
-
-void TeachingDashboardWindow::on_openVisualizationButton_clicked() {
-	openVisualizationWindow(ui.visualizationFacultyNameSelector->currentText());
 }

@@ -13,16 +13,14 @@ class GrantDashboardWindow : public DashboardWindow {
  public:
 	GrantDashboardWindow(const QString &csv_filename);
 	
- protected slots:
-    virtual void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item);
-    virtual void on_openVisualizationButton_clicked();
-	
  protected:
 	virtual void updateTreeWidget();
+	virtual void openVisualizationWindow(const QString &memberName);
+	inline virtual int memberNameColumn() {
+		return 3;
+	}
 
  private:
-	void openVisualizationWindow(const QString &memberName);
-	
 	QList<GrantRecord> records;
 };
 
